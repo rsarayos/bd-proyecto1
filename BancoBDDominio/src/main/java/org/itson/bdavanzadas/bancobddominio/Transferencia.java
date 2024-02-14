@@ -8,16 +8,14 @@ package org.itson.bdavanzadas.bancobddominio;
  *
  * @author alex_
  */
-public class Transferencia {
+public class Transferencia extends Transaccion{
     private int idTransferencia;
-    private int idTransaccion;
     private String cuentaDestino;
 
     public Transferencia() {
     }
     
-    public Transferencia(int idTransaccion, String cuentaDestino) {
-        this.idTransaccion = idTransaccion;
+    public Transferencia(String cuentaDestino) {
         this.cuentaDestino = cuentaDestino;
     }
 
@@ -27,14 +25,6 @@ public class Transferencia {
 
     public void setIdTransferencia(int idTransferencia) {
         this.idTransferencia = idTransferencia;
-    }
-
-    public int getIdTransaccion() {
-        return idTransaccion;
-    }
-
-    public void setIdTransaccion(int idTransaccion) {
-        this.idTransaccion = idTransaccion;
     }
 
     public String getCuentaDestino() {
@@ -72,7 +62,6 @@ public class Transferencia {
         StringBuilder sb = new StringBuilder();
         sb.append("Transferencia{");
         sb.append("idTransferencia=").append(idTransferencia);
-        sb.append(", idTransaccion=").append(idTransaccion);
         sb.append(", cuentaDestino=").append(cuentaDestino);
         sb.append('}');
         return sb.toString();
