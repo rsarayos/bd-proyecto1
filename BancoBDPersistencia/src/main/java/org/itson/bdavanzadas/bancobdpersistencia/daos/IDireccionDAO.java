@@ -4,10 +4,15 @@
  */
 package org.itson.bdavanzadas.bancobdpersistencia.daos;
 
+import org.itson.bdavanzadas.bancobddominio.Direccion;
+import org.itson.bdavanzadas.bancobdpersistencia.dtos.DireccionNuevaDTO;
+import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
+
 /**
  *
  * @author alex_
  */
 public interface IDireccionDAO {
-    
+    Direccion agregar(DireccionNuevaDTO direccionNueva) throws PersistenciaException;
+    Direccion actualizar(DireccionNuevaDTO direccionNueva) throws PersistenciaException;
 }
