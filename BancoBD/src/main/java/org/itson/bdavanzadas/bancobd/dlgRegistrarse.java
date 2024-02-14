@@ -59,10 +59,12 @@ public class dlgRegistrarse extends javax.swing.JDialog {
         setResizable(false);
 
         fondo.setBackground(new java.awt.Color(102, 153, 255));
+        fondo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel2.setFont(new java.awt.Font("Leelawadee UI", 1, 70)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Registrarse");
+        fondo.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(264, 22, -1, -1));
 
         btnAceptar.setBackground(new java.awt.Color(0, 102, 255));
         btnAceptar.setFont(new java.awt.Font("Segoe UI Black", 0, 24)); // NOI18N
@@ -73,6 +75,7 @@ public class dlgRegistrarse extends javax.swing.JDialog {
                 btnAceptarActionPerformed(evt);
             }
         });
+        fondo.add(btnAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 515, -1, -1));
 
         btnCancelar.setBackground(new java.awt.Color(0, 102, 255));
         btnCancelar.setFont(new java.awt.Font("Segoe UI Black", 0, 24)); // NOI18N
@@ -83,22 +86,28 @@ public class dlgRegistrarse extends javax.swing.JDialog {
                 btnCancelarActionPerformed(evt);
             }
         });
+        fondo.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 515, -1, -1));
 
-        lblContrasenia.setFont(new java.awt.Font("Leelawadee UI", 1, 24)); // NOI18N
+        lblContrasenia.setFont(new java.awt.Font("Leelawadee UI", 1, 18)); // NOI18N
         lblContrasenia.setForeground(new java.awt.Color(255, 255, 255));
         lblContrasenia.setText("Contraseña:");
+        fondo.add(lblContrasenia, new org.netbeans.lib.awtextra.AbsoluteConstraints(502, 443, -1, -1));
 
-        lblTelefono.setFont(new java.awt.Font("Leelawadee UI", 1, 24)); // NOI18N
+        lblTelefono.setFont(new java.awt.Font("Leelawadee UI", 1, 18)); // NOI18N
         lblTelefono.setForeground(new java.awt.Color(255, 255, 255));
         lblTelefono.setText("Nombres:");
+        fondo.add(lblTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(128, 166, -1, -1));
 
         txtNombres.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
+        fondo.add(txtNombres, new org.netbeans.lib.awtextra.AbsoluteConstraints(217, 167, 230, -1));
 
         pswContrasenia.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
+        fondo.add(pswContrasenia, new org.netbeans.lib.awtextra.AbsoluteConstraints(609, 444, 228, -1));
 
-        lblTelefono1.setFont(new java.awt.Font("Leelawadee UI", 1, 24)); // NOI18N
+        lblTelefono1.setFont(new java.awt.Font("Leelawadee UI", 1, 18)); // NOI18N
         lblTelefono1.setForeground(new java.awt.Color(255, 255, 255));
         lblTelefono1.setText("Apellido paterno:");
+        fondo.add(lblTelefono1, new org.netbeans.lib.awtextra.AbsoluteConstraints(63, 211, -1, -1));
 
         txtApellidoPaterno.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
         txtApellidoPaterno.addActionListener(new java.awt.event.ActionListener() {
@@ -106,10 +115,12 @@ public class dlgRegistrarse extends javax.swing.JDialog {
                 txtApellidoPaternoActionPerformed(evt);
             }
         });
+        fondo.add(txtApellidoPaterno, new org.netbeans.lib.awtextra.AbsoluteConstraints(219, 212, 228, -1));
 
-        lblTelefono2.setFont(new java.awt.Font("Leelawadee UI", 1, 24)); // NOI18N
+        lblTelefono2.setFont(new java.awt.Font("Leelawadee UI", 1, 18)); // NOI18N
         lblTelefono2.setForeground(new java.awt.Color(255, 255, 255));
         lblTelefono2.setText("Apellido materno:");
+        fondo.add(lblTelefono2, new org.netbeans.lib.awtextra.AbsoluteConstraints(58, 256, -1, -1));
 
         txtApellidoMaterno.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
         txtApellidoMaterno.addActionListener(new java.awt.event.ActionListener() {
@@ -117,10 +128,12 @@ public class dlgRegistrarse extends javax.swing.JDialog {
                 txtApellidoMaternoActionPerformed(evt);
             }
         });
+        fondo.add(txtApellidoMaterno, new org.netbeans.lib.awtextra.AbsoluteConstraints(219, 257, 228, -1));
 
-        lblTelefono3.setFont(new java.awt.Font("Leelawadee UI", 1, 24)); // NOI18N
+        lblTelefono3.setFont(new java.awt.Font("Leelawadee UI", 1, 18)); // NOI18N
         lblTelefono3.setForeground(new java.awt.Color(255, 255, 255));
         lblTelefono3.setText("Calle:");
+        fondo.add(lblTelefono3, new org.netbeans.lib.awtextra.AbsoluteConstraints(557, 166, -1, -1));
 
         txtTelefono.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
         txtTelefono.addActionListener(new java.awt.event.ActionListener() {
@@ -128,10 +141,12 @@ public class dlgRegistrarse extends javax.swing.JDialog {
                 txtTelefonoActionPerformed(evt);
             }
         });
+        fondo.add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(219, 347, 228, -1));
 
-        lblTelefono4.setFont(new java.awt.Font("Leelawadee UI", 1, 24)); // NOI18N
+        lblTelefono4.setFont(new java.awt.Font("Leelawadee UI", 1, 18)); // NOI18N
         lblTelefono4.setForeground(new java.awt.Color(255, 255, 255));
         lblTelefono4.setText("Teléfono:");
+        fondo.add(lblTelefono4, new org.netbeans.lib.awtextra.AbsoluteConstraints(132, 346, -1, -1));
 
         txtCalle.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
         txtCalle.addActionListener(new java.awt.event.ActionListener() {
@@ -139,10 +154,12 @@ public class dlgRegistrarse extends javax.swing.JDialog {
                 txtCalleActionPerformed(evt);
             }
         });
+        fondo.add(txtCalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(609, 167, 228, -1));
 
-        lblTelefono5.setFont(new java.awt.Font("Leelawadee UI", 1, 24)); // NOI18N
+        lblTelefono5.setFont(new java.awt.Font("Leelawadee UI", 1, 18)); // NOI18N
         lblTelefono5.setForeground(new java.awt.Color(255, 255, 255));
         lblTelefono5.setText("Colonia:");
+        fondo.add(lblTelefono5, new org.netbeans.lib.awtextra.AbsoluteConstraints(533, 256, -1, -1));
 
         txtColonia.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
         txtColonia.addActionListener(new java.awt.event.ActionListener() {
@@ -150,10 +167,12 @@ public class dlgRegistrarse extends javax.swing.JDialog {
                 txtColoniaActionPerformed(evt);
             }
         });
+        fondo.add(txtColonia, new org.netbeans.lib.awtextra.AbsoluteConstraints(609, 257, 228, -1));
 
-        lblTelefono6.setFont(new java.awt.Font("Leelawadee UI", 1, 24)); // NOI18N
+        lblTelefono6.setFont(new java.awt.Font("Leelawadee UI", 1, 18)); // NOI18N
         lblTelefono6.setForeground(new java.awt.Color(255, 255, 255));
         lblTelefono6.setText("Número:");
+        fondo.add(lblTelefono6, new org.netbeans.lib.awtextra.AbsoluteConstraints(528, 211, -1, -1));
 
         txtNumero.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
         txtNumero.addActionListener(new java.awt.event.ActionListener() {
@@ -161,10 +180,12 @@ public class dlgRegistrarse extends javax.swing.JDialog {
                 txtNumeroActionPerformed(evt);
             }
         });
+        fondo.add(txtNumero, new org.netbeans.lib.awtextra.AbsoluteConstraints(609, 212, 228, -1));
 
-        lblTelefono7.setFont(new java.awt.Font("Leelawadee UI", 1, 24)); // NOI18N
+        lblTelefono7.setFont(new java.awt.Font("Leelawadee UI", 1, 18)); // NOI18N
         lblTelefono7.setForeground(new java.awt.Color(255, 255, 255));
         lblTelefono7.setText("Ciudad:");
+        fondo.add(lblTelefono7, new org.netbeans.lib.awtextra.AbsoluteConstraints(537, 301, -1, -1));
 
         txtCiudad.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
         txtCiudad.addActionListener(new java.awt.event.ActionListener() {
@@ -172,10 +193,12 @@ public class dlgRegistrarse extends javax.swing.JDialog {
                 txtCiudadActionPerformed(evt);
             }
         });
+        fondo.add(txtCiudad, new org.netbeans.lib.awtextra.AbsoluteConstraints(609, 302, 228, -1));
 
-        lblTelefono8.setFont(new java.awt.Font("Leelawadee UI", 1, 24)); // NOI18N
+        lblTelefono8.setFont(new java.awt.Font("Leelawadee UI", 1, 18)); // NOI18N
         lblTelefono8.setForeground(new java.awt.Color(255, 255, 255));
         lblTelefono8.setText("CP:");
+        fondo.add(lblTelefono8, new org.netbeans.lib.awtextra.AbsoluteConstraints(575, 340, -1, 33));
 
         txtCodigoPostal.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
         txtCodigoPostal.addActionListener(new java.awt.event.ActionListener() {
@@ -183,10 +206,12 @@ public class dlgRegistrarse extends javax.swing.JDialog {
                 txtCodigoPostalActionPerformed(evt);
             }
         });
+        fondo.add(txtCodigoPostal, new org.netbeans.lib.awtextra.AbsoluteConstraints(609, 345, 228, -1));
 
-        lblTelefono9.setFont(new java.awt.Font("Leelawadee UI", 1, 24)); // NOI18N
+        lblTelefono9.setFont(new java.awt.Font("Leelawadee UI", 1, 18)); // NOI18N
         lblTelefono9.setForeground(new java.awt.Color(255, 255, 255));
         lblTelefono9.setText("Fecha de nacimiento:");
+        fondo.add(lblTelefono9, new org.netbeans.lib.awtextra.AbsoluteConstraints(32, 301, -1, -1));
 
         txtFechaNacimiento.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
         txtFechaNacimiento.addActionListener(new java.awt.event.ActionListener() {
@@ -194,135 +219,17 @@ public class dlgRegistrarse extends javax.swing.JDialog {
                 txtFechaNacimientoActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout fondoLayout = new javax.swing.GroupLayout(fondo);
-        fondo.setLayout(fondoLayout);
-        fondoLayout.setHorizontalGroup(
-            fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, fondoLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addGap(266, 266, 266))
-            .addGroup(fondoLayout.createSequentialGroup()
-                .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(fondoLayout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(fondoLayout.createSequentialGroup()
-                                .addComponent(lblTelefono3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtCalle, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(lblTelefono5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtColonia))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, fondoLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(txtCodigoPostal, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(fondoLayout.createSequentialGroup()
-                                .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addGroup(fondoLayout.createSequentialGroup()
-                                            .addComponent(lblTelefono6)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(txtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(18, 18, 18)
-                                            .addComponent(lblTelefono7)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(txtCiudad, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(18, 18, 18)
-                                            .addComponent(lblTelefono8))
-                                        .addGroup(fondoLayout.createSequentialGroup()
-                                            .addComponent(lblTelefono2)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(txtApellidoMaterno, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(18, 18, 18)
-                                            .addComponent(lblTelefono4)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(txtTelefono))
-                                        .addGroup(fondoLayout.createSequentialGroup()
-                                            .addComponent(lblTelefono)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(txtNombres, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(18, 18, 18)
-                                            .addComponent(lblTelefono1)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(txtApellidoPaterno, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(fondoLayout.createSequentialGroup()
-                                        .addComponent(lblTelefono9)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 0, Short.MAX_VALUE))))
-                    .addGroup(fondoLayout.createSequentialGroup()
-                        .addGap(300, 300, 300)
-                        .addComponent(btnAceptar)
-                        .addGap(114, 114, 114)
-                        .addComponent(btnCancelar)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, fondoLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblContrasenia)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pswContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(44, 44, 44))
-        );
-        fondoLayout.setVerticalGroup(
-            fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(fondoLayout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addComponent(jLabel2)
-                .addGap(36, 36, 36)
-                .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblTelefono)
-                    .addComponent(txtNombres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblTelefono1)
-                    .addComponent(txtApellidoPaterno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblTelefono2)
-                    .addComponent(txtApellidoMaterno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblTelefono4))
-                .addGap(18, 18, 18)
-                .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblTelefono3)
-                    .addComponent(txtCalle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblTelefono5)
-                    .addComponent(txtColonia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblTelefono6)
-                    .addComponent(txtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblTelefono7)
-                    .addComponent(txtCiudad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblTelefono8)
-                    .addComponent(txtCodigoPostal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblTelefono9)
-                    .addComponent(txtFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblContrasenia)
-                    .addComponent(pswContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
-                .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAceptar)
-                    .addComponent(btnCancelar))
-                .addGap(58, 58, 58))
-        );
+        fondo.add(txtFechaNacimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(219, 302, 228, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(fondo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(fondo, javax.swing.GroupLayout.DEFAULT_SIZE, 900, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(fondo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(fondo, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
         );
 
         pack();
@@ -372,48 +279,6 @@ public class dlgRegistrarse extends javax.swing.JDialog {
     private void txtFechaNacimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechaNacimientoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtFechaNacimientoActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(dlgRegistrarse.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(dlgRegistrarse.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(dlgRegistrarse.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(dlgRegistrarse.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                dlgRegistrarse dialog = new dlgRegistrarse(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;

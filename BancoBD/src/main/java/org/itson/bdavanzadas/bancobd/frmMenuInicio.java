@@ -32,6 +32,10 @@ public class frmMenuInicio extends javax.swing.JFrame {
         btnRetiroSinCuenta = new javax.swing.JButton();
         btnRegistrarse = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
+        lblTelefono = new javax.swing.JLabel();
+        lblContrasenia = new javax.swing.JLabel();
+        txtTelefono = new javax.swing.JTextField();
+        pswContrasenia = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Menu Inicio");
@@ -83,51 +87,95 @@ public class frmMenuInicio extends javax.swing.JFrame {
             }
         });
 
+        lblTelefono.setFont(new java.awt.Font("Leelawadee UI", 1, 24)); // NOI18N
+        lblTelefono.setForeground(new java.awt.Color(255, 255, 255));
+        lblTelefono.setText("Teléfono:");
+
+        lblContrasenia.setFont(new java.awt.Font("Leelawadee UI", 1, 24)); // NOI18N
+        lblContrasenia.setForeground(new java.awt.Color(255, 255, 255));
+        lblContrasenia.setText("Contraseña:");
+
+        txtTelefono.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
+        txtTelefono.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTelefonoActionPerformed(evt);
+            }
+        });
+
+        pswContrasenia.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
+        pswContrasenia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pswContraseniaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout fondoLayout = new javax.swing.GroupLayout(fondo);
         fondo.setLayout(fondoLayout);
         fondoLayout.setHorizontalGroup(
             fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(fondoLayout.createSequentialGroup()
+                .addGap(335, 335, 335)
+                .addComponent(btnRetiroSinCuenta)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnSalir)
+                .addGap(47, 47, 47))
             .addGroup(fondoLayout.createSequentialGroup()
                 .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(fondoLayout.createSequentialGroup()
                         .addGap(156, 156, 156)
                         .addComponent(jLabel2))
                     .addGroup(fondoLayout.createSequentialGroup()
-                        .addGap(206, 206, 206)
+                        .addGap(199, 199, 199)
                         .addComponent(btnIniciarSesion)
-                        .addGap(127, 127, 127)
-                        .addComponent(btnRegistrarse)))
-                .addGap(156, 156, 156))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, fondoLayout.createSequentialGroup()
-                .addComponent(btnRetiroSinCuenta)
-                .addGap(330, 330, 330))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, fondoLayout.createSequentialGroup()
-                .addComponent(btnSalir)
-                .addGap(54, 54, 54))
+                        .addGap(128, 128, 128)
+                        .addComponent(btnRegistrarse, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(157, Short.MAX_VALUE))
+            .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(fondoLayout.createSequentialGroup()
+                    .addGap(216, 216, 216)
+                    .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(fondoLayout.createSequentialGroup()
+                            .addComponent(lblTelefono)
+                            .addGap(18, 18, 18)
+                            .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(fondoLayout.createSequentialGroup()
+                            .addComponent(lblContrasenia)
+                            .addGap(18, 18, 18)
+                            .addComponent(pswContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addContainerGap(217, Short.MAX_VALUE)))
         );
         fondoLayout.setVerticalGroup(
             fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(fondoLayout.createSequentialGroup()
                 .addGap(57, 57, 57)
                 .addComponent(jLabel2)
-                .addGap(104, 104, 104)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 216, Short.MAX_VALUE)
                 .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnIniciarSesion)
-                    .addComponent(btnRegistrarse))
-                .addGap(78, 78, 78)
-                .addComponent(btnRetiroSinCuenta)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
-                .addComponent(btnSalir)
+                    .addComponent(btnIniciarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRegistrarse, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(36, 36, 36)
+                .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnSalir, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnRetiroSinCuenta, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(49, 49, 49))
+            .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(fondoLayout.createSequentialGroup()
+                    .addGap(246, 246, 246)
+                    .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lblTelefono)
+                        .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGap(41, 41, 41)
+                    .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lblContrasenia)
+                        .addComponent(pswContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addContainerGap(247, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(fondo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 1, Short.MAX_VALUE))
+            .addComponent(fondo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -139,8 +187,8 @@ public class frmMenuInicio extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
-        dlgIniciarSesion iniciarSesion = new dlgIniciarSesion(this, true);
-        iniciarSesion.setVisible(true);
+        frmMenuPrincipal menuPrincipal = new frmMenuPrincipal();
+        menuPrincipal.setVisible(true);
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
     private void btnRetiroSinCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetiroSinCuentaActionPerformed
@@ -148,12 +196,21 @@ public class frmMenuInicio extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRetiroSinCuentaActionPerformed
 
     private void btnRegistrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarseActionPerformed
-        // TODO add your handling code here:
+        dlgRegistrarse registrarse = new dlgRegistrarse(this, true);
+        registrarse.setVisible(true);
     }//GEN-LAST:event_btnRegistrarseActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         dispose();
     }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void txtTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTelefonoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTelefonoActionPerformed
+
+    private void pswContraseniaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pswContraseniaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_pswContraseniaActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIniciarSesion;
@@ -162,5 +219,9 @@ public class frmMenuInicio extends javax.swing.JFrame {
     private javax.swing.JButton btnSalir;
     private javax.swing.JPanel fondo;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel lblContrasenia;
+    private javax.swing.JLabel lblTelefono;
+    private javax.swing.JPasswordField pswContrasenia;
+    private javax.swing.JTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
 }
