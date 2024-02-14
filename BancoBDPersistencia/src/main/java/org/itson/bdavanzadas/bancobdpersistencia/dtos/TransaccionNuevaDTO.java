@@ -4,10 +4,54 @@
  */
 package org.itson.bdavanzadas.bancobdpersistencia.dtos;
 
+import java.util.Date;
+import org.itson.bdavanzadas.bancobdpersistencia.excepciones.ValidacionDTOException;
+
 /**
  *
  * @author alex_
  */
 public class TransaccionNuevaDTO {
+    
+    private int idTransaccion;
+    private Date fecha;
+    private long cantidad;
+    private String numCuenta;
+
+    public int getIdTransaccion() {
+        return idTransaccion;
+    }
+
+    public void setIdTransaccion(int idTransaccion) {
+        this.idTransaccion = idTransaccion;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public long getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(long cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public String getNumCuenta() {
+        return numCuenta;
+    }
+
+    public void setNumCuenta(String numCuenta) {
+        this.numCuenta = numCuenta;
+    }
+    
+    public boolean esValido() throws ValidacionDTOException {
+        return true;
+    }
     
 }
