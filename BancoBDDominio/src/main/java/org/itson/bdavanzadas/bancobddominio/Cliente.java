@@ -25,13 +25,15 @@ public class Cliente {
     public Cliente() {
     }
 
-    public Cliente(String telefono, String nombre, String apellidoPaterno, String apellidoMaterno, Date fechaNacimiento, String password) {
+    public Cliente(String telefono, String nombre, String apellidoPaterno, String apellidoMaterno, Date fechaNacimiento, int edad, String password, int idDireccion) {
         this.telefono = telefono;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
         this.fechaNacimiento = fechaNacimiento;
+        this.edad = edad;
         this.password = password;
+        this.idDireccion = idDireccion;
     }
 
     public String getTelefono() {
