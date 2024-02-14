@@ -15,7 +15,7 @@ import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaExcepti
  */
 public interface IClientesDAO {
     Cliente agregar(ClienteNuevoDTO clienteNuevo) throws PersistenciaException;
-    Cliente actualizar(ClienteNuevoDTO clienteNuevo) throws PersistenciaException;
+    Cliente actualizar(ClienteNuevoDTO clienteNuevo, String telefono) throws PersistenciaException;
     Cliente obtener(String telefono) throws PersistenciaException;
     List<Cliente> consultar() throws PersistenciaException;
 }
