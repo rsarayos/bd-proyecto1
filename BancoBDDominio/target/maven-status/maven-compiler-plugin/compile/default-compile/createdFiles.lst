@@ -1,0 +1,6 @@
+org\itson\bdavanzadas\bancobddominio\Cliente.class
+org\itson\bdavanzadas\bancobddominio\Transaccion.class
+org\itson\bdavanzadas\bancobddominio\Transferencia.class
+org\itson\bdavanzadas\bancobddominio\Retiro.class
+org\itson\bdavanzadas\bancobddominio\Cuenta.class
+org\itson\bdavanzadas\bancobddominio\Direccion.class

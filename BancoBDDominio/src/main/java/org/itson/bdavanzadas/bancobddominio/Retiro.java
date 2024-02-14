@@ -8,20 +8,18 @@ package org.itson.bdavanzadas.bancobddominio;
  *
  * @author alex_
  */
-public class Retiro {
+public class Retiro extends Transaccion{
     private int idRetiro;
     private String folioRetiro;
     private String contraseniaRetiro;
     private boolean estado;
-    private int idTransaccion;
 
     public Retiro() {
     }
 
-    public Retiro(String folioRetiro, String contraseniaRetiro, int idTransaccion) {
+    public Retiro(String folioRetiro, String contraseniaRetiro) {
         this.folioRetiro = folioRetiro;
         this.contraseniaRetiro = contraseniaRetiro;
-        this.idTransaccion = idTransaccion;
     }
 
     public int getIdRetiro() {
@@ -56,14 +54,6 @@ public class Retiro {
         this.estado = estado;
     }
 
-    public int getIdTransaccion() {
-        return idTransaccion;
-    }
-
-    public void setIdTransaccion(int idTransaccion) {
-        this.idTransaccion = idTransaccion;
-    }
-
     @Override
     public int hashCode() {
         int hash = 7;
@@ -94,7 +84,6 @@ public class Retiro {
         sb.append(", folioRetiro=").append(folioRetiro);
         sb.append(", contraseniaRetiro=").append(contraseniaRetiro);
         sb.append(", estado=").append(estado);
-        sb.append(", idTransaccion=").append(idTransaccion);
         sb.append('}');
         return sb.toString();
     }
