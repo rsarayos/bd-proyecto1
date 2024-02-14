@@ -21,7 +21,7 @@ public class Cuenta {
     public Cuenta() {
     }
 
-    public Cuenta(String numCuenta, Date fechaApertura, long saldo, String telefonoTitular) {
+    public Cuenta(String numCuenta, Date fechaApertura, long saldo, boolean estado, String telefonoTitular) {
         this.numCuenta = numCuenta;
         this.fechaApertura = fechaApertura;
         this.saldo = saldo;

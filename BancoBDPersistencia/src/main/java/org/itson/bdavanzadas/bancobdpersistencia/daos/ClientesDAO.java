@@ -36,7 +36,7 @@ public class ClientesDAO implements IClientesDAO{
     public Cliente agregar(ClienteNuevoDTO clienteNuevo) throws PersistenciaException {
         String setenciaSQL = """
                              INSERT INTO clientes (telefono, nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento, edad, contrasenia, idDireccion)
-                                         VALUES(?,?,?,?,?,?,?,?);;
+                                         VALUES(?,?,?,?,?,?,?,?);
                              """;
 
         try (
