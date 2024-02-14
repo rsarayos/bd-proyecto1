@@ -1,0 +1,94 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package org.itson.bdavanzadas.bancobdpersistencia.daos;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.itson.bdavanzadas.bancobddominio.Direccion;
+import org.itson.bdavanzadas.bancobdpersistencia.conexion.IConexion;
+import org.itson.bdavanzadas.bancobdpersistencia.dtos.DireccionNuevaDTO;
+import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
+
+/**
+ *
+ * @author alex_
+ */
+public class DireccionDAO implements IDireccionDAO{
+
+    final IConexion conexionDB;
+    static final Logger logger = Logger.getLogger(DireccionDAO.class.getName());
+
+    public DireccionDAO(IConexion conexionDB) {
+        this.conexionDB = conexionDB;
+    }
+    
+    @Override
+    public Direccion agregar(DireccionNuevaDTO direccionNueva) throws PersistenciaException {
+        String setenciaSQL = """
+                             INSERT INTO direcciones (calle, colonia, numero, ciudad, cp)
+                                         VALUES(?,?,?,?,?);
+                             """;
+
+        try (
+                Connection conexion = this.conexionDB.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(
+                setenciaSQL,
+                Statement.RETURN_GENERATED_KEYS);) {
+            comando.setString(1, direccionNueva.getCalle());
+            comando.setString(2, direccionNueva.getColonia());
+            comando.setString(3, direccionNueva.getNumero());
+            comando.setString(4, direccionNueva.getCiudad());
+            comando.setString(5, direccionNueva.getCp());
+            int numeroRegistrosInsertados = comando.executeUpdate();
+            logger.log(Level.INFO, "Se agrego {0} direccion", numeroRegistrosInsertados);
+            ResultSet idsGenerados = comando.getGeneratedKeys();
+            idsGenerados.next();
+            return new Direccion(idsGenerados.getInt(1),
+                    direccionNueva.getCalle(),
+                    direccionNueva.getColonia(),
+                    direccionNueva.getNumero(),
+                    direccionNueva.getCiudad(),
+                    direccionNueva.getCp());
+        } catch (SQLException ex) {
+            logger.log(Level.INFO, "No se ha podido agregar la direccion", ex);
+            return null;
+        }
+    }
+
+    @Override
+    public Direccion actualizar(DireccionNuevaDTO direccionNueva) throws PersistenciaException {
+        String setenciaSQL = """
+                             UPDATE direcciones
+                             SET calle=?, colonia=?, numero=?, ciudad=?, cp=?
+                             WHERE idDireccion=?;
+                             """;
+
+        try (
+                Connection conexion = this.conexionDB.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(setenciaSQL);) {
+            comando.setString(1, direccionNueva.getCalle());
+            comando.setString(2, direccionNueva.getColonia());
+            comando.setString(3, direccionNueva.getNumero());
+            comando.setString(4, direccionNueva.getCiudad());
+            comando.setString(5, direccionNueva.getCp());
+            comando.setInt(6, direccionNueva.getIdDireccion());
+            int numeroRegistrosActualizados = comando.executeUpdate();
+            logger.log(Level.INFO, "Se actualizaron {0} registros", numeroRegistrosActualizados);
+                return new Direccion(direccionNueva.getIdDireccion(),
+                    direccionNueva.getCalle(),
+                    direccionNueva.getColonia(),
+                    direccionNueva.getNumero(),
+                    direccionNueva.getCiudad(),
+                    direccionNueva.getCp());
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientesDAO.class.getName()).log(Level.SEVERE, "No se pudo actualizar la direccion", ex);
+            return null;
+        }
+    }
+    
+}
