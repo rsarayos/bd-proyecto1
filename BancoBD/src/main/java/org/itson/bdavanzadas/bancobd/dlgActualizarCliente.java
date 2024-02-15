@@ -1,102 +1,26 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
+
 package org.itson.bdavanzadas.bancobd;
 
-import com.google.protobuf.TextFormat.ParseException;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import org.itson.bdavanzadas.bancobddominio.Direccion;
 import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
-import org.itson.bdavanzadas.bancobdpersistencia.dtos.ClienteNuevoDTO;
-import org.itson.bdavanzadas.bancobdpersistencia.dtos.DireccionNuevaDTO;
-import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
-import org.itson.bdavanzadas.bancobdpersistencia.excepciones.ValidacionDTOException;
 
 /**
  *
  * @author victo
  */
-public class dlgRegistrarse extends javax.swing.JDialog {
+public class dlgActualizarCliente extends javax.swing.JDialog {
 
     private final DatosConexion datosConexion;
-
+    
     /**
-     * Creates new form dlgRegistrarse
+     * Creates new form dlgActualizarCliente
      */
-    public dlgRegistrarse(java.awt.Frame parent, boolean modal, DatosConexion datosConexion) {
+    public dlgActualizarCliente(java.awt.Frame parent, boolean modal, DatosConexion datosConexion) {
         super(parent, modal);
         initComponents();
-        this.datosConexion = datosConexion;
-
-    }
-
-    private void registrar() throws java.text.ParseException {
-        String telefono = txtTelefono.getText();
-        String nombres = txtNombres.getText();
-        String apellidoPaterno = txtApellidoPaterno.getText();
-        String apellidoMaterno = txtApellidoMaterno.getText();
-        java.util.Date fechaSeleccionada = jDateFechaNacimiento.getDate();
-        java.sql.Date fechaNacimiento = new java.sql.Date(fechaSeleccionada.getTime());
-        String calle = txtCalle.getText();
-        String numero = txtNumero.getText();
-        String colonia = txtColonia.getText();
-        String ciudad = txtCiudad.getText();
-        String cp = txtCodigoPostal.getText();
-
-        char[] contraseniaArray = pswContrasenia.getPassword();
-        String contrasenia = new String(contraseniaArray);
-
-        DireccionNuevaDTO direccionNueva = new DireccionNuevaDTO();
-        direccionNueva.setCalle(calle);
-        direccionNueva.setNumero(numero);
-        direccionNueva.setColonia(colonia);
-        direccionNueva.setCiudad(ciudad);
-        direccionNueva.setCp(cp);
-
-        ClienteNuevoDTO clienteNuevo = new ClienteNuevoDTO();
-        clienteNuevo.setTelefono(telefono);
-        clienteNuevo.setNombre(nombres);
-        clienteNuevo.setApellidoPaterno(apellidoPaterno);
-        clienteNuevo.setApellidoMaterno(apellidoMaterno);
-        clienteNuevo.setFechaNacimiento(fechaNacimiento);
-        clienteNuevo.setPassword(contrasenia);
-        limpiarDatos();
-        try {
-            direccionNueva.esValido();
-            Direccion direccion = this.datosConexion.getDireccionDAO().agregar(direccionNueva);
-            clienteNuevo.setIdDireccion(direccion.getIdDireccion());
-            clienteNuevo.esValido();
-            if (datosConexion.getClientesDAO().obtener(clienteNuevo.getTelefono()) == null) {
-                this.datosConexion.getClientesDAO().agregar(clienteNuevo);
-                JOptionPane.showMessageDialog(this, "Se registró al cliente", "Notificación", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(this, "El número de teléfono ya está registrado", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (ValidacionDTOException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de validación", JOptionPane.ERROR_MESSAGE);
-        } catch (PersistenciaException ex) {
-            JOptionPane.showMessageDialog(this, "No fue posible agregar al cliente", "Error de almacenamiento", JOptionPane.ERROR_MESSAGE);
-        }
-        dispose();
-    }
-
-    private void limpiarDatos() {
-        txtApellidoMaterno.setText("");
-        txtApellidoPaterno.setText("");
-        txtCalle.setText("");
-        txtCiudad.setText("");
-        txtCodigoPostal.setText("");
-        txtColonia.setText("");
-        txtNombres.setText("");
-        txtNumero.setText("");
-        txtTelefono.setText("");
-        pswContrasenia.setText("");
-        jDateFechaNacimiento.setDate(null);
+        this.datosConexion=datosConexion;
     }
 
     /**
@@ -136,7 +60,7 @@ public class dlgRegistrarse extends javax.swing.JDialog {
         jDateFechaNacimiento = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Registrarse");
+        setTitle("Actualizar cliente");
         setResizable(false);
 
         fondo.setBackground(new java.awt.Color(102, 153, 255));
@@ -144,8 +68,8 @@ public class dlgRegistrarse extends javax.swing.JDialog {
 
         jLabel2.setFont(new java.awt.Font("Leelawadee UI", 1, 70)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Registrarse");
-        fondo.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(264, 22, -1, -1));
+        jLabel2.setText("Actualizar datos");
+        fondo.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 30, -1, -1));
 
         btnAceptar.setBackground(new java.awt.Color(0, 102, 255));
         btnAceptar.setFont(new java.awt.Font("Segoe UI Black", 0, 24)); // NOI18N
@@ -272,60 +196,13 @@ public class dlgRegistrarse extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        if (!txtNombres.getText().isBlank()) {
-            if (!txtApellidoPaterno.getText().isBlank()) {
-                if (!txtApellidoMaterno.getText().isBlank()) {
-                    if (jDateFechaNacimiento.getDate() != null) {
-                        if (!txtTelefono.getText().isBlank()) {
-                            if (!txtCalle.getText().isBlank()) {
-                                if (!txtNumero.getText().isBlank()) {
-                                    if (!txtColonia.getText().isBlank()) {
-                                        if (!txtCiudad.getText().isBlank()) {
-                                            if (!txtCodigoPostal.getText().isBlank()) {
-                                                if (!pswContrasenia.getText().isBlank()) {
-                                                    try {
-                                                        registrar();
-                                                    } catch (java.text.ParseException ex) {
-                                                        Logger.getLogger(dlgRegistrarse.class.getName()).log(Level.SEVERE, null, ex);
-                                                    }
-                                                } else {
-                                                    JOptionPane.showMessageDialog(this, "Ingrese una contraseña");
-                                                }
-                                            } else {
-                                                JOptionPane.showMessageDialog(this, "Ingrese el código postal");
-                                            }
-                                        } else {
-                                            JOptionPane.showMessageDialog(this, "Ingrese una ciudad");
-                                        }
-                                    } else {
-                                        JOptionPane.showMessageDialog(this, "Ingrese una colonia");
-                                    }
-                                } else {
-                                    JOptionPane.showMessageDialog(this, "Ingrese una número");
-                                }
-                            } else {
-                                JOptionPane.showMessageDialog(this, "Ingrese una calle");
-                            }
-                        } else {
-                            JOptionPane.showMessageDialog(this, "Ingrese un teléfono");
-                        }
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Ingrese una fecha de nacimiento");
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(this, "Ingrese el apellido materno");
-                }
-            } else {
-                JOptionPane.showMessageDialog(this, "Ingrese el apellido paterno");
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Ingrese los nombres");
-        }
+        
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
@@ -355,5 +232,4 @@ public class dlgRegistrarse extends javax.swing.JDialog {
     private javax.swing.JTextField txtNumero;
     private javax.swing.JTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
-
 }
