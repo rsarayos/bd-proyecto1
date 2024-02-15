@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import org.itson.bdavanzadas.bancobddominio.Direccion;
 import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
 import org.itson.bdavanzadas.bancobdpersistencia.dtos.ClienteNuevoDTO;
 import org.itson.bdavanzadas.bancobdpersistencia.dtos.DireccionNuevaDTO;
@@ -46,7 +47,9 @@ public class dlgRegistrarse extends javax.swing.JDialog {
         String colonia = txtColonia.getText();
         String ciudad = txtCiudad.getText();
         String cp = txtCodigoPostal.getText();
-        String contrasenia = String.valueOf(pswContrasenia);
+        
+        char [] contraseniaArray = pswContrasenia.getPassword();
+        String contrasenia = new String(contraseniaArray);
 
         DireccionNuevaDTO direccionNueva = new DireccionNuevaDTO();
         direccionNueva.setCalle(calle);
@@ -63,11 +66,11 @@ public class dlgRegistrarse extends javax.swing.JDialog {
         clienteNuevo.setFechaNacimiento(fechaNacimiento);
         clienteNuevo.setEdad(20);
         clienteNuevo.setPassword(contrasenia);
-        clienteNuevo.setIdDireccion(direccionNueva.getIdDireccion());
         limpiarDatos();
         try {
             direccionNueva.esValido();
-            this.datosConexion.getDireccionDAO().agregar(direccionNueva);
+            Direccion direccion = this.datosConexion.getDireccionDAO().agregar(direccionNueva);
+            clienteNuevo.setIdDireccion(direccion.getIdDireccion());
             clienteNuevo.esValido();
             this.datosConexion.getClientesDAO().agregar(clienteNuevo);
             JOptionPane.showMessageDialog(this, "Se registró al cliente", "Notificación", JOptionPane.INFORMATION_MESSAGE);
@@ -90,6 +93,7 @@ public class dlgRegistrarse extends javax.swing.JDialog {
         txtNumero.setText("");
         txtTelefono.setText("");
         pswContrasenia.setText("");
+        jDateFechaNacimiento.setDate(null);
     }
 
     /**

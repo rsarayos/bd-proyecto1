@@ -1,7 +1,12 @@
-
 package org.itson.bdavanzadas.bancobd;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import org.itson.bdavanzadas.bancobd.frmMenuPrincipal;
+import org.itson.bdavanzadas.bancobddominio.Cliente;
 import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
+import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
 
 /**
  *
@@ -10,13 +15,26 @@ import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
 public class frmMenuInicio extends javax.swing.JFrame {
 
     private final DatosConexion datosConexion;
-    
+
     /**
      * Creates new form MenuPrincipal
      */
     public frmMenuInicio(DatosConexion datosConexion) {
         initComponents();
-        this.datosConexion=datosConexion;
+        this.datosConexion = datosConexion;
+    }
+
+    private void iniciarSesion() {
+        String telefono = txtTelefono.getText();
+        char[] contraseniaArray = pswContrasenia.getPassword();
+        String contrasenia = new String(contraseniaArray);
+        try {
+            Cliente cliente = datosConexion.getClientesDAO().obtener(telefono);
+
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(frmMenuInicio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     /**
@@ -189,9 +207,39 @@ public class frmMenuInicio extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
-        frmMenuPrincipal menuPrincipal = new frmMenuPrincipal(datosConexion);
-        menuPrincipal.setVisible(true);
-        dispose();
+        if (!txtTelefono.getText().isBlank()) {
+            if (!String.valueOf(pswContrasenia.getPassword()).isBlank()) {
+                String telefono = txtTelefono.getText();
+                char[] contraseniaArray = pswContrasenia.getPassword();
+                String contrasenia = new String(contraseniaArray);
+                Cliente cliente = null;
+                try {
+                    cliente = datosConexion.getClientesDAO().obtener(telefono);
+                } catch (PersistenciaException ex) {
+                    Logger.getLogger(frmMenuInicio.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                if (cliente != null) {
+                    if (cliente.getTelefono().equals(telefono)) {
+                        if (cliente.getPassword().equals(contrasenia)) {
+                            frmMenuPrincipal menuPrincipal = new frmMenuPrincipal(datosConexion);
+                            menuPrincipal.setVisible(true);
+                            dispose();
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Contraseña incorrecta", "Error Inicio Sesión", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Teléfono incorrecto", "Error Inicio Sesión", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "No se encontró ningún cliente con ese teléfono", "Error Inicio Sesión", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Ingresa la contraseña", "Error Inicio Sesión", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Ingresa el teléfono", "Error Inicio Sesión", JOptionPane.ERROR_MESSAGE);
+        }
+
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
     private void btnRetiroSinCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetiroSinCuentaActionPerformed
