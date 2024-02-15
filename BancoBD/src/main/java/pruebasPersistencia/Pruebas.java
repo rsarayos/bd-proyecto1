@@ -30,22 +30,8 @@ public class Pruebas {
         String usuario = "root";
         String password = "Base1234";
         IConexion conexion = new Conexion(candenaConexion, usuario, password);
-        
-        
-        TransferenciaDAO transfDAO = new TransferenciaDAO(conexion);
-        
-        TransferenciaNuevaDTO transNueva = new TransferenciaNuevaDTO();
-        Date fecha = new Date(1995, 1, 20);
-        transNueva.setFecha(fecha);
-        transNueva.setCantidad(250000);
-        transNueva.setNumCuenta("A12345");
-        transNueva.setCuentaDestino("C54321");
-        
-        try {
-            transfDAO.nueva(transNueva);
-            
-            
-            // PRUEBA AGREGAR UN CLIENTE
+         
+            // PRUEBAS CLIENTEDAO
 //        ClienteNuevoDTO cliente = new ClienteNuevoDTO();
 //        cliente.setTelefono("6666666666");
 //        cliente.setNombre("Juan");
@@ -59,15 +45,10 @@ public class Pruebas {
 //        
 //        IClientesDAO clienteDAO = new ClientesDAO(conexion);
 //        try {
-//            clienteDAO.agregar(cliente);
+//            System.out.println(clienteDAO.consultar().size());
 //        } catch (PersistenciaException ex) {
 //            Logger.getLogger(Pruebas.class.getName()).log(Level.SEVERE, null, ex);
 //        }
-
-// PRUEBA
-        } catch (PersistenciaException ex) {
-            Logger.getLogger(Pruebas.class.getName()).log(Level.SEVERE, null, ex);
-        }
         
     }
     
