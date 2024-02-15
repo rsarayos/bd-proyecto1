@@ -3,7 +3,6 @@ package org.itson.bdavanzadas.bancobd;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import org.itson.bdavanzadas.bancobd.frmMenuPrincipal;
 import org.itson.bdavanzadas.bancobddominio.Cliente;
 import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
@@ -24,18 +23,6 @@ public class frmMenuInicio extends javax.swing.JFrame {
         this.datosConexion = datosConexion;
     }
 
-    private void iniciarSesion() {
-        String telefono = txtTelefono.getText();
-        char[] contraseniaArray = pswContrasenia.getPassword();
-        String contrasenia = new String(contraseniaArray);
-        try {
-            Cliente cliente = datosConexion.getClientesDAO().obtener(telefono);
-
-        } catch (PersistenciaException ex) {
-            Logger.getLogger(frmMenuInicio.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.

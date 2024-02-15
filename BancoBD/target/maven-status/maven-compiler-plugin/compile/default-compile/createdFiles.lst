@@ -1,3 +1,4 @@
+pruebasPersistencia\Pruebas.class
 org\itson\bdavanzadas\bancobd\frmMenuPrincipal$5.class
 org\itson\bdavanzadas\bancobd\frmMenuInicio$4.class
 org\itson\bdavanzadas\bancobd\frmMenuInicio$5.class
@@ -7,6 +8,7 @@ org\itson\bdavanzadas\bancobd\dlgRegistrarse$1.class
 org\itson\bdavanzadas\bancobd\frmMenuInicio$1.class
 org\itson\bdavanzadas\bancobd\dlgTransferencia$3.class
 org\itson\bdavanzadas\bancobd\dlgTransferencia.class
+org\itson\bdavanzadas\bancobd\dlgCuentas.class
 org\itson\bdavanzadas\bancobd\frmMenuPrincipal$3.class
 org\itson\bdavanzadas\bancobd\frmMenuInicio$6.class
 org\itson\bdavanzadas\bancobd\dlgRegistrarse$2.class
