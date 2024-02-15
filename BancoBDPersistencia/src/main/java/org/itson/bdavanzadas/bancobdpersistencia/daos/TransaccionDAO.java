@@ -14,83 +14,77 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.itson.bdavanzadas.bancobddominio.Transferencia;
+import org.itson.bdavanzadas.bancobddominio.Transaccion;
 import org.itson.bdavanzadas.bancobdpersistencia.conexion.IConexion;
-import org.itson.bdavanzadas.bancobdpersistencia.dtos.TransferenciaNuevaDTO;
+import org.itson.bdavanzadas.bancobdpersistencia.dtos.TransaccionNuevaDTO;
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
 
 /**
  *
  * @author alex_
  */
-public class TransferenciaDAO implements ITransferenciaDAO{
+public class TransaccionDAO implements ITransaccionDAO{
 
     final IConexion conexionDB;
     static final Logger logger = Logger.getLogger(TransferenciaDAO.class.getName());
 
-    public TransferenciaDAO(IConexion conexionDB) {
+    public TransaccionDAO(IConexion conexionDB) {
         this.conexionDB = conexionDB;
     }
     
     @Override
-    public Transferencia nueva(TransferenciaNuevaDTO transferenciaNueva) throws PersistenciaException {
+    public Transaccion nueva(TransaccionNuevaDTO transaccionNueva) throws PersistenciaException {
         String setenciaSQL = """
-                             INSERT INTO transacciones (idTransaccion, numCuentaDestino)
-                                         VALUES(?,?);
+                             INSERT INTO transacciones (fecha, cantidad, numCuenta)
+                                         VALUES(?,?,?);
                              """;
 
         try (
                 Connection conexion = this.conexionDB.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(
                 setenciaSQL,
                 Statement.RETURN_GENERATED_KEYS);) {
-            comando.setInt(1, transferenciaNueva.getIdTransaccion());
-            comando.setString(2, transferenciaNueva.getCuentaDestino());
+            comando.setDate(1, (Date) transaccionNueva.getFecha());
+            comando.setLong(2, transaccionNueva.getCantidad());
+            comando.setString(3, transaccionNueva.getNumCuenta());
             int numeroRegistrosInsertados = comando.executeUpdate();
-            logger.log(Level.INFO, "Se agrearon {0} transferencia", numeroRegistrosInsertados);
+            logger.log(Level.INFO, "Se agrearon {0} transaccion", numeroRegistrosInsertados);
             ResultSet idsGenerados = comando.getGeneratedKeys();
             idsGenerados.next();
-            return new Transferencia(idsGenerados.getInt(1),
-                    transferenciaNueva.getCuentaDestino(),
-                    transferenciaNueva.getIdTransaccion(),
-                    transferenciaNueva.getFecha(), 
-                    transferenciaNueva.getCantidad(), 
-                    transferenciaNueva.getNumCuenta());
+            return new Transaccion(idsGenerados.getInt(1),
+                    transaccionNueva.getFecha(),
+                    transaccionNueva.getCantidad(),
+                    transaccionNueva.getNumCuenta());
         } catch (SQLException ex) {
-            logger.log(Level.INFO, "No se ha podido agregar la transferencia", ex);
+            logger.log(Level.INFO, "No se ha podido agregar la transaccion", ex);
             return null;
         }
     }
 
     @Override
-    public List<Transferencia> consultar() throws PersistenciaException {
+    public List<Transaccion> consultar() throws PersistenciaException {
         String setenciaSQL = """
-                             SELECT *
-                             FROM transferencias
-                             INNER JOIN transacciones ON transferencias.idTransaccion = transacciones.idTransaccion;
+                             SELECT idTransaccion, fecha, cantidad, numCuenta
+                             FROM transacciones;
                              """;
-        List<Transferencia> listaTranferencias = new LinkedList<>();
+        List<Transaccion> listaTransacciones = new LinkedList<>();
         try (
                 Connection conexion = this.conexionDB.obtenerConexion(); 
                 PreparedStatement comando = conexion.prepareStatement(setenciaSQL); 
                 ResultSet resultados = comando.executeQuery();) {
             
             while (resultados.next()) {                
-                int idTransferencia = resultados.getInt("idTransferencia");
                 int idTransaccion = resultados.getInt("idTransaccion");
-                String numCuentaDest = resultados.getString("numCuentaDestino");
                 Date fecha = resultados.getDate("fecha");
                 long cantidad = resultados.getInt("cantidad");
                 String numCuenta = resultados.getString("numCuenta");
-                Transferencia transferencia = new Transferencia(idTransferencia, 
-                        numCuentaDest, 
-                        idTransaccion,
+                Transaccion transaccion = new Transaccion(idTransaccion, 
                         fecha, 
-                        cantidad, 
+                        cantidad,
                         numCuenta);
-                listaTranferencias.add(transferencia);
+                listaTransacciones.add(transaccion);
             }
-            logger.log(Level.INFO, "Se consultaron {0} transferencias", listaTranferencias.size());
-            return listaTranferencias;
+            logger.log(Level.INFO, "Se consultaron {0} transacciones", listaTransacciones.size());
+            return listaTransacciones;
         } catch (SQLException ex) {
             Logger.getLogger(ClientesDAO.class.getName()).log(Level.SEVERE, "No se pudieron consultar las transacciones", ex);
             throw new PersistenciaException("No se pudieron consultar las transacciones", ex);

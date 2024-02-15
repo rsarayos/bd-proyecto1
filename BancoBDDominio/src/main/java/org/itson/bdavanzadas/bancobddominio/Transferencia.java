@@ -4,6 +4,8 @@
  */
 package org.itson.bdavanzadas.bancobddominio;
 
+import java.util.Date;
+
 /**
  *
  * @author alex_
@@ -16,6 +18,12 @@ public class Transferencia extends Transaccion{
     }
     
     public Transferencia(String cuentaDestino) {
+        this.cuentaDestino = cuentaDestino;
+    }
+
+    public Transferencia(int idTransferencia, String cuentaDestino, int idTransaccion, Date fecha, long cantidad, String numCuenta) {
+        super(idTransaccion, fecha, cantidad, numCuenta);
+        this.idTransferencia = idTransferencia;
         this.cuentaDestino = cuentaDestino;
     }
 

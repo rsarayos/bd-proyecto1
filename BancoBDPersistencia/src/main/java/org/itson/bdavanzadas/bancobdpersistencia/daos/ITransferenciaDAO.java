@@ -15,6 +15,5 @@ import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaExcepti
  */
 public interface ITransferenciaDAO {
     Transferencia nueva(TransferenciaNuevaDTO transferenciaNueva) throws PersistenciaException;
-    Transferencia obtener(int idTransferencia) throws PersistenciaException;
     List<Transferencia> consultar() throws PersistenciaException;
 }

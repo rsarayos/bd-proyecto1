@@ -11,7 +11,9 @@ import org.itson.bdavanzadas.bancobdpersistencia.conexion.Conexion;
 import org.itson.bdavanzadas.bancobdpersistencia.conexion.IConexion;
 import org.itson.bdavanzadas.bancobdpersistencia.daos.ClientesDAO;
 import org.itson.bdavanzadas.bancobdpersistencia.daos.IClientesDAO;
+import org.itson.bdavanzadas.bancobdpersistencia.daos.TransferenciaDAO;
 import org.itson.bdavanzadas.bancobdpersistencia.dtos.ClienteNuevoDTO;
+import org.itson.bdavanzadas.bancobdpersistencia.dtos.TransferenciaNuevaDTO;
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
 
 /**
@@ -30,7 +32,20 @@ public class Pruebas {
         IConexion conexion = new Conexion(candenaConexion, usuario, password);
         
         
-        // PRUEBA AGREGAR UN CLIENTE
+        TransferenciaDAO transfDAO = new TransferenciaDAO(conexion);
+        
+        TransferenciaNuevaDTO transNueva = new TransferenciaNuevaDTO();
+        Date fecha = new Date(1995, 1, 20);
+        transNueva.setFecha(fecha);
+        transNueva.setCantidad(250000);
+        transNueva.setNumCuenta("A12345");
+        transNueva.setCuentaDestino("C54321");
+        
+        try {
+            transfDAO.nueva(transNueva);
+            
+            
+            // PRUEBA AGREGAR UN CLIENTE
 //        ClienteNuevoDTO cliente = new ClienteNuevoDTO();
 //        cliente.setTelefono("6666666666");
 //        cliente.setNombre("Juan");
@@ -49,7 +64,10 @@ public class Pruebas {
 //            Logger.getLogger(Pruebas.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 
-        // PRUEBA
+// PRUEBA
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(Pruebas.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
     

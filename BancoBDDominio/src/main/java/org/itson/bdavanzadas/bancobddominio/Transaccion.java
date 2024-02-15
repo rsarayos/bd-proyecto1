@@ -19,7 +19,8 @@ public class Transaccion {
     public Transaccion() {
     }
 
-    public Transaccion(Date fecha, long cantidad, String numCuenta) {
+    public Transaccion(int idTransaccion, Date fecha, long cantidad, String numCuenta) {
+        this.idTransaccion = idTransaccion;
         this.fecha = fecha;
         this.cantidad = cantidad;
         this.numCuenta = numCuenta;

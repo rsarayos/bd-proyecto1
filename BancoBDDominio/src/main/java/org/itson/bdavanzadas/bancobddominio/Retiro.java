@@ -4,6 +4,8 @@
  */
 package org.itson.bdavanzadas.bancobddominio;
 
+import java.util.Date;
+
 /**
  *
  * @author alex_
@@ -20,6 +22,14 @@ public class Retiro extends Transaccion{
     public Retiro(String folioRetiro, String contraseniaRetiro) {
         this.folioRetiro = folioRetiro;
         this.contraseniaRetiro = contraseniaRetiro;
+    }
+
+    public Retiro(int idRetiro, String folioRetiro, String contraseniaRetiro, boolean estado, int idTransaccion, Date fecha, long cantidad, String numCuenta) {
+        super(idTransaccion, fecha, cantidad, numCuenta);
+        this.idRetiro = idRetiro;
+        this.folioRetiro = folioRetiro;
+        this.contraseniaRetiro = contraseniaRetiro;
+        this.estado = estado;
     }
 
     public int getIdRetiro() {
