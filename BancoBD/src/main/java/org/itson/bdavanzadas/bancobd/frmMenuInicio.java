@@ -1,8 +1,7 @@
 
 package org.itson.bdavanzadas.bancobd;
 
-import org.itson.bdavanzadas.bancobdpersistencia.daos.IClientesDAO;
-import org.itson.bdavanzadas.bancobdpersistencia.daos.IDireccionDAO;
+import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
 
 /**
  *
@@ -10,16 +9,14 @@ import org.itson.bdavanzadas.bancobdpersistencia.daos.IDireccionDAO;
  */
 public class frmMenuInicio extends javax.swing.JFrame {
 
-    private final IClientesDAO clientesDAO;
-    private final IDireccionDAO direccionDAO;
+    private final DatosConexion datosConexion;
     
     /**
      * Creates new form MenuPrincipal
      */
-    public frmMenuInicio(IClientesDAO clientesDAO, IDireccionDAO direccionDAO) {
+    public frmMenuInicio(DatosConexion datosConexion) {
         initComponents();
-        this.clientesDAO = clientesDAO;
-        this.direccionDAO = direccionDAO;
+        this.datosConexion=datosConexion;
     }
 
     /**
@@ -192,7 +189,7 @@ public class frmMenuInicio extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
-        frmMenuPrincipal menuPrincipal = new frmMenuPrincipal();
+        frmMenuPrincipal menuPrincipal = new frmMenuPrincipal(datosConexion);
         menuPrincipal.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
@@ -202,7 +199,7 @@ public class frmMenuInicio extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRetiroSinCuentaActionPerformed
 
     private void btnRegistrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarseActionPerformed
-        dlgRegistrarse registrarse = new dlgRegistrarse(this, true, clientesDAO,direccionDAO);
+        dlgRegistrarse registrarse = new dlgRegistrarse(this, true, datosConexion);
         registrarse.setVisible(true);
     }//GEN-LAST:event_btnRegistrarseActionPerformed
 

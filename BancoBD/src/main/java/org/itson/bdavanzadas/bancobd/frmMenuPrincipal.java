@@ -1,10 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package org.itson.bdavanzadas.bancobd;
 
-import org.itson.bdavanzadas.bancobddominio.Transferencia;
+import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
 
 /**
  *
@@ -12,11 +9,14 @@ import org.itson.bdavanzadas.bancobddominio.Transferencia;
  */
 public class frmMenuPrincipal extends javax.swing.JFrame {
 
+    private final DatosConexion datosConexion;
+    
     /**
      * Creates new form frmMenuPrincipal
      */
-    public frmMenuPrincipal() {
+    public frmMenuPrincipal(DatosConexion datosConexion) {
         initComponents();
+        this.datosConexion=datosConexion;
     }
 
     /**

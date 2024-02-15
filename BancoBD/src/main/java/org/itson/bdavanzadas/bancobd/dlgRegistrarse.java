@@ -4,9 +4,13 @@
  */
 package org.itson.bdavanzadas.bancobd;
 
+import com.google.protobuf.TextFormat.ParseException;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import org.itson.bdavanzadas.bancobdpersistencia.daos.IClientesDAO;
-import org.itson.bdavanzadas.bancobdpersistencia.daos.IDireccionDAO;
+import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
 import org.itson.bdavanzadas.bancobdpersistencia.dtos.ClienteNuevoDTO;
 import org.itson.bdavanzadas.bancobdpersistencia.dtos.DireccionNuevaDTO;
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
@@ -18,25 +22,25 @@ import org.itson.bdavanzadas.bancobdpersistencia.excepciones.ValidacionDTOExcept
  */
 public class dlgRegistrarse extends javax.swing.JDialog {
 
-    private final IClientesDAO clientesDAO;
-    private final IDireccionDAO direccionDAO;
+    private final DatosConexion datosConexion;
 
     /**
      * Creates new form dlgRegistrarse
      */
-    public dlgRegistrarse(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO, IDireccionDAO direccionDAO) {
+    public dlgRegistrarse(java.awt.Frame parent, boolean modal, DatosConexion datosConexion) {
         super(parent, modal);
         initComponents();
-        this.clientesDAO = clientesDAO;
-        this.direccionDAO = direccionDAO;
+        this.datosConexion = datosConexion;
+
     }
 
-    private void registrar() {
+    private void registrar() throws java.text.ParseException {
         String telefono = txtTelefono.getText();
         String nombres = txtNombres.getText();
         String apellidoPaterno = txtApellidoPaterno.getText();
         String apellidoMaterno = txtApellidoMaterno.getText();
-        String fechaNacimiento = txtFechaNacimiento.getText();
+        java.util.Date fechaSeleccionada = jDateFechaNacimiento.getDate();
+        java.sql.Date fechaNacimiento = new java.sql.Date(fechaSeleccionada.getTime());
         String calle = txtCalle.getText();
         String numero = txtNumero.getText();
         String colonia = txtColonia.getText();
@@ -50,34 +54,42 @@ public class dlgRegistrarse extends javax.swing.JDialog {
         direccionNueva.setColonia(colonia);
         direccionNueva.setCiudad(ciudad);
         direccionNueva.setCp(cp);
-        
+
         ClienteNuevoDTO clienteNuevo = new ClienteNuevoDTO();
         clienteNuevo.setTelefono(telefono);
         clienteNuevo.setNombre(nombres);
         clienteNuevo.setApellidoPaterno(apellidoPaterno);
         clienteNuevo.setApellidoMaterno(apellidoMaterno);
-        clienteNuevo.setTelefono(telefono);
-        clienteNuevo.setTelefono(telefono);
+        clienteNuevo.setFechaNacimiento(fechaNacimiento);
+        clienteNuevo.setEdad(20);
+        clienteNuevo.setPassword(contrasenia);
+        clienteNuevo.setIdDireccion(direccionNueva.getIdDireccion());
         limpiarDatos();
         try {
-            socioNuevo.esValido();
-            this.sociosDAO.agregar(socioNuevo);
-            JOptionPane.showMessageDialog(this, "Se registró al socio", "Notificación", JOptionPane.INFORMATION_MESSAGE);
+            direccionNueva.esValido();
+            this.datosConexion.getDireccionDAO().agregar(direccionNueva);
+            clienteNuevo.esValido();
+            this.datosConexion.getClientesDAO().agregar(clienteNuevo);
+            JOptionPane.showMessageDialog(this, "Se registró al cliente", "Notificación", JOptionPane.INFORMATION_MESSAGE);
         } catch (ValidacionDTOException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de validación", JOptionPane.ERROR_MESSAGE);
         } catch (PersistenciaException ex) {
-            JOptionPane.showMessageDialog(this, "No fue posible agregar al socio", "Error de almacenamiento", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "No fue posible agregar al cliente", "Error de almacenamiento", JOptionPane.ERROR_MESSAGE);
         }
-
         dispose();
-
     }
 
     private void limpiarDatos() {
-        txtId.setText("");
-        txtNombre.setText("");
+        txtApellidoMaterno.setText("");
+        txtApellidoPaterno.setText("");
+        txtCalle.setText("");
+        txtCiudad.setText("");
+        txtCodigoPostal.setText("");
+        txtColonia.setText("");
+        txtNombres.setText("");
+        txtNumero.setText("");
         txtTelefono.setText("");
-        txtCorreo.setText("");
+        pswContrasenia.setText("");
     }
 
     /**
@@ -114,8 +126,7 @@ public class dlgRegistrarse extends javax.swing.JDialog {
         lblTelefono8 = new javax.swing.JLabel();
         txtCodigoPostal = new javax.swing.JTextField();
         lblTelefono9 = new javax.swing.JLabel();
-        txtFechaNacimiento = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
+        jDateFechaNacimiento = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Registrarse");
@@ -190,12 +201,12 @@ public class dlgRegistrarse extends javax.swing.JDialog {
 
         txtTelefono.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
         txtTelefono.setToolTipText("");
-        fondo.add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 380, 228, -1));
+        fondo.add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 340, 228, -1));
 
         lblTelefono4.setFont(new java.awt.Font("Leelawadee UI", 1, 18)); // NOI18N
         lblTelefono4.setForeground(new java.awt.Color(255, 255, 255));
         lblTelefono4.setText("Teléfono:");
-        fondo.add(lblTelefono4, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 380, -1, -1));
+        fondo.add(lblTelefono4, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 340, -1, -1));
 
         txtCalle.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
         fondo.add(txtCalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(609, 167, 228, -1));
@@ -235,14 +246,8 @@ public class dlgRegistrarse extends javax.swing.JDialog {
         lblTelefono9.setFont(new java.awt.Font("Leelawadee UI", 1, 18)); // NOI18N
         lblTelefono9.setForeground(new java.awt.Color(255, 255, 255));
         lblTelefono9.setText("Fecha de nacimiento:");
-        fondo.add(lblTelefono9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 330, -1, -1));
-
-        txtFechaNacimiento.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
-        fondo.add(txtFechaNacimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 330, 228, -1));
-
-        jLabel1.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
-        jLabel1.setText("Formato: AAAA-MM-DD");
-        fondo.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 300, 170, -1));
+        fondo.add(lblTelefono9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, -1, -1));
+        fondo.add(jDateFechaNacimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 300, 230, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -260,7 +265,11 @@ public class dlgRegistrarse extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        registrar();
+        try {
+            registrar();
+        } catch (java.text.ParseException ex) {
+            Logger.getLogger(dlgRegistrarse.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -271,7 +280,7 @@ public class dlgRegistrarse extends javax.swing.JDialog {
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JPanel fondo;
-    private javax.swing.JLabel jLabel1;
+    private com.toedter.calendar.JDateChooser jDateFechaNacimiento;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel lblContrasenia;
     private javax.swing.JLabel lblTelefono;
@@ -291,7 +300,6 @@ public class dlgRegistrarse extends javax.swing.JDialog {
     private javax.swing.JTextField txtCiudad;
     private javax.swing.JTextField txtCodigoPostal;
     private javax.swing.JTextField txtColonia;
-    private javax.swing.JTextField txtFechaNacimiento;
     private javax.swing.JTextField txtNombres;
     private javax.swing.JTextField txtNumero;
     private javax.swing.JTextField txtTelefono;
