@@ -4,18 +4,80 @@
  */
 package org.itson.bdavanzadas.bancobd;
 
+import javax.swing.JOptionPane;
+import org.itson.bdavanzadas.bancobdpersistencia.daos.IClientesDAO;
+import org.itson.bdavanzadas.bancobdpersistencia.daos.IDireccionDAO;
+import org.itson.bdavanzadas.bancobdpersistencia.dtos.ClienteNuevoDTO;
+import org.itson.bdavanzadas.bancobdpersistencia.dtos.DireccionNuevaDTO;
+import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
+import org.itson.bdavanzadas.bancobdpersistencia.excepciones.ValidacionDTOException;
+
 /**
  *
  * @author victo
  */
 public class dlgRegistrarse extends javax.swing.JDialog {
 
+    private final IClientesDAO clientesDAO;
+    private final IDireccionDAO direccionDAO;
+
     /**
      * Creates new form dlgRegistrarse
      */
-    public dlgRegistrarse(java.awt.Frame parent, boolean modal) {
+    public dlgRegistrarse(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO, IDireccionDAO direccionDAO) {
         super(parent, modal);
         initComponents();
+        this.clientesDAO = clientesDAO;
+        this.direccionDAO = direccionDAO;
+    }
+
+    private void registrar() {
+        String telefono = txtTelefono.getText();
+        String nombres = txtNombres.getText();
+        String apellidoPaterno = txtApellidoPaterno.getText();
+        String apellidoMaterno = txtApellidoMaterno.getText();
+        String fechaNacimiento = txtFechaNacimiento.getText();
+        String calle = txtCalle.getText();
+        String numero = txtNumero.getText();
+        String colonia = txtColonia.getText();
+        String ciudad = txtCiudad.getText();
+        String cp = txtCodigoPostal.getText();
+        String contrasenia = String.valueOf(pswContrasenia);
+
+        DireccionNuevaDTO direccionNueva = new DireccionNuevaDTO();
+        direccionNueva.setCalle(calle);
+        direccionNueva.setNumero(numero);
+        direccionNueva.setColonia(colonia);
+        direccionNueva.setCiudad(ciudad);
+        direccionNueva.setCp(cp);
+        
+        ClienteNuevoDTO clienteNuevo = new ClienteNuevoDTO();
+        clienteNuevo.setTelefono(telefono);
+        clienteNuevo.setNombre(nombres);
+        clienteNuevo.setApellidoPaterno(apellidoPaterno);
+        clienteNuevo.setApellidoMaterno(apellidoMaterno);
+        clienteNuevo.setTelefono(telefono);
+        clienteNuevo.setTelefono(telefono);
+        limpiarDatos();
+        try {
+            socioNuevo.esValido();
+            this.sociosDAO.agregar(socioNuevo);
+            JOptionPane.showMessageDialog(this, "Se registró al socio", "Notificación", JOptionPane.INFORMATION_MESSAGE);
+        } catch (ValidacionDTOException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de validación", JOptionPane.ERROR_MESSAGE);
+        } catch (PersistenciaException ex) {
+            JOptionPane.showMessageDialog(this, "No fue posible agregar al socio", "Error de almacenamiento", JOptionPane.ERROR_MESSAGE);
+        }
+
+        dispose();
+
+    }
+
+    private void limpiarDatos() {
+        txtId.setText("");
+        txtNombre.setText("");
+        txtTelefono.setText("");
+        txtCorreo.setText("");
     }
 
     /**
@@ -53,6 +115,7 @@ public class dlgRegistrarse extends javax.swing.JDialog {
         txtCodigoPostal = new javax.swing.JTextField();
         lblTelefono9 = new javax.swing.JLabel();
         txtFechaNacimiento = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Registrarse");
@@ -110,11 +173,6 @@ public class dlgRegistrarse extends javax.swing.JDialog {
         fondo.add(lblTelefono1, new org.netbeans.lib.awtextra.AbsoluteConstraints(63, 211, -1, -1));
 
         txtApellidoPaterno.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
-        txtApellidoPaterno.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtApellidoPaternoActionPerformed(evt);
-            }
-        });
         fondo.add(txtApellidoPaterno, new org.netbeans.lib.awtextra.AbsoluteConstraints(219, 212, 228, -1));
 
         lblTelefono2.setFont(new java.awt.Font("Leelawadee UI", 1, 18)); // NOI18N
@@ -123,11 +181,6 @@ public class dlgRegistrarse extends javax.swing.JDialog {
         fondo.add(lblTelefono2, new org.netbeans.lib.awtextra.AbsoluteConstraints(58, 256, -1, -1));
 
         txtApellidoMaterno.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
-        txtApellidoMaterno.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtApellidoMaternoActionPerformed(evt);
-            }
-        });
         fondo.add(txtApellidoMaterno, new org.netbeans.lib.awtextra.AbsoluteConstraints(219, 257, 228, -1));
 
         lblTelefono3.setFont(new java.awt.Font("Leelawadee UI", 1, 18)); // NOI18N
@@ -136,24 +189,15 @@ public class dlgRegistrarse extends javax.swing.JDialog {
         fondo.add(lblTelefono3, new org.netbeans.lib.awtextra.AbsoluteConstraints(557, 166, -1, -1));
 
         txtTelefono.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
-        txtTelefono.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtTelefonoActionPerformed(evt);
-            }
-        });
-        fondo.add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(219, 347, 228, -1));
+        txtTelefono.setToolTipText("");
+        fondo.add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 380, 228, -1));
 
         lblTelefono4.setFont(new java.awt.Font("Leelawadee UI", 1, 18)); // NOI18N
         lblTelefono4.setForeground(new java.awt.Color(255, 255, 255));
         lblTelefono4.setText("Teléfono:");
-        fondo.add(lblTelefono4, new org.netbeans.lib.awtextra.AbsoluteConstraints(132, 346, -1, -1));
+        fondo.add(lblTelefono4, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 380, -1, -1));
 
         txtCalle.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
-        txtCalle.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCalleActionPerformed(evt);
-            }
-        });
         fondo.add(txtCalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(609, 167, 228, -1));
 
         lblTelefono5.setFont(new java.awt.Font("Leelawadee UI", 1, 18)); // NOI18N
@@ -162,11 +206,6 @@ public class dlgRegistrarse extends javax.swing.JDialog {
         fondo.add(lblTelefono5, new org.netbeans.lib.awtextra.AbsoluteConstraints(533, 256, -1, -1));
 
         txtColonia.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
-        txtColonia.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtColoniaActionPerformed(evt);
-            }
-        });
         fondo.add(txtColonia, new org.netbeans.lib.awtextra.AbsoluteConstraints(609, 257, 228, -1));
 
         lblTelefono6.setFont(new java.awt.Font("Leelawadee UI", 1, 18)); // NOI18N
@@ -175,11 +214,6 @@ public class dlgRegistrarse extends javax.swing.JDialog {
         fondo.add(lblTelefono6, new org.netbeans.lib.awtextra.AbsoluteConstraints(528, 211, -1, -1));
 
         txtNumero.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
-        txtNumero.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNumeroActionPerformed(evt);
-            }
-        });
         fondo.add(txtNumero, new org.netbeans.lib.awtextra.AbsoluteConstraints(609, 212, 228, -1));
 
         lblTelefono7.setFont(new java.awt.Font("Leelawadee UI", 1, 18)); // NOI18N
@@ -188,11 +222,6 @@ public class dlgRegistrarse extends javax.swing.JDialog {
         fondo.add(lblTelefono7, new org.netbeans.lib.awtextra.AbsoluteConstraints(537, 301, -1, -1));
 
         txtCiudad.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
-        txtCiudad.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCiudadActionPerformed(evt);
-            }
-        });
         fondo.add(txtCiudad, new org.netbeans.lib.awtextra.AbsoluteConstraints(609, 302, 228, -1));
 
         lblTelefono8.setFont(new java.awt.Font("Leelawadee UI", 1, 18)); // NOI18N
@@ -201,25 +230,19 @@ public class dlgRegistrarse extends javax.swing.JDialog {
         fondo.add(lblTelefono8, new org.netbeans.lib.awtextra.AbsoluteConstraints(575, 340, -1, 33));
 
         txtCodigoPostal.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
-        txtCodigoPostal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCodigoPostalActionPerformed(evt);
-            }
-        });
         fondo.add(txtCodigoPostal, new org.netbeans.lib.awtextra.AbsoluteConstraints(609, 345, 228, -1));
 
         lblTelefono9.setFont(new java.awt.Font("Leelawadee UI", 1, 18)); // NOI18N
         lblTelefono9.setForeground(new java.awt.Color(255, 255, 255));
         lblTelefono9.setText("Fecha de nacimiento:");
-        fondo.add(lblTelefono9, new org.netbeans.lib.awtextra.AbsoluteConstraints(32, 301, -1, -1));
+        fondo.add(lblTelefono9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 330, -1, -1));
 
         txtFechaNacimiento.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
-        txtFechaNacimiento.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFechaNacimientoActionPerformed(evt);
-            }
-        });
-        fondo.add(txtFechaNacimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(219, 302, 228, -1));
+        fondo.add(txtFechaNacimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 330, 228, -1));
+
+        jLabel1.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
+        jLabel1.setText("Formato: AAAA-MM-DD");
+        fondo.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 300, 170, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -237,53 +260,18 @@ public class dlgRegistrarse extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-
+        registrar();
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private void txtApellidoPaternoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtApellidoPaternoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtApellidoPaternoActionPerformed
-
-    private void txtApellidoMaternoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtApellidoMaternoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtApellidoMaternoActionPerformed
-
-    private void txtTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTelefonoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtTelefonoActionPerformed
-
-    private void txtCalleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCalleActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtCalleActionPerformed
-
-    private void txtColoniaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtColoniaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtColoniaActionPerformed
-
-    private void txtNumeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNumeroActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNumeroActionPerformed
-
-    private void txtCiudadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCiudadActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtCiudadActionPerformed
-
-    private void txtCodigoPostalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoPostalActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtCodigoPostalActionPerformed
-
-    private void txtFechaNacimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechaNacimientoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFechaNacimientoActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JPanel fondo;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel lblContrasenia;
     private javax.swing.JLabel lblTelefono;
@@ -308,4 +296,5 @@ public class dlgRegistrarse extends javax.swing.JDialog {
     private javax.swing.JTextField txtNumero;
     private javax.swing.JTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
+
 }

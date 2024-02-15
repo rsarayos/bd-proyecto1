@@ -1,8 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package org.itson.bdavanzadas.bancobd;
+
+import org.itson.bdavanzadas.bancobdpersistencia.daos.IClientesDAO;
+import org.itson.bdavanzadas.bancobdpersistencia.daos.IDireccionDAO;
 
 /**
  *
@@ -10,11 +10,16 @@ package org.itson.bdavanzadas.bancobd;
  */
 public class frmMenuInicio extends javax.swing.JFrame {
 
+    private final IClientesDAO clientesDAO;
+    private final IDireccionDAO direccionDAO;
+    
     /**
      * Creates new form MenuPrincipal
      */
-    public frmMenuInicio() {
+    public frmMenuInicio(IClientesDAO clientesDAO, IDireccionDAO direccionDAO) {
         initComponents();
+        this.clientesDAO = clientesDAO;
+        this.direccionDAO = direccionDAO;
     }
 
     /**
@@ -197,7 +202,7 @@ public class frmMenuInicio extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRetiroSinCuentaActionPerformed
 
     private void btnRegistrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarseActionPerformed
-        dlgRegistrarse registrarse = new dlgRegistrarse(this, true);
+        dlgRegistrarse registrarse = new dlgRegistrarse(this, true, clientesDAO,direccionDAO);
         registrarse.setVisible(true);
     }//GEN-LAST:event_btnRegistrarseActionPerformed
 
