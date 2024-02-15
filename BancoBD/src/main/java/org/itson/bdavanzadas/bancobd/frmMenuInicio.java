@@ -189,6 +189,7 @@ public class frmMenuInicio extends javax.swing.JFrame {
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
         frmMenuPrincipal menuPrincipal = new frmMenuPrincipal();
         menuPrincipal.setVisible(true);
+        dispose();
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
     private void btnRetiroSinCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetiroSinCuentaActionPerformed
