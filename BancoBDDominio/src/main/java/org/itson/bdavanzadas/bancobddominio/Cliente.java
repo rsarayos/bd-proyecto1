@@ -30,7 +30,7 @@ public class Cliente {
         this.password = password;
     }
 
-    public Cliente(String telefono, String nombre, String apellidoPaterno, String apellidoMaterno, Date fechaNacimiento, int edad, String password, int idDireccion) {
+    public Cliente(String telefono, String nombre, String apellidoPaterno, String apellidoMaterno, Date fechaNacimiento,int edad,  String password, int idDireccion) {
         this.telefono = telefono;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
