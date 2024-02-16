@@ -4,6 +4,7 @@
  */
 package org.itson.bdavanzadas.bancobdpersistencia.daos;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -11,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -61,9 +63,10 @@ public class TransferenciaDAO implements ITransferenciaDAO{
     @Override
     public Transferencia obtener(int idTransferencia) throws PersistenciaException {
         String setenciaSQL = """
-                             SELECT idTransferencia, idTransaccion, numCuentaDestino
-                             FROM transacciones
-                             WHERE idTransaccion=?;
+                             SELECT *
+                             FROM transferencias
+                             INNER JOIN transacciones ON transferencias.idTransaccion = transacciones.idTransaccion
+                             WHERE idTransferencia=?;
                              """;
 
         try (
@@ -78,7 +81,10 @@ public class TransferenciaDAO implements ITransferenciaDAO{
                 return new Transferencia(
                         resultados.getInt("idTransferencia"),
                         resultados.getString("numCuentaDestino"),
-                        resultados.getInt("idTransaccion")
+                        resultados.getInt("idTransaccion"),
+                        resultados.getTimestamp("fecha"),
+                        resultados.getFloat("cantidad"),
+                        resultados.getString("numCuenta")
                 );
             } else {
                 return null; // No se encontró el socio con el telefono dado
@@ -159,6 +165,33 @@ public class TransferenciaDAO implements ITransferenciaDAO{
         } catch (SQLException ex) {
             Logger.getLogger(ClientesDAO.class.getName()).log(Level.SEVERE, "No se pudieron consultar las transacciones", ex);
             throw new PersistenciaException("No se pudieron consultar las transacciones", ex);
+        }
+    }
+
+    @Override
+    public Transferencia realizarTransferencia(String cuentaOrigen, String cuentaDestino, float cantidad) throws PersistenciaException {
+        String setenciaSQL = "{call realizar_transferencia(?, ?, ?, ?, ?)}";
+        try (
+                Connection conexion = this.conexionDB.obtenerConexion(); 
+                CallableStatement callableStatement = conexion.prepareCall(setenciaSQL);) {
+            callableStatement.setString(1, cuentaOrigen);
+            callableStatement.setString(2, cuentaDestino);
+            callableStatement.setFloat(3, cantidad);
+            callableStatement.registerOutParameter(4, Types.BOOLEAN);
+            callableStatement.registerOutParameter(5, Types.INTEGER);
+            callableStatement.execute();
+            
+            boolean resultado = callableStatement.getBoolean(4);
+            int idTransferencia = callableStatement.getInt(5);
+            
+            if (resultado) {
+                    return this.obtener(idTransferencia);
+                } else {
+                    throw new PersistenciaException("No se pudo realizar la transferencia");
+                }
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientesDAO.class.getName()).log(Level.SEVERE, "No se pudo procesar la transferencia", ex);
+            throw new PersistenciaException("No se pudo procesar la transferencia", ex);
         }
     }
 

@@ -17,6 +17,7 @@ public interface IRetiroDAO {
     Retiro nuevo(RetiroNuevoDTO retiroNuevo) throws PersistenciaException;
     Retiro actualizar(RetiroNuevoDTO retiroNuevo) throws PersistenciaException;
     Retiro obtener(int idRetiro) throws PersistenciaException;
+    Retiro realizarRetiro(int idRetiro) throws PersistenciaException;
     List<Retiro> consultar() throws PersistenciaException;
     List<Retiro> consultarRetiroCuenta(String numCuenta) throws PersistenciaException;
 }

@@ -18,4 +18,5 @@ public interface ITransferenciaDAO {
     Transferencia obtener(int idTransferencia) throws PersistenciaException;
     List<Transferencia> consultar() throws PersistenciaException;
     List<Transferencia> consultarTransCuenta(String numCuenta) throws PersistenciaException;
+    Transferencia realizarTransferencia(String cuentaOrigen, String cuentaDestino, float cantidad) throws PersistenciaException;
 }

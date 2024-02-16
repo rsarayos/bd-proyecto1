@@ -4,6 +4,7 @@
  */
 package org.itson.bdavanzadas.bancobdpersistencia.daos;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -11,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -205,6 +207,29 @@ public class RetiroDAO implements IRetiroDAO{
         } catch (SQLException ex) {
             Logger.getLogger(ClientesDAO.class.getName()).log(Level.SEVERE, "No se pudieron consultar los retiros", ex);
             throw new PersistenciaException("No se pudieron consultar los retiros", ex);
+        }
+    }
+
+    @Override
+    public Retiro realizarRetiro(int idRetiro) throws PersistenciaException {
+        String setenciaSQL = "{call realizar_retiro(?, ?)}";
+        try (
+                Connection conexion = this.conexionDB.obtenerConexion(); 
+                CallableStatement callableStatement = conexion.prepareCall(setenciaSQL);) {
+            callableStatement.setInt(1, idRetiro);
+            callableStatement.registerOutParameter(2, Types.BOOLEAN);
+            callableStatement.execute();
+            
+            boolean resultado = callableStatement.getBoolean(2);
+            
+            if (resultado) {
+                    return obtener(idRetiro);
+                } else {
+                    throw new PersistenciaException("No se pudo realizar el retiro");
+                }
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientesDAO.class.getName()).log(Level.SEVERE, "No se pudo procesar el retiro", ex);
+            throw new PersistenciaException("No se pudo procesar el retiro", ex);
         }
     }
     
