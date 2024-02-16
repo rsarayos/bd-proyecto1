@@ -14,7 +14,7 @@ public class RetiroNuevoDTO extends TransaccionNuevaDTO{
     private int idRetiro;
     private String folioRetiro;
     private String contraseniaRetiro;
-    private boolean estado;
+    private int estado;
 
     public int getIdRetiro() {
         return idRetiro;
@@ -40,11 +40,11 @@ public class RetiroNuevoDTO extends TransaccionNuevaDTO{
         this.contraseniaRetiro = contraseniaRetiro;
     }
 
-    public boolean isEstado() {
+    public int getEstado() {
         return estado;
     }
 
-    public void setEstado(boolean estado) {
+    public void setEstado(int estado) {
         this.estado = estado;
     }
     

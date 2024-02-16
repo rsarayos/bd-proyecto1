@@ -46,7 +46,7 @@ public class RetiroDAO implements IRetiroDAO{
                 Statement.RETURN_GENERATED_KEYS);) {
             comando.setString(1, retiroNuevo.getFolioRetiro());
             comando.setString(2, retiroNuevo.getContraseniaRetiro());
-            comando.setBoolean(3, retiroNuevo.isEstado());
+            comando.setInt(3, retiroNuevo.getEstado());
             comando.setInt(4, retiroNuevo.getIdTransaccion());
             int numeroRegistrosInsertados = comando.executeUpdate();
             logger.log(Level.INFO, "Se agrearon {0} retiro", numeroRegistrosInsertados);
@@ -55,7 +55,7 @@ public class RetiroDAO implements IRetiroDAO{
             return new Retiro(idsGenerados.getInt(1),
                     retiroNuevo.getFolioRetiro(),
                     retiroNuevo.getContraseniaRetiro(),
-                    retiroNuevo.isEstado(), 
+                    retiroNuevo.getEstado(), 
                     retiroNuevo.getIdTransaccion(), 
                     retiroNuevo.getFecha(), 
                     retiroNuevo.getCantidad(), 
@@ -76,14 +76,14 @@ public class RetiroDAO implements IRetiroDAO{
 
         try (
                 Connection conexion = this.conexionDB.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(setenciaSQL);) {
-            comando.setBoolean(1, retiroNuevo.isEstado());
+            comando.setInt(1, retiroNuevo.getEstado());
             comando.setInt(2, retiroNuevo.getIdRetiro());
             int numeroRegistrosActualizados = comando.executeUpdate();
             logger.log(Level.INFO, "Se actualizaron {0} registros", numeroRegistrosActualizados);
                 return new Retiro(retiroNuevo.getIdRetiro(),
                     retiroNuevo.getFolioRetiro(),
                     retiroNuevo.getContraseniaRetiro(),
-                    retiroNuevo.isEstado(), 
+                    retiroNuevo.getEstado(), 
                     retiroNuevo.getIdTransaccion(), 
                     retiroNuevo.getFecha(), 
                     retiroNuevo.getCantidad(), 
@@ -96,7 +96,35 @@ public class RetiroDAO implements IRetiroDAO{
     
     @Override
     public Retiro obtener(int idRetiro) throws PersistenciaException {
-        return null;
+        String setenciaSQL = """
+                             SELECT idRetiro, folioRetiro, contraseniaRetiro, estado, idTransaccion
+                             FROM retiros
+                             WHERE idRetiro=?;
+                             """;
+
+        try (
+                Connection conexion = this.conexionDB.obtenerConexion();
+                PreparedStatement comando = conexion.prepareStatement(setenciaSQL);
+        ) {
+            comando.setInt(1, idRetiro);
+
+            ResultSet resultados = comando.executeQuery();
+
+            if (resultados.next()) {
+                return new Retiro(
+                        resultados.getInt("idRetiro"),
+                        resultados.getString("folioRetiro"),
+                        resultados.getString("contraseniaRetiro"),
+                        resultados.getInt("estado"),
+                        resultados.getInt("idTransaccion")
+                );
+            } else {
+                return null; // No se encontró el socio con el telefono dado
+            }
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "No se ha podido obtener el retiro", ex);
+            throw new PersistenciaException("No se ha podido obtener el retiro", ex);
+        }
     }
     
     @Override
@@ -116,11 +144,52 @@ public class RetiroDAO implements IRetiroDAO{
                 int idRetiro = resultados.getInt("idRetiro");
                 String folioRetiro = resultados.getString("folioRetiro");
                 String contraseniaRetiro = resultados.getString("contraseniaRetiro");
-                boolean estado = resultados.getBoolean("estado");
+                int estado = resultados.getInt("estado");
                 int idTransaccion = resultados.getInt("idTransaccion");
                 Timestamp fecha = resultados.getTimestamp("fecha");
                 long cantidad = resultados.getInt("cantidad");
                 String numCuenta = resultados.getString("numCuenta");
+                Retiro retiro = new Retiro(idRetiro,
+                    folioRetiro,
+                    contraseniaRetiro,
+                    estado, 
+                    idTransaccion, 
+                    fecha, 
+                    cantidad, 
+                    numCuenta);
+                listaRetiros.add(retiro);
+            }
+            logger.log(Level.INFO, "Se consultaron {0} retiros", listaRetiros.size());
+            return listaRetiros;
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientesDAO.class.getName()).log(Level.SEVERE, "No se pudieron consultar los retiros", ex);
+            throw new PersistenciaException("No se pudieron consultar los retiros", ex);
+        }
+    }
+
+    @Override
+    public List<Retiro> consultarRetiroCuenta(String numCuenta) throws PersistenciaException {
+        String setenciaSQL = """
+                             SELECT *
+                             FROM retiros
+                             INNER JOIN transacciones ON retiros.idTransaccion = transacciones.idTransaccion
+                             WHERE numCuenta=?;
+                             """;
+        List<Retiro> listaRetiros = new LinkedList<>();
+        try (
+                Connection conexion = this.conexionDB.obtenerConexion(); 
+                PreparedStatement comando = conexion.prepareStatement(setenciaSQL); 
+                ) {
+            comando.setString(1, numCuenta);
+            ResultSet resultados = comando.executeQuery();
+            while (resultados.next()) {                
+                int idRetiro = resultados.getInt("idRetiro");
+                String folioRetiro = resultados.getString("folioRetiro");
+                String contraseniaRetiro = resultados.getString("contraseniaRetiro");
+                int estado = resultados.getInt("estado");
+                int idTransaccion = resultados.getInt("idTransaccion");
+                Timestamp fecha = resultados.getTimestamp("fecha");
+                long cantidad = resultados.getInt("cantidad");
                 Retiro retiro = new Retiro(idRetiro,
                     folioRetiro,
                     contraseniaRetiro,

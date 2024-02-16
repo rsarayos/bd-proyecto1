@@ -14,7 +14,7 @@ public class Retiro extends Transaccion{
     private int idRetiro;
     private String folioRetiro;
     private String contraseniaRetiro;
-    private boolean estado;
+    private int estado;
 
     public Retiro() {
     }
@@ -28,7 +28,7 @@ public class Retiro extends Transaccion{
         this.contraseniaRetiro = contraseniaRetiro;
     }
 
-    public Retiro(int idRetiro, String folioRetiro, String contraseniaRetiro, boolean estado, int idTransaccion) {
+    public Retiro(int idRetiro, String folioRetiro, String contraseniaRetiro, int estado, int idTransaccion) {
         super(idTransaccion);
         this.idRetiro = idRetiro;
         this.folioRetiro = folioRetiro;
@@ -36,7 +36,7 @@ public class Retiro extends Transaccion{
         this.estado = estado;
     }
 
-    public Retiro(int idRetiro, String folioRetiro, String contraseniaRetiro, boolean estado, int idTransaccion, Timestamp fecha, float cantidad, String numCuenta) {
+    public Retiro(int idRetiro, String folioRetiro, String contraseniaRetiro, int estado, int idTransaccion, Timestamp fecha, float cantidad, String numCuenta) {
         super(idTransaccion, fecha, cantidad, numCuenta);
         this.idRetiro = idRetiro;
         this.folioRetiro = folioRetiro;
@@ -68,14 +68,14 @@ public class Retiro extends Transaccion{
         this.contraseniaRetiro = contraseniaRetiro;
     }
 
-    public boolean isEstado() {
+    public int getEstado() {
         return estado;
     }
 
-    public void setEstado(boolean estado) {
+    public void setEstado(int estado) {
         this.estado = estado;
     }
-
+    
     @Override
     public int hashCode() {
         int hash = 7;
@@ -109,7 +109,5 @@ public class Retiro extends Transaccion{
         sb.append('}');
         return sb.toString();
     }
-    
-    
-    
+ 
 }

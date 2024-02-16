@@ -125,4 +125,41 @@ public class TransferenciaDAO implements ITransferenciaDAO{
         }
     }
 
+    @Override
+    public List<Transferencia> consultarTransCuenta(String numCuenta) throws PersistenciaException {
+        String setenciaSQL = """
+                             SELECT *
+                             FROM transferencias
+                             INNER JOIN transacciones ON transferencias.idTransaccion = transacciones.idTransaccion
+                             WHERE numCuenta=?;
+                             """;
+        List<Transferencia> listaTranferencias = new LinkedList<>();
+        try (
+                Connection conexion = this.conexionDB.obtenerConexion(); 
+                PreparedStatement comando = conexion.prepareStatement(setenciaSQL); 
+                ) {
+            comando.setString(1, numCuenta);
+            ResultSet resultados = comando.executeQuery();
+            while (resultados.next()) {                
+                int idTransferencia = resultados.getInt("idTransferencia");
+                int idTransaccion = resultados.getInt("idTransaccion");
+                String numCuentaDest = resultados.getString("numCuentaDestino");
+                Timestamp fecha = resultados.getTimestamp("fecha");
+                float cantidad = resultados.getFloat("cantidad");
+                Transferencia transferencia = new Transferencia(idTransferencia, 
+                        numCuentaDest, 
+                        idTransaccion,
+                        fecha, 
+                        cantidad, 
+                        numCuenta);
+                listaTranferencias.add(transferencia);
+            }
+            logger.log(Level.INFO, "Se consultaron {0} transferencias", listaTranferencias.size());
+            return listaTranferencias;
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientesDAO.class.getName()).log(Level.SEVERE, "No se pudieron consultar las transacciones", ex);
+            throw new PersistenciaException("No se pudieron consultar las transacciones", ex);
+        }
+    }
+
 }

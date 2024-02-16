@@ -79,6 +79,10 @@ public class Transferencia extends Transaccion{
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Transferencia{");
+        sb.append("idTransaccion=").append(this.getIdTransaccion());
+        sb.append("fecha=").append(this.getFecha());
+        sb.append("cantidad=").append(this.getCantidad());
+        sb.append("numCuenta=").append(this.getNumCuenta());
         sb.append("idTransferencia=").append(idTransferencia);
         sb.append(", cuentaDestino=").append(cuentaDestino);
         sb.append('}');
