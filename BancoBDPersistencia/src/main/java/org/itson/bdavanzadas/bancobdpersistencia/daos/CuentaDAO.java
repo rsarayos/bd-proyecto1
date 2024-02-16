@@ -37,8 +37,8 @@ public class CuentaDAO implements ICuentaDAO{
     @Override
     public Cuenta agregar(CuentaNuevaDTO cuentaNueva) throws PersistenciaException {
         String setenciaSQL = """
-                             INSERT INTO cuentas (numCuenta, fechaApertura, saldo, estado, telefonoTitular)
-                                         VALUES(?,?,?,?,?);
+                             INSERT INTO cuentas (numCuenta, saldo, estado, telefonoTitular)
+                                         VALUES(?,?,?,?);
                              """;
 
         try (
@@ -46,18 +46,12 @@ public class CuentaDAO implements ICuentaDAO{
                 setenciaSQL,
                 Statement.RETURN_GENERATED_KEYS);) {
             comando.setString(1, cuentaNueva.getNumCuenta());
-            comando.setDate(2, (Date) cuentaNueva.getFechaApertura());
-            comando.setLong(3, cuentaNueva.getSaldo());
-            comando.setBoolean(4, cuentaNueva.isEstado());
-            comando.setString(5, cuentaNueva.getTelefonoTitular());
+            comando.setLong(2, cuentaNueva.getSaldo());
+            comando.setBoolean(3, cuentaNueva.isEstado());
+            comando.setString(4, cuentaNueva.getTelefonoTitular());
             int numeroRegistrosInsertados = comando.executeUpdate();
             logger.log(Level.INFO, "Se agrearon {0} cuentas", numeroRegistrosInsertados);
-            Cuenta cuenta = new Cuenta(cuentaNueva.getNumCuenta(),
-                    cuentaNueva.getFechaApertura(),
-                    cuentaNueva.getSaldo(),
-                    cuentaNueva.isEstado(),
-                    cuentaNueva.getTelefonoTitular());
-            return cuenta;
+            return obtener(cuentaNueva.getNumCuenta());
         } catch (SQLException ex) {
             logger.log(Level.INFO, "No se ha podido agregar la cuenta", ex);
             return null;

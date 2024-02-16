@@ -45,21 +45,11 @@ public class ClientesDAO implements IClientesDAO{
             comando.setString(3, clienteNuevo.getApellidoPaterno());
             comando.setString(4, clienteNuevo.getApellidoMaterno());
             comando.setDate(5, (Date) clienteNuevo.getFechaNacimiento());
-            comando.setString(7, clienteNuevo.getPassword());
-            comando.setInt(8, clienteNuevo.getIdDireccion());
+            comando.setString(6, clienteNuevo.getPassword());
+            comando.setInt(7, clienteNuevo.getIdDireccion());
             int numeroRegistrosInsertados = comando.executeUpdate();
             logger.log(Level.INFO, "Se agrearon {0} clientes", numeroRegistrosInsertados);
-            ResultSet edadGenerada = comando.getResultSet();
-            edadGenerada.next();
-            Cliente cliente = new Cliente(clienteNuevo.getTelefono(),
-                    clienteNuevo.getNombre(),
-                    clienteNuevo.getApellidoPaterno(),
-                    clienteNuevo.getApellidoMaterno(),
-                    clienteNuevo.getFechaNacimiento(),
-                    edadGenerada.getInt("edad"),
-                    clienteNuevo.getPassword(),
-                    clienteNuevo.getIdDireccion());
-            return cliente;
+            return obtener(clienteNuevo.getTelefono());
         } catch (SQLException ex) {
             logger.log(Level.INFO, "No se ha podido agregar al cliente", ex);
             return null;
