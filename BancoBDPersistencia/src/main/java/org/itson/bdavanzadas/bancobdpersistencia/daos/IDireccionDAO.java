@@ -14,5 +14,6 @@ import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaExcepti
  */
 public interface IDireccionDAO {
     Direccion agregar(DireccionNuevaDTO direccionNueva) throws PersistenciaException;
+    Direccion obtener(int idDireccion) throws PersistenciaException;
     Direccion actualizar(DireccionNuevaDTO direccionNueva) throws PersistenciaException;
 }

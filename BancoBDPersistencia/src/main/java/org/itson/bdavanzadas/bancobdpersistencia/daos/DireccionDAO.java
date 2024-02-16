@@ -60,6 +60,40 @@ public class DireccionDAO implements IDireccionDAO{
             return null;
         }
     }
+    
+    @Override
+    public Direccion obtener(int idDireccion) throws PersistenciaException {
+        String setenciaSQL = """
+                             SELECT idDireccion, calle, colonia, numero, ciudad, cp
+                             FROM direcciones
+                             WHERE idDireccion=?;
+                             """;
+
+        try (
+                Connection conexion = this.conexionDB.obtenerConexion();
+                PreparedStatement comando = conexion.prepareStatement(setenciaSQL);
+        ) {
+            comando.setInt(1, idDireccion);
+
+            ResultSet resultados = comando.executeQuery();
+
+            if (resultados.next()) {
+                return new Direccion(
+                        resultados.getInt("idDireccion"),
+                        resultados.getString("calle"),
+                        resultados.getString("colonia"),
+                        resultados.getString("numero"),
+                        resultados.getString("ciudad"),
+                        resultados.getString("cp")
+                );
+            } else {
+                return null; // No se encontró el socio con el telefono dado
+            }
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "No se ha podido obtener la direccion", ex);
+            throw new PersistenciaException("No se ha podido obtener la direccion", ex);
+        }
+    }
 
     @Override
     public Direccion actualizar(DireccionNuevaDTO direccionNueva) throws PersistenciaException {
