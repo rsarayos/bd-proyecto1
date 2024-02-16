@@ -18,4 +18,5 @@ public interface ICuentaDAO {
     Cuenta actualizar(CuentaNuevaDTO cuentaNueva) throws PersistenciaException;
     Cuenta obtener(String numCuenta) throws PersistenciaException;
     List<Cuenta> consultar() throws PersistenciaException;
+    List<Cuenta> consultarCuentasCliente(String telefonoTitular) throws PersistenciaException;
 }

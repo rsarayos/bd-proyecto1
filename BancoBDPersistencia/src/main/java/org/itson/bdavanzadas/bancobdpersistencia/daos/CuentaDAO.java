@@ -149,5 +149,39 @@ public class CuentaDAO implements ICuentaDAO{
             throw new PersistenciaException("No se pudieron consultar las cuentas", ex);
         }
     }
+
+    @Override
+    public List<Cuenta> consultarCuentasCliente(String telefonoTitular) throws PersistenciaException {
+        String setenciaSQL = """
+                             SELECT numCuenta, fechaApertura, saldo, estado, telefonoTitular
+                             FROM cuentas
+                             WHERE telefonoTitular=?;
+                             """;
+        List<Cuenta> listaCuentas = new LinkedList<>();
+        try (
+                Connection conexion = this.conexionDB.obtenerConexion(); 
+                PreparedStatement comando = conexion.prepareStatement(setenciaSQL);
+                ) {
+            comando.setString(1, telefonoTitular);
+            ResultSet resultados = comando.executeQuery();
+            while (resultados.next()) {                
+                String numCuenta = resultados.getString("numCuenta");
+                Date fechaApertura = resultados.getDate("fechaApertura");
+                float saldo = resultados.getLong("saldo");
+                boolean estado = resultados.getBoolean("estado");
+                Cuenta cuenta = new Cuenta(numCuenta, 
+                        fechaApertura, 
+                        saldo, 
+                        estado, 
+                        telefonoTitular);
+                listaCuentas.add(cuenta);
+            }
+            logger.log(Level.INFO, "Se consultaron {0} cuentas", listaCuentas.size());
+            return listaCuentas;
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientesDAO.class.getName()).log(Level.SEVERE, "No se pudieron consultar las cuentas", ex);
+            throw new PersistenciaException("No se pudieron consultar las cuentas", ex);
+        }
+    }
     
 }
