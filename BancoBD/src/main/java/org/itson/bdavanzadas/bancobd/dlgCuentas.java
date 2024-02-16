@@ -1,7 +1,14 @@
-
 package org.itson.bdavanzadas.bancobd;
 
+import java.awt.Font;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import org.itson.bdavanzadas.bancobddominio.Cliente;
+import org.itson.bdavanzadas.bancobddominio.Cuenta;
 import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
+import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
 
 /**
  *
@@ -10,14 +17,41 @@ import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
 public class dlgCuentas extends javax.swing.JDialog {
 
     private final DatosConexion datosConexion;
-    
+    private Cliente cliente;
+
     /**
      * Creates new form dlgCuentas
      */
-    public dlgCuentas(java.awt.Frame parent, boolean modal, DatosConexion datosConexion) {
+    public dlgCuentas(java.awt.Frame parent, boolean modal, DatosConexion datosConexion, Cliente cliente) {
         super(parent, modal);
         initComponents();
-        this.datosConexion=datosConexion;
+        this.datosConexion = datosConexion;
+        this.cliente = cliente;
+        mostrarTabla();
+    }
+
+    private void mostrarTabla() {
+        List<Cuenta> listaCuentas;
+        try {
+            listaCuentas = datosConexion.getCuentaDAO().consultar();
+            DefaultTableModel modelo = new DefaultTableModel();
+            modelo.addColumn("CUENTA");
+            modelo.addColumn("ESTADO");
+
+            for (Cuenta cuenta : listaCuentas) {
+                Object[] fila = {cuenta.getNumCuenta(), "Cancelar"};
+                modelo.addRow(fila);
+            }
+
+            jTablaCuentas.setModel(modelo);
+
+            JTableHeader header = jTablaCuentas.getTableHeader();
+
+            header.setFont(new Font("Leelawadee UI", Font.BOLD, 28));
+            header.setPreferredSize(new java.awt.Dimension(80, 30));
+        } catch (PersistenciaException e) {
+            JOptionPane.showMessageDialog(this, "Error al mostrar información de los socios: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -34,7 +68,7 @@ public class dlgCuentas extends javax.swing.JDialog {
         btnAgregarCuenta = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTablaCuentas = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cuentas");
@@ -66,7 +100,8 @@ public class dlgCuentas extends javax.swing.JDialog {
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTablaCuentas.setFont(new java.awt.Font("Leelawadee UI", 0, 22)); // NOI18N
+        jTablaCuentas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -74,7 +109,8 @@ public class dlgCuentas extends javax.swing.JDialog {
 
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jTablaCuentas.setRowHeight(30);
+        jScrollPane1.setViewportView(jTablaCuentas);
 
         javax.swing.GroupLayout fondoLayout = new javax.swing.GroupLayout(fondo);
         fondo.setLayout(fondoLayout);
@@ -125,7 +161,8 @@ public class dlgCuentas extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAgregarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarCuentaActionPerformed
-        dlgAgregarCuenta agregarCuenta = new dlgAgregarCuenta(null, true, datosConexion);
+        dlgAgregarCuenta agregarCuenta = new dlgAgregarCuenta(null, true, datosConexion, cliente);
+        dispose();
         agregarCuenta.setVisible(true);
     }//GEN-LAST:event_btnAgregarCuentaActionPerformed
 
@@ -139,6 +176,6 @@ public class dlgCuentas extends javax.swing.JDialog {
     private javax.swing.JPanel fondo;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTablaCuentas;
     // End of variables declaration//GEN-END:variables
 }

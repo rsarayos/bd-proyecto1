@@ -179,7 +179,7 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCuentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCuentasActionPerformed
-        dlgCuentas cuentas = new dlgCuentas(this, true, datosConexion);
+        dlgCuentas cuentas = new dlgCuentas(this, true, datosConexion, cliente);
         cuentas.setVisible(true);
     }//GEN-LAST:event_btnCuentasActionPerformed
 

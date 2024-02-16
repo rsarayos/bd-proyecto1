@@ -1,10 +1,18 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
 package org.itson.bdavanzadas.bancobd;
 
+import java.time.Instant;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import org.itson.bdavanzadas.bancobddominio.Cliente;
+import org.itson.bdavanzadas.bancobddominio.Cuenta;
+import org.itson.bdavanzadas.bancobdpersistencia.auxiliar.GenerarNumeroCuenta;
 import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
+import org.itson.bdavanzadas.bancobdpersistencia.dtos.CuentaNuevaDTO;
+import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
+import org.itson.bdavanzadas.bancobdpersistencia.excepciones.ValidacionDTOException;
 
 /**
  *
@@ -13,14 +21,63 @@ import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
 public class dlgAgregarCuenta extends javax.swing.JDialog {
 
     private final DatosConexion datosConexion;
-    
+    private Cliente cliente;
+
     /**
      * Creates new form dlgAgregarCuenta
      */
-    public dlgAgregarCuenta(java.awt.Frame parent, boolean modal, DatosConexion datosConexion) {
+    public dlgAgregarCuenta(java.awt.Frame parent, boolean modal, DatosConexion datosConexion, Cliente cliente) {
         super(parent, modal);
         initComponents();
-        this.datosConexion=datosConexion;
+        this.datosConexion = datosConexion;
+        this.cliente = cliente;
+        generarNumCuenta();
+    }
+
+    private void generarNumCuenta() {
+        GenerarNumeroCuenta gnc = new GenerarNumeroCuenta();
+        String numero = gnc.generarNumeroCuenta();
+
+        List<Cuenta> listaCuentas = null;
+
+        try {
+            listaCuentas = datosConexion.getCuentaDAO().consultar();
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(dlgAgregarCuenta.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        for (Cuenta cuenta : listaCuentas) {
+            if (!cuenta.getNumCuenta().equals(numero)) {
+                txtCuenta.setText(numero);
+                break;
+            } else {
+                generarNumCuenta();
+                break;
+            }
+        }
+    }
+
+    private void agregarCuenta() {
+        String numCuenta = txtCuenta.getText();
+        int monto = Integer.parseInt(txtMonto.getText());
+
+        CuentaNuevaDTO cuentaNueva = new CuentaNuevaDTO();
+        cuentaNueva.setNumCuenta(numCuenta);
+        cuentaNueva.setSaldo(monto);
+        cuentaNueva.setEstado(true);
+        cuentaNueva.setTelefonoTitular(cliente.getTelefono());
+        cuentaNueva.setFechaApertura(null);
+
+        try {
+            cuentaNueva.esValido();
+            datosConexion.getCuentaDAO().agregar(cuentaNueva);
+            JOptionPane.showMessageDialog(this, "Se registró al cliente", "Notificación", JOptionPane.INFORMATION_MESSAGE);
+        } catch (ValidacionDTOException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de validación", JOptionPane.ERROR_MESSAGE);
+        } catch (PersistenciaException ex) {
+            JOptionPane.showMessageDialog(this, "No fue posible agregar la cuenta", "Error de almacenamiento", JOptionPane.ERROR_MESSAGE);
+        }
+        dispose();
     }
 
     /**
@@ -51,6 +108,7 @@ public class dlgAgregarCuenta extends javax.swing.JDialog {
         lblTelefono.setForeground(new java.awt.Color(255, 255, 255));
         lblTelefono.setText("Cuenta:");
 
+        txtCuenta.setEditable(false);
         txtCuenta.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
         txtCuenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -159,7 +217,11 @@ public class dlgAgregarCuenta extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-
+        if (!txtMonto.getText().isBlank()) {
+            agregarCuenta();
+            dlgCuentas cuentas = new dlgCuentas(null, true, datosConexion, cliente);
+            cuentas.setVisible(true);
+        }
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void txtCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCuentaActionPerformed
