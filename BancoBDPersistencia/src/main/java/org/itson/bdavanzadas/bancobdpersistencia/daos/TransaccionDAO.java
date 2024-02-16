@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -35,31 +36,60 @@ public class TransaccionDAO implements ITransaccionDAO{
     @Override
     public Transaccion nueva(TransaccionNuevaDTO transaccionNueva) throws PersistenciaException {
         String setenciaSQL = """
-                             INSERT INTO transacciones (fecha, cantidad, numCuenta)
-                                         VALUES(?,?,?);
+                             INSERT INTO transacciones (cantidad, numCuenta)
+                                         VALUES(?,?);
                              """;
 
         try (
                 Connection conexion = this.conexionDB.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(
                 setenciaSQL,
                 Statement.RETURN_GENERATED_KEYS);) {
-            comando.setDate(1, (Date) transaccionNueva.getFecha());
-            comando.setLong(2, transaccionNueva.getCantidad());
-            comando.setString(3, transaccionNueva.getNumCuenta());
+            comando.setFloat(1, transaccionNueva.getCantidad());
+            comando.setString(2, transaccionNueva.getNumCuenta());
             int numeroRegistrosInsertados = comando.executeUpdate();
             logger.log(Level.INFO, "Se agrearon {0} transaccion", numeroRegistrosInsertados);
             ResultSet idsGenerados = comando.getGeneratedKeys();
             idsGenerados.next();
-            return new Transaccion(idsGenerados.getInt(1),
-                    transaccionNueva.getFecha(),
-                    transaccionNueva.getCantidad(),
-                    transaccionNueva.getNumCuenta());
+            Transaccion transaccion = new Transaccion(idsGenerados.getInt(1));
+            return obtener(transaccion.getIdTransaccion());
         } catch (SQLException ex) {
             logger.log(Level.INFO, "No se ha podido agregar la transaccion", ex);
             return null;
         }
     }
+    
+    @Override
+    public Transaccion obtener(int idTransaccion) throws PersistenciaException {
+        String setenciaSQL = """
+                             SELECT idTransaccion, fecha, cantidad, numCuenta
+                             FROM transacciones
+                             WHERE idTransaccion=?;
+                             """;
 
+        try (
+                Connection conexion = this.conexionDB.obtenerConexion();
+                PreparedStatement comando = conexion.prepareStatement(setenciaSQL);
+        ) {
+            comando.setInt(1, idTransaccion);
+
+            ResultSet resultados = comando.executeQuery();
+
+            if (resultados.next()) {
+                return new Transaccion(
+                        resultados.getInt("idTransaccion"),
+                        resultados.getTimestamp("fecha"),
+                        resultados.getFloat("cantidad"),
+                        resultados.getString("numCuenta")
+                );
+            } else {
+                return null; // No se encontró el socio con el telefono dado
+            }
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "No se ha podido obtener la transaccion", ex);
+            throw new PersistenciaException("No se ha podido obtener la transaccion", ex);
+        }
+    }
+    
     @Override
     public List<Transaccion> consultar() throws PersistenciaException {
         String setenciaSQL = """
@@ -74,8 +104,8 @@ public class TransaccionDAO implements ITransaccionDAO{
             
             while (resultados.next()) {                
                 int idTransaccion = resultados.getInt("idTransaccion");
-                Date fecha = resultados.getDate("fecha");
-                long cantidad = resultados.getInt("cantidad");
+                Timestamp fecha = resultados.getTimestamp("fecha");
+                float cantidad = resultados.getFloat("cantidad");
                 String numCuenta = resultados.getString("numCuenta");
                 Transaccion transaccion = new Transaccion(idTransaccion, 
                         fecha, 
@@ -90,5 +120,5 @@ public class TransaccionDAO implements ITransaccionDAO{
             throw new PersistenciaException("No se pudieron consultar las transacciones", ex);
         }
     }
-    
+  
 }

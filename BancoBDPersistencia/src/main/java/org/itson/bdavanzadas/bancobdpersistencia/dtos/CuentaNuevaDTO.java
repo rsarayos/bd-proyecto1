@@ -14,7 +14,7 @@ import org.itson.bdavanzadas.bancobdpersistencia.excepciones.ValidacionDTOExcept
 public class CuentaNuevaDTO {
     private String numCuenta;
     private Date fechaApertura;
-    private long saldo;
+    private float saldo;
     private boolean estado;
     private String telefonoTitular;
 
@@ -34,11 +34,11 @@ public class CuentaNuevaDTO {
         this.fechaApertura = fechaApertura;
     }
 
-    public long getSaldo() {
+    public float getSaldo() {
         return saldo;
     }
 
-    public void setSaldo(long saldo) {
+    public void setSaldo(float saldo) {
         this.saldo = saldo;
     }
 

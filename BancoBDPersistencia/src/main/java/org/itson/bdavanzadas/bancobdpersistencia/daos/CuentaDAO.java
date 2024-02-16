@@ -46,7 +46,7 @@ public class CuentaDAO implements ICuentaDAO{
                 setenciaSQL,
                 Statement.RETURN_GENERATED_KEYS);) {
             comando.setString(1, cuentaNueva.getNumCuenta());
-            comando.setLong(2, cuentaNueva.getSaldo());
+            comando.setFloat(2, cuentaNueva.getSaldo());
             comando.setBoolean(3, cuentaNueva.isEstado());
             comando.setString(4, cuentaNueva.getTelefonoTitular());
             int numeroRegistrosInsertados = comando.executeUpdate();
@@ -104,7 +104,7 @@ public class CuentaDAO implements ICuentaDAO{
                 return new Cuenta(
                         resultados.getString("numCuenta"),
                         resultados.getDate("fechaApertura"),
-                        resultados.getLong("saldo"),
+                        resultados.getFloat("saldo"),
                         resultados.getBoolean("estado"),
                         resultados.getString("telefonoTitular")
                 );
@@ -132,7 +132,7 @@ public class CuentaDAO implements ICuentaDAO{
             while (resultados.next()) {                
                 String numCuenta = resultados.getString("numCuenta");
                 Date fechaApertura = resultados.getDate("fechaApertura");
-                long saldo = resultados.getLong("saldo");
+                float saldo = resultados.getLong("saldo");
                 boolean estado = resultados.getBoolean("estado");
                 String telefonoTitular = resultados.getString("telefonoTitular");
                 Cuenta cuenta = new Cuenta(numCuenta, 

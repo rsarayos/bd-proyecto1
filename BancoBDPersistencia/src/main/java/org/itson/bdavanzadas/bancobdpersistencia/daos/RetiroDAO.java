@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -94,6 +95,11 @@ public class RetiroDAO implements IRetiroDAO{
     }
     
     @Override
+    public Retiro obtener(int idRetiro) throws PersistenciaException {
+        return null;
+    }
+    
+    @Override
     public List<Retiro> consultar() throws PersistenciaException {
         String setenciaSQL = """
                              SELECT *
@@ -112,7 +118,7 @@ public class RetiroDAO implements IRetiroDAO{
                 String contraseniaRetiro = resultados.getString("contraseniaRetiro");
                 boolean estado = resultados.getBoolean("estado");
                 int idTransaccion = resultados.getInt("idTransaccion");
-                Date fecha = resultados.getDate("fecha");
+                Timestamp fecha = resultados.getTimestamp("fecha");
                 long cantidad = resultados.getInt("cantidad");
                 String numCuenta = resultados.getString("numCuenta");
                 Retiro retiro = new Retiro(idRetiro,

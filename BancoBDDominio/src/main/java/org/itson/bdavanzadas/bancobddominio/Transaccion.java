@@ -4,7 +4,7 @@
  */
 package org.itson.bdavanzadas.bancobddominio;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 /**
  *
@@ -12,14 +12,18 @@ import java.util.Date;
  */
 public class Transaccion {
     private int idTransaccion;
-    private Date fecha;
-    private long cantidad;
+    private Timestamp fecha;
+    private float cantidad;
     private String numCuenta;
 
     public Transaccion() {
     }
 
-    public Transaccion(int idTransaccion, Date fecha, long cantidad, String numCuenta) {
+    public Transaccion(int idTransaccion) {
+        this.idTransaccion = idTransaccion;
+    }
+
+    public Transaccion(int idTransaccion, Timestamp fecha, float cantidad, String numCuenta) {
         this.idTransaccion = idTransaccion;
         this.fecha = fecha;
         this.cantidad = cantidad;
@@ -34,19 +38,19 @@ public class Transaccion {
         this.idTransaccion = idTransaccion;
     }
 
-    public Date getFecha() {
+    public Timestamp getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(Timestamp fecha) {
         this.fecha = fecha;
     }
 
-    public long getCantidad() {
+    public float getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(long cantidad) {
+    public void setCantidad(float cantidad) {
         this.cantidad = cantidad;
     }
 

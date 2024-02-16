@@ -14,14 +14,14 @@ import java.util.Objects;
 public class Cuenta {
     private String numCuenta;
     private Date fechaApertura;
-    private long saldo;
+    private float saldo;
     private boolean estado;
     private String telefonoTitular;
 
     public Cuenta() {
     }
 
-    public Cuenta(String numCuenta, Date fechaApertura, long saldo, boolean estado, String telefonoTitular) {
+    public Cuenta(String numCuenta, Date fechaApertura, float saldo, boolean estado, String telefonoTitular) {
         this.numCuenta = numCuenta;
         this.fechaApertura = fechaApertura;
         this.saldo = saldo;
@@ -45,11 +45,11 @@ public class Cuenta {
         this.fechaApertura = fechaApertura;
     }
 
-    public long getSaldo() {
+    public float getSaldo() {
         return saldo;
     }
 
-    public void setSaldo(long saldo) {
+    public void setSaldo(float saldo) {
         this.saldo = saldo;
     }
 

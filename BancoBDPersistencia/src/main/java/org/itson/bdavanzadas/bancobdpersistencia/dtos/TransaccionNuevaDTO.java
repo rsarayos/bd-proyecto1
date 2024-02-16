@@ -4,7 +4,7 @@
  */
 package org.itson.bdavanzadas.bancobdpersistencia.dtos;
 
-import java.util.Date;
+import java.sql.Timestamp;
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.ValidacionDTOException;
 
 /**
@@ -14,8 +14,8 @@ import org.itson.bdavanzadas.bancobdpersistencia.excepciones.ValidacionDTOExcept
 public class TransaccionNuevaDTO {
     
     private int idTransaccion;
-    private Date fecha;
-    private long cantidad;
+    private Timestamp fecha;
+    private float cantidad;
     private String numCuenta;
 
     public int getIdTransaccion() {
@@ -26,19 +26,19 @@ public class TransaccionNuevaDTO {
         this.idTransaccion = idTransaccion;
     }
 
-    public Date getFecha() {
+    public Timestamp getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(Timestamp fecha) {
         this.fecha = fecha;
     }
 
-    public long getCantidad() {
+    public float getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(long cantidad) {
+    public void setCantidad(float cantidad) {
         this.cantidad = cantidad;
     }
 

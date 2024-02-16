@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -49,15 +50,42 @@ public class TransferenciaDAO implements ITransferenciaDAO{
             logger.log(Level.INFO, "Se agrearon {0} transferencia", numeroRegistrosInsertados);
             ResultSet idsGenerados = comando.getGeneratedKeys();
             idsGenerados.next();
-            return new Transferencia(idsGenerados.getInt(1),
-                    transferenciaNueva.getCuentaDestino(),
-                    transferenciaNueva.getIdTransaccion(),
-                    transferenciaNueva.getFecha(), 
-                    transferenciaNueva.getCantidad(), 
-                    transferenciaNueva.getNumCuenta());
+            Transferencia transferencia = new Transferencia(idsGenerados.getInt(1));
+            return obtener(transferencia.getIdTransferencia());
         } catch (SQLException ex) {
             logger.log(Level.INFO, "No se ha podido agregar la transferencia", ex);
             return null;
+        }
+    }
+    
+    @Override
+    public Transferencia obtener(int idTransferencia) throws PersistenciaException {
+        String setenciaSQL = """
+                             SELECT idTransferencia, idTransaccion, numCuentaDestino
+                             FROM transacciones
+                             WHERE idTransaccion=?;
+                             """;
+
+        try (
+                Connection conexion = this.conexionDB.obtenerConexion();
+                PreparedStatement comando = conexion.prepareStatement(setenciaSQL);
+        ) {
+            comando.setInt(1, idTransferencia);
+
+            ResultSet resultados = comando.executeQuery();
+
+            if (resultados.next()) {
+                return new Transferencia(
+                        resultados.getInt("idTransferencia"),
+                        resultados.getString("numCuentaDestino"),
+                        resultados.getInt("idTransaccion")
+                );
+            } else {
+                return null; // No se encontró el socio con el telefono dado
+            }
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "No se ha podido obtener la transferencia", ex);
+            throw new PersistenciaException("No se ha podido obtener la transferencia", ex);
         }
     }
 
@@ -78,8 +106,8 @@ public class TransferenciaDAO implements ITransferenciaDAO{
                 int idTransferencia = resultados.getInt("idTransferencia");
                 int idTransaccion = resultados.getInt("idTransaccion");
                 String numCuentaDest = resultados.getString("numCuentaDestino");
-                Date fecha = resultados.getDate("fecha");
-                long cantidad = resultados.getInt("cantidad");
+                Timestamp fecha = resultados.getTimestamp("fecha");
+                float cantidad = resultados.getFloat("cantidad");
                 String numCuenta = resultados.getString("numCuenta");
                 Transferencia transferencia = new Transferencia(idTransferencia, 
                         numCuentaDest, 
@@ -96,5 +124,5 @@ public class TransferenciaDAO implements ITransferenciaDAO{
             throw new PersistenciaException("No se pudieron consultar las transacciones", ex);
         }
     }
-    
+
 }
