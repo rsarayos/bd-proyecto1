@@ -254,6 +254,8 @@ public class dlgRegistrarse extends javax.swing.JDialog {
         lblTelefono9.setForeground(new java.awt.Color(255, 255, 255));
         lblTelefono9.setText("Fecha de nacimiento:");
         fondo.add(lblTelefono9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, -1, -1));
+
+        jDateFechaNacimiento.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
         fondo.add(jDateFechaNacimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 300, 230, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

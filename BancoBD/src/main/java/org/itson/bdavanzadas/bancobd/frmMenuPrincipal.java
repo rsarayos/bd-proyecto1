@@ -1,6 +1,7 @@
 
 package org.itson.bdavanzadas.bancobd;
 
+import org.itson.bdavanzadas.bancobddominio.Cliente;
 import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
 
 /**
@@ -10,13 +11,15 @@ import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
 public class frmMenuPrincipal extends javax.swing.JFrame {
 
     private final DatosConexion datosConexion;
+    private Cliente cliente;
     
     /**
      * Creates new form frmMenuPrincipal
      */
-    public frmMenuPrincipal(DatosConexion datosConexion) {
+    public frmMenuPrincipal(DatosConexion datosConexion, Cliente cliente) {
         initComponents();
         this.datosConexion=datosConexion;
+        this.cliente=cliente;
     }
 
     
@@ -181,16 +184,18 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCuentasActionPerformed
 
     private void btnRetiroSinCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetiroSinCuentaActionPerformed
-        // TODO add your handling code here:
+        dlgRetiroSinCuenta retiroSinCuenta = new dlgRetiroSinCuenta(this, true, datosConexion);
+        retiroSinCuenta.setVisible(true);
     }//GEN-LAST:event_btnRetiroSinCuentaActionPerformed
 
     private void btnTransferenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransferenciaActionPerformed
-        dlgTransferencia transferencia = new dlgTransferencia(this, true);
+        dlgTransferencia transferencia = new dlgTransferencia(this, true, datosConexion);
         transferencia.setVisible(true);
     }//GEN-LAST:event_btnTransferenciaActionPerformed
 
     private void btnHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActionPerformed
-
+        dlgHistorial historial = new dlgHistorial(this, true, datosConexion);
+        historial.setVisible(true);
     }//GEN-LAST:event_btnHistorialActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
@@ -198,7 +203,7 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
-        dlgActualizarCliente actualizarCliente = new dlgActualizarCliente(this, true, datosConexion);
+        dlgActualizarCliente actualizarCliente = new dlgActualizarCliente(this, true, datosConexion, cliente);
         actualizarCliente.setVisible(true);
     }//GEN-LAST:event_jLabel1MouseClicked
 

@@ -1,10 +1,15 @@
-
 package org.itson.bdavanzadas.bancobd;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import org.itson.bdavanzadas.bancobddominio.Cliente;
+import org.itson.bdavanzadas.bancobddominio.Direccion;
 import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
+import org.itson.bdavanzadas.bancobdpersistencia.dtos.ClienteNuevoDTO;
+import org.itson.bdavanzadas.bancobdpersistencia.dtos.DireccionNuevaDTO;
+import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
+import org.itson.bdavanzadas.bancobdpersistencia.excepciones.ValidacionDTOException;
 
 /**
  *
@@ -13,14 +18,96 @@ import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
 public class dlgActualizarCliente extends javax.swing.JDialog {
 
     private final DatosConexion datosConexion;
-    
+    private Cliente cliente;
+ 
+
     /**
      * Creates new form dlgActualizarCliente
      */
-    public dlgActualizarCliente(java.awt.Frame parent, boolean modal, DatosConexion datosConexion) {
+    public dlgActualizarCliente(java.awt.Frame parent, boolean modal, DatosConexion datosConexion, Cliente cliente) {
         super(parent, modal);
         initComponents();
-        this.datosConexion=datosConexion;
+        this.datosConexion = datosConexion;
+        this.cliente = cliente;
+
+        System.out.println(cliente);
+        
+        try {
+            Cliente clienteActu = datosConexion.getClientesDAO().obtener(cliente.getTelefono());
+            System.out.println(clienteActu);
+            txtNombres.setText(cliente.getNombre());
+            txtApellidoPaterno.setText(cliente.getApellidoPaterno());
+            txtApellidoMaterno.setText(cliente.getApellidoMaterno());
+            txtTelefono.setText(cliente.getTelefono());
+            jDateFechaNacimiento.setDate(cliente.getFechaNacimiento());
+            pswContrasenia.setText(cliente.getPassword());
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(dlgActualizarCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        try {
+            Direccion direccion = datosConexion.getDireccionDAO().obtener(cliente.getIdDireccion());
+            txtCalle.setText(direccion.getCalle());
+            txtNumero.setText(direccion.getNumero());
+            txtColonia.setText(direccion.getColonia());
+            txtCiudad.setText(direccion.getCiudad());
+            txtCodigoPostal.setText(direccion.getCp());
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(dlgActualizarCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    private void actualizar() {
+        String telefono = txtTelefono.getText();
+        String nombres = txtNombres.getText();
+        String apellidoPaterno = txtApellidoPaterno.getText();
+        String apellidoMaterno = txtApellidoMaterno.getText();
+        java.util.Date fechaSeleccionada = jDateFechaNacimiento.getDate();
+        java.sql.Date fechaNacimiento = new java.sql.Date(fechaSeleccionada.getTime());
+        
+        String calle = txtCalle.getText();
+        String numero = txtNumero.getText();
+        String colonia = txtColonia.getText();
+        String ciudad = txtCiudad.getText();
+        String cp = txtCodigoPostal.getText();
+
+        char[] contraseniaArray = pswContrasenia.getPassword();
+        String contrasenia = new String(contraseniaArray);
+
+        DireccionNuevaDTO direccionActualizada = new DireccionNuevaDTO();
+        direccionActualizada.setIdDireccion(cliente.getIdDireccion());
+        direccionActualizada.setCalle(calle);
+        direccionActualizada.setNumero(numero);
+        direccionActualizada.setColonia(colonia);
+        direccionActualizada.setCiudad(ciudad);
+        direccionActualizada.setCp(cp);
+
+        ClienteNuevoDTO clienteActualizado = new ClienteNuevoDTO();
+        clienteActualizado.setTelefono(telefono);
+        clienteActualizado.setNombre(nombres);
+        clienteActualizado.setApellidoPaterno(apellidoPaterno);
+        clienteActualizado.setApellidoMaterno(apellidoMaterno);
+        clienteActualizado.setFechaNacimiento(fechaNacimiento);
+        clienteActualizado.setPassword(contrasenia);
+
+        try {
+            direccionActualizada.esValido();
+            Direccion direccionActu = this.datosConexion.getDireccionDAO().actualizar(direccionActualizada);
+            clienteActualizado.setIdDireccion(direccionActu.getIdDireccion());
+            clienteActualizado.esValido();
+            Cliente clienteActualizadoNuevo = this.datosConexion.getClientesDAO().actualizar(clienteActualizado, telefono);
+            
+            if(clienteActualizadoNuevo != null){
+            JOptionPane.showMessageDialog(this, "Se modificó al cliente exitosamente", "Socio modificado", JOptionPane.INFORMATION_MESSAGE);
+            dispose();
+            }
+        } catch (ValidacionDTOException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de validación", JOptionPane.ERROR_MESSAGE);
+        } catch (PersistenciaException ex) {
+            JOptionPane.showMessageDialog(this, "No fue posible actualizar al cliente", "Error de almacenamiento", JOptionPane.ERROR_MESSAGE);
+        }
+
     }
 
     /**
@@ -130,6 +217,7 @@ public class dlgActualizarCliente extends javax.swing.JDialog {
         lblTelefono3.setText("Calle:");
         fondo.add(lblTelefono3, new org.netbeans.lib.awtextra.AbsoluteConstraints(557, 166, -1, -1));
 
+        txtTelefono.setEditable(false);
         txtTelefono.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
         txtTelefono.setToolTipText("");
         fondo.add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 340, 228, -1));
@@ -178,6 +266,8 @@ public class dlgActualizarCliente extends javax.swing.JDialog {
         lblTelefono9.setForeground(new java.awt.Color(255, 255, 255));
         lblTelefono9.setText("Fecha de nacimiento:");
         fondo.add(lblTelefono9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, -1, -1));
+
+        jDateFechaNacimiento.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
         fondo.add(jDateFechaNacimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 300, 230, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -196,7 +286,51 @@ public class dlgActualizarCliente extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        
+        if (!txtNombres.getText().isBlank()) {
+            if (!txtApellidoPaterno.getText().isBlank()) {
+                if (!txtApellidoMaterno.getText().isBlank()) {
+                    if (jDateFechaNacimiento.getDate() != null) {
+                        if (!txtTelefono.getText().isBlank()) {
+                            if (!txtCalle.getText().isBlank()) {
+                                if (!txtNumero.getText().isBlank()) {
+                                    if (!txtColonia.getText().isBlank()) {
+                                        if (!txtCiudad.getText().isBlank()) {
+                                            if (!txtCodigoPostal.getText().isBlank()) {
+                                                if (!pswContrasenia.getText().isBlank()) {
+                                                    actualizar();
+                                                } else {
+                                                    JOptionPane.showMessageDialog(this, "Ingrese una contraseña");
+                                                }
+                                            } else {
+                                                JOptionPane.showMessageDialog(this, "Ingrese el código postal");
+                                            }
+                                        } else {
+                                            JOptionPane.showMessageDialog(this, "Ingrese una ciudad");
+                                        }
+                                    } else {
+                                        JOptionPane.showMessageDialog(this, "Ingrese una colonia");
+                                    }
+                                } else {
+                                    JOptionPane.showMessageDialog(this, "Ingrese una número");
+                                }
+                            } else {
+                                JOptionPane.showMessageDialog(this, "Ingrese una calle");
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Ingrese un teléfono");
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Ingrese una fecha de nacimiento");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Ingrese el apellido materno");
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Ingrese el apellido paterno");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Ingrese los nombres");
+        }
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed

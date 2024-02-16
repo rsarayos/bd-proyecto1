@@ -208,7 +208,8 @@ public class frmMenuInicio extends javax.swing.JFrame {
                 if (cliente != null) {
                     if (cliente.getTelefono().equals(telefono)) {
                         if (cliente.getPassword().equals(contrasenia)) {
-                            frmMenuPrincipal menuPrincipal = new frmMenuPrincipal(datosConexion);
+                            System.out.println(cliente);
+                            frmMenuPrincipal menuPrincipal = new frmMenuPrincipal(datosConexion, cliente);
                             menuPrincipal.setVisible(true);
                             dispose();
                         } else {
@@ -230,7 +231,8 @@ public class frmMenuInicio extends javax.swing.JFrame {
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
     private void btnRetiroSinCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetiroSinCuentaActionPerformed
-        // TODO add your handling code here:
+        dlgRetirarSinCuentaMenuInicial retiroSinCuenta = new dlgRetirarSinCuentaMenuInicial(this, true, datosConexion);
+        retiroSinCuenta.setVisible(true);
     }//GEN-LAST:event_btnRetiroSinCuentaActionPerformed
 
     private void btnRegistrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarseActionPerformed

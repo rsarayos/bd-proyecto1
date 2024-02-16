@@ -7,14 +7,14 @@ import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
  *
  * @author victo
  */
-public class dlgTransferencia extends javax.swing.JDialog {
+public class dlgRetiroSinCuenta extends javax.swing.JDialog {
 
     private final DatosConexion datosConexion;
     
     /**
-     * Creates new form dlgTransferencia
+     * Creates new form dlgRetiroSinCuenta
      */
-    public dlgTransferencia(java.awt.Frame parent, boolean modal, DatosConexion datosConexion) {
+    public dlgRetiroSinCuenta(java.awt.Frame parent, boolean modal, DatosConexion datosConexion) {
         super(parent, modal);
         initComponents();
         this.datosConexion=datosConexion;
@@ -38,16 +38,17 @@ public class dlgTransferencia extends javax.swing.JDialog {
         txtMonto = new javax.swing.JTextField();
         lblContrasenia1 = new javax.swing.JLabel();
         cbxCuentaRetiro = new javax.swing.JComboBox<>();
-        cbxCuentaDestino = new javax.swing.JComboBox<>();
+        txtMonto1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Retiro sin cuenta");
         setResizable(false);
 
         fondo.setBackground(new java.awt.Color(102, 153, 255));
 
         jLabel2.setFont(new java.awt.Font("Leelawadee UI", 1, 80)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Transferencia");
+        jLabel2.setText("Retiro sin cuenta");
 
         btnConfirmar.setBackground(new java.awt.Color(0, 102, 255));
         btnConfirmar.setFont(new java.awt.Font("Segoe UI Black", 0, 24)); // NOI18N
@@ -75,7 +76,7 @@ public class dlgTransferencia extends javax.swing.JDialog {
 
         lblContrasenia.setFont(new java.awt.Font("Leelawadee UI", 1, 24)); // NOI18N
         lblContrasenia.setForeground(new java.awt.Color(255, 255, 255));
-        lblContrasenia.setText("Cuenta destino:");
+        lblContrasenia.setText("Fecha de vencimiento:");
 
         txtMonto.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
         txtMonto.addActionListener(new java.awt.event.ActionListener() {
@@ -90,55 +91,61 @@ public class dlgTransferencia extends javax.swing.JDialog {
 
         cbxCuentaRetiro.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
 
-        cbxCuentaDestino.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
+        txtMonto1.setEditable(false);
+        txtMonto1.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
+        txtMonto1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtMonto1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout fondoLayout = new javax.swing.GroupLayout(fondo);
         fondo.setLayout(fondoLayout);
         fondoLayout.setHorizontalGroup(
             fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, fondoLayout.createSequentialGroup()
-                .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(191, 191, 191)
+                .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, fondoLayout.createSequentialGroup()
+                        .addGap(0, 56, Short.MAX_VALUE)
+                        .addComponent(btnConfirmar)
+                        .addGap(134, 134, 134)
+                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(21, 21, 21))
                     .addGroup(fondoLayout.createSequentialGroup()
-                        .addGap(191, 191, 191)
+                        .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lblContrasenia1)
+                            .addComponent(lblCuentaRetiro))
+                        .addGap(28, 28, 28)
                         .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, fondoLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(btnConfirmar)
-                                .addGap(155, 155, 155)
-                                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(fondoLayout.createSequentialGroup()
-                                .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(lblContrasenia1)
-                                    .addComponent(lblContrasenia)
-                                    .addComponent(lblCuentaRetiro))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(cbxCuentaDestino, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(cbxCuentaRetiro, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtMonto))
-                                .addGap(30, 30, 30))))
-                    .addGroup(fondoLayout.createSequentialGroup()
-                        .addContainerGap(196, Short.MAX_VALUE)
-                        .addComponent(jLabel2)))
+                            .addComponent(txtMonto1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(cbxCuentaRetiro, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtMonto))))
                 .addGap(196, 196, 196))
+            .addGroup(fondoLayout.createSequentialGroup()
+                .addGap(133, 133, 133)
+                .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblContrasenia)
+                    .addComponent(jLabel2))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         fondoLayout.setVerticalGroup(
             fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(fondoLayout.createSequentialGroup()
-                .addGap(51, 51, 51)
+                .addGap(38, 38, 38)
                 .addComponent(jLabel2)
-                .addGap(49, 49, 49)
+                .addGap(62, 62, 62)
                 .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblCuentaRetiro)
                     .addComponent(cbxCuentaRetiro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblContrasenia)
-                    .addComponent(cbxCuentaDestino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblContrasenia1)
                     .addComponent(txtMonto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblContrasenia)
+                    .addComponent(txtMonto1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
                 .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -173,10 +180,13 @@ public class dlgTransferencia extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtMontoActionPerformed
 
+    private void txtMonto1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMonto1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtMonto1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnConfirmar;
-    private javax.swing.JComboBox<String> cbxCuentaDestino;
     private javax.swing.JComboBox<String> cbxCuentaRetiro;
     private javax.swing.JPanel fondo;
     private javax.swing.JLabel jLabel2;
@@ -184,5 +194,6 @@ public class dlgTransferencia extends javax.swing.JDialog {
     private javax.swing.JLabel lblContrasenia1;
     private javax.swing.JLabel lblCuentaRetiro;
     private javax.swing.JTextField txtMonto;
+    private javax.swing.JTextField txtMonto1;
     // End of variables declaration//GEN-END:variables
 }
