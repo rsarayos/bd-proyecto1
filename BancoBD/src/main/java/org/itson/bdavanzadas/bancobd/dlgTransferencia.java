@@ -1,7 +1,12 @@
-
 package org.itson.bdavanzadas.bancobd;
 
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.itson.bdavanzadas.bancobddominio.Cliente;
+import org.itson.bdavanzadas.bancobddominio.Cuenta;
 import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
+import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
 
 /**
  *
@@ -10,14 +15,32 @@ import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
 public class dlgTransferencia extends javax.swing.JDialog {
 
     private final DatosConexion datosConexion;
-    
+    private Cliente cliente;
+
     /**
      * Creates new form dlgTransferencia
      */
-    public dlgTransferencia(java.awt.Frame parent, boolean modal, DatosConexion datosConexion) {
+    public dlgTransferencia(java.awt.Frame parent, boolean modal, DatosConexion datosConexion, Cliente cliente) {
         super(parent, modal);
         initComponents();
-        this.datosConexion=datosConexion;
+        this.datosConexion = datosConexion;
+        this.cliente = cliente;
+        mostrarCuentas();
+    }
+
+    private void mostrarCuentas() {
+
+        List<Cuenta> listaCuentas = null;
+        try {
+            listaCuentas = datosConexion.getCuentaDAO().consultar();
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(dlgTransferencia.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        for (Cuenta cuenta : listaCuentas) {
+            cbxCuentaRetiro.addItem(cuenta.getNumCuenta());
+        }
+
     }
 
     /**
@@ -88,9 +111,9 @@ public class dlgTransferencia extends javax.swing.JDialog {
         lblContrasenia1.setForeground(new java.awt.Color(255, 255, 255));
         lblContrasenia1.setText("Monto:");
 
-        cbxCuentaRetiro.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
+        cbxCuentaRetiro.setFont(new java.awt.Font("Leelawadee UI", 1, 14)); // NOI18N
 
-        cbxCuentaDestino.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
+        cbxCuentaDestino.setFont(new java.awt.Font("Leelawadee UI", 1, 14)); // NOI18N
 
         javax.swing.GroupLayout fondoLayout = new javax.swing.GroupLayout(fondo);
         fondo.setLayout(fondoLayout);
@@ -113,9 +136,9 @@ public class dlgTransferencia extends javax.swing.JDialog {
                                     .addComponent(lblCuentaRetiro))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(cbxCuentaDestino, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(cbxCuentaRetiro, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtMonto))
+                                    .addComponent(txtMonto)
+                                    .addComponent(cbxCuentaDestino, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(30, 30, 30))))
                     .addGroup(fondoLayout.createSequentialGroup()
                         .addContainerGap(196, Short.MAX_VALUE)

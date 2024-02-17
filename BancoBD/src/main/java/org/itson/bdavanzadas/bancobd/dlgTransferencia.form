@@ -63,9 +63,9 @@
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="cbxCuentaDestino" max="32767" attributes="0"/>
                                       <Component id="cbxCuentaRetiro" max="32767" attributes="0"/>
                                       <Component id="txtMonto" max="32767" attributes="0"/>
+                                      <Component id="cbxCuentaDestino" alignment="0" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="30" pref="30" max="-2" attributes="0"/>
                               </Group>
@@ -202,7 +202,7 @@
         <Component class="javax.swing.JComboBox" name="cbxCuentaRetiro">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Leelawadee UI" size="14" style="0"/>
+              <Font name="Leelawadee UI" size="14" style="1"/>
             </Property>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="0"/>
@@ -215,7 +215,7 @@
         <Component class="javax.swing.JComboBox" name="cbxCuentaDestino">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Leelawadee UI" size="14" style="0"/>
+              <Font name="Leelawadee UI" size="14" style="1"/>
             </Property>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="0"/>

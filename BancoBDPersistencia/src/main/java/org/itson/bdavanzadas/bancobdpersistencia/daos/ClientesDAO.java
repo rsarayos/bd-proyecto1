@@ -60,7 +60,7 @@ public class ClientesDAO implements IClientesDAO{
     public Cliente actualizar(ClienteNuevoDTO clienteNuevo, String telefono) throws PersistenciaException {
         String setenciaSQL = """
                              UPDATE clientes
-                             SET telefono=?, nombre=?, apellidoPaterno=?, apellidoMaterno=?, fechaNacimiento=?, edad=?, contrasenia=?, idDireccion=?
+                             SET telefono=?, nombre=?, apellidoPaterno=?, apellidoMaterno=?, fechaNacimiento=?, contrasenia=?, idDireccion=?
                              WHERE telefono=?;
                              """;
 
@@ -71,21 +71,20 @@ public class ClientesDAO implements IClientesDAO{
             comando.setString(3, clienteNuevo.getApellidoPaterno());
             comando.setString(4, clienteNuevo.getApellidoMaterno());
             comando.setDate(5, (Date) clienteNuevo.getFechaNacimiento());
-            comando.setInt(6, clienteNuevo.getEdad());
-            comando.setString(7, clienteNuevo.getPassword());
-            comando.setInt(8, clienteNuevo.getIdDireccion());
-            comando.setString(9, telefono);
+            comando.setString(6, clienteNuevo.getPassword());
+            comando.setInt(7, clienteNuevo.getIdDireccion());
+            comando.setString(8, telefono);
             int numeroRegistrosActualizados = comando.executeUpdate();
             logger.log(Level.INFO, "Se actualizaron {0} registros", numeroRegistrosActualizados);
-                Cliente cliente = new Cliente(clienteNuevo.getTelefono(),
-                    clienteNuevo.getNombre(),
-                    clienteNuevo.getApellidoPaterno(),
-                    clienteNuevo.getApellidoMaterno(),
-                    clienteNuevo.getFechaNacimiento(),
-                    clienteNuevo.getEdad(),
-                    clienteNuevo.getPassword(),
-                    clienteNuevo.getIdDireccion());
-            return cliente;
+//                Cliente cliente = new Cliente(clienteNuevo.getTelefono(),
+//                    clienteNuevo.getNombre(),
+//                    clienteNuevo.getApellidoPaterno(),
+//                    clienteNuevo.getApellidoMaterno(),
+//                    clienteNuevo.getFechaNacimiento(),
+//                    clienteNuevo.getEdad(),
+//                    clienteNuevo.getPassword(),
+//                    clienteNuevo.getIdDireccion());
+            return obtener(clienteNuevo.getTelefono());
         } catch (SQLException ex) {
             Logger.getLogger(ClientesDAO.class.getName()).log(Level.SEVERE, "No se pudo actualizar al socio", ex);
             return null;

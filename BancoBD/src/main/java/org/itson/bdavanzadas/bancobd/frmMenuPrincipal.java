@@ -189,7 +189,7 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRetiroSinCuentaActionPerformed
 
     private void btnTransferenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransferenciaActionPerformed
-        dlgTransferencia transferencia = new dlgTransferencia(this, true, datosConexion);
+        dlgTransferencia transferencia = new dlgTransferencia(this, true, datosConexion, cliente);
         transferencia.setVisible(true);
     }//GEN-LAST:event_btnTransferenciaActionPerformed
 

@@ -35,12 +35,12 @@ public class dlgActualizarCliente extends javax.swing.JDialog {
         try {
             Cliente clienteActu = datosConexion.getClientesDAO().obtener(cliente.getTelefono());
             System.out.println(clienteActu);
-            txtNombres.setText(cliente.getNombre());
-            txtApellidoPaterno.setText(cliente.getApellidoPaterno());
-            txtApellidoMaterno.setText(cliente.getApellidoMaterno());
-            txtTelefono.setText(cliente.getTelefono());
-            jDateFechaNacimiento.setDate(cliente.getFechaNacimiento());
-            pswContrasenia.setText(cliente.getPassword());
+            txtNombres.setText(clienteActu.getNombre());
+            txtApellidoPaterno.setText(clienteActu.getApellidoPaterno());
+            txtApellidoMaterno.setText(clienteActu.getApellidoMaterno());
+            txtTelefono.setText(clienteActu.getTelefono());
+            jDateFechaNacimiento.setDate(clienteActu.getFechaNacimiento());
+            pswContrasenia.setText(clienteActu.getPassword());
         } catch (PersistenciaException ex) {
             Logger.getLogger(dlgActualizarCliente.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -84,7 +84,7 @@ public class dlgActualizarCliente extends javax.swing.JDialog {
         direccionActualizada.setCp(cp);
 
         ClienteNuevoDTO clienteActualizado = new ClienteNuevoDTO();
-        clienteActualizado.setTelefono(telefono);
+        clienteActualizado.setTelefono(cliente.getTelefono());
         clienteActualizado.setNombre(nombres);
         clienteActualizado.setApellidoPaterno(apellidoPaterno);
         clienteActualizado.setApellidoMaterno(apellidoMaterno);
@@ -99,7 +99,7 @@ public class dlgActualizarCliente extends javax.swing.JDialog {
             Cliente clienteActualizadoNuevo = this.datosConexion.getClientesDAO().actualizar(clienteActualizado, telefono);
             
             if(clienteActualizadoNuevo != null){
-            JOptionPane.showMessageDialog(this, "Se modificó al cliente exitosamente", "Socio modificado", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Se modificó al cliente exitosamente", "Cliente modificado", JOptionPane.INFORMATION_MESSAGE);
             dispose();
             }
         } catch (ValidacionDTOException ex) {

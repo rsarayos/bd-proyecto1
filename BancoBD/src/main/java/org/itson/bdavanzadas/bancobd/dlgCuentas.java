@@ -33,7 +33,7 @@ public class dlgCuentas extends javax.swing.JDialog {
     private void mostrarTabla() {
         List<Cuenta> listaCuentas;
         try {
-            listaCuentas = datosConexion.getCuentaDAO().consultar();
+            listaCuentas = datosConexion.getCuentaDAO().consultarCuentasCliente(cliente.getTelefono());
             DefaultTableModel modelo = new DefaultTableModel();
             modelo.addColumn("CUENTA");
             modelo.addColumn("ESTADO");
