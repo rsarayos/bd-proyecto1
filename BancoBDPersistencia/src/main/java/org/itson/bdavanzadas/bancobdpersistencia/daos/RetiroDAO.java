@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.itson.bdavanzadas.bancobddominio.Retiro;
+import org.itson.bdavanzadas.bancobdpersistencia.auxiliar.EncriptarContra;
 import org.itson.bdavanzadas.bancobdpersistencia.conexion.IConexion;
 import org.itson.bdavanzadas.bancobdpersistencia.dtos.RetiroNuevoDTO;
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
@@ -30,9 +31,11 @@ public class RetiroDAO implements IRetiroDAO {
 
     final IConexion conexionDB;
     static final Logger logger = Logger.getLogger(TransferenciaDAO.class.getName());
+    private EncriptarContra encriptador;
 
     public RetiroDAO(IConexion conexionDB) {
         this.conexionDB = conexionDB;
+        this.encriptador = new EncriptarContra();
     }
 
     @Override
@@ -46,8 +49,11 @@ public class RetiroDAO implements IRetiroDAO {
                 Connection conexion = this.conexionDB.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(
                 setenciaSQL,
                 Statement.RETURN_GENERATED_KEYS);) {
+            
+            String contraEncriptada = encriptador.encriptar(retiroNuevo.getContraseniaRetiro());
+            
             comando.setString(1, retiroNuevo.getFolioRetiro());
-            comando.setString(2, retiroNuevo.getContraseniaRetiro());
+            comando.setBytes(2, contraEncriptada.getBytes());
             comando.setInt(3, retiroNuevo.getEstado());
             comando.setInt(4, retiroNuevo.getIdTransaccion());
             int numeroRegistrosInsertados = comando.executeUpdate();
@@ -63,6 +69,9 @@ public class RetiroDAO implements IRetiroDAO {
                     retiroNuevo.getCantidad(),
                     retiroNuevo.getNumCuenta());
         } catch (SQLException ex) {
+            logger.log(Level.INFO, "No se ha podido agregar el retiro", ex);
+            return null;
+        } catch (Exception ex) {
             logger.log(Level.INFO, "No se ha podido agregar el retiro", ex);
             return null;
         }
@@ -99,8 +108,9 @@ public class RetiroDAO implements IRetiroDAO {
     @Override
     public Retiro obtener(int idRetiro) throws PersistenciaException {
         String setenciaSQL = """
-                             SELECT idRetiro, folioRetiro, contraseniaRetiro, estado, idTransaccion
+                             SELECT *
                              FROM retiros
+                             INNER JOIN transacciones ON retiros.idTransaccion = transacciones.idTransaccion
                              WHERE idRetiro=?;
                              """;
 
@@ -111,17 +121,30 @@ public class RetiroDAO implements IRetiroDAO {
             ResultSet resultados = comando.executeQuery();
 
             if (resultados.next()) {
-                return new Retiro(
-                        resultados.getInt("idRetiro"),
-                        resultados.getString("folioRetiro"),
-                        resultados.getString("contraseniaRetiro"),
-                        resultados.getInt("estado"),
-                        resultados.getInt("idTransaccion")
-                );
+                String folioRetiro = resultados.getString("folioRetiro");
+                String contraseniaCifrada = resultados.getString("contraseniaRetiro");
+                String contraDesencriptada = encriptador.desencriptar(contraseniaCifrada);
+                int estado = resultados.getInt("estado");
+                int idTransaccion = resultados.getInt("idTransaccion");
+                Timestamp fecha = resultados.getTimestamp("fecha");
+                long cantidad = resultados.getInt("cantidad");
+                String numCuenta = resultados.getString("numCuenta");
+                Retiro retiro = new Retiro(idRetiro,
+                        folioRetiro,
+                        contraDesencriptada,
+                        estado,
+                        idTransaccion,
+                        fecha,
+                        cantidad,
+                        numCuenta);
+                return retiro;
             } else {
                 return null; // No se encontró el socio con el telefono dado
             }
         } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "No se ha podido obtener el retiro", ex);
+            throw new PersistenciaException("No se ha podido obtener el retiro", ex);
+        } catch (Exception ex) {
             logger.log(Level.SEVERE, "No se ha podido obtener el retiro", ex);
             throw new PersistenciaException("No se ha podido obtener el retiro", ex);
         }
@@ -140,8 +163,9 @@ public class RetiroDAO implements IRetiroDAO {
 
             while (resultados.next()) {
                 int idRetiro = resultados.getInt("idRetiro");
+                String contraseniaCifrada = resultados.getString("contraseniaRetiro");
+                String contraDesencriptada = encriptador.desencriptar(contraseniaCifrada);
                 String folioRetiro = resultados.getString("folioRetiro");
-                String contraseniaRetiro = resultados.getString("contraseniaRetiro");
                 int estado = resultados.getInt("estado");
                 int idTransaccion = resultados.getInt("idTransaccion");
                 Timestamp fecha = resultados.getTimestamp("fecha");
@@ -149,7 +173,7 @@ public class RetiroDAO implements IRetiroDAO {
                 String numCuenta = resultados.getString("numCuenta");
                 Retiro retiro = new Retiro(idRetiro,
                         folioRetiro,
-                        contraseniaRetiro,
+                        contraDesencriptada,
                         estado,
                         idTransaccion,
                         fecha,
@@ -160,6 +184,9 @@ public class RetiroDAO implements IRetiroDAO {
             logger.log(Level.INFO, "Se consultaron {0} retiros", listaRetiros.size());
             return listaRetiros;
         } catch (SQLException ex) {
+            Logger.getLogger(ClientesDAO.class.getName()).log(Level.SEVERE, "No se pudieron consultar los retiros", ex);
+            throw new PersistenciaException("No se pudieron consultar los retiros", ex);
+        } catch (Exception ex) {
             Logger.getLogger(ClientesDAO.class.getName()).log(Level.SEVERE, "No se pudieron consultar los retiros", ex);
             throw new PersistenciaException("No se pudieron consultar los retiros", ex);
         }
@@ -181,14 +208,15 @@ public class RetiroDAO implements IRetiroDAO {
             while (resultados.next()) {
                 int idRetiro = resultados.getInt("idRetiro");
                 String folioRetiro = resultados.getString("folioRetiro");
-                String contraseniaRetiro = resultados.getString("contraseniaRetiro");
+                String contraseniaCifrada = resultados.getString("contraseniaRetiro");
+                String contraDesencriptada = encriptador.desencriptar(contraseniaCifrada);
                 int estado = resultados.getInt("estado");
                 int idTransaccion = resultados.getInt("idTransaccion");
                 Timestamp fecha = resultados.getTimestamp("fecha");
                 long cantidad = resultados.getInt("cantidad");
                 Retiro retiro = new Retiro(idRetiro,
                         folioRetiro,
-                        contraseniaRetiro,
+                        contraDesencriptada,
                         estado,
                         idTransaccion,
                         fecha,
@@ -199,6 +227,9 @@ public class RetiroDAO implements IRetiroDAO {
             logger.log(Level.INFO, "Se consultaron {0} retiros", listaRetiros.size());
             return listaRetiros;
         } catch (SQLException ex) {
+            Logger.getLogger(ClientesDAO.class.getName()).log(Level.SEVERE, "No se pudieron consultar los retiros", ex);
+            throw new PersistenciaException("No se pudieron consultar los retiros", ex);
+        } catch (Exception ex) {
             Logger.getLogger(ClientesDAO.class.getName()).log(Level.SEVERE, "No se pudieron consultar los retiros", ex);
             throw new PersistenciaException("No se pudieron consultar los retiros", ex);
         }

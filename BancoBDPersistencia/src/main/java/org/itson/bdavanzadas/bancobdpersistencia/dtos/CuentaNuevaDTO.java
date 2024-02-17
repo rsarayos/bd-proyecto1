@@ -63,6 +63,11 @@ public class CuentaNuevaDTO {
     }
     
     public boolean esValido() throws ValidacionDTOException {
+        if (this.numCuenta == null 
+            || this.numCuenta.isBlank() 
+            || !this.valida.validaCuenta(numCuenta)) {
+            throw new ValidacionDTOException("numero de cuenta invalido");
+        }
         if (this.saldo == 0f 
             || this.saldo < 0) {
             throw new ValidacionDTOException("saldo en cuenta invalida");
