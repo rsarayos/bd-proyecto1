@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package org.itson.bdavanzadas.bancobddominio;
 
 import java.sql.Timestamp;
@@ -15,6 +12,8 @@ public class Transaccion {
     private Timestamp fecha;
     private float cantidad;
     private String numCuenta;
+    private String tipo;
+    private String estadoTransaccion;
 
     public Transaccion() {
     }
@@ -61,6 +60,23 @@ public class Transaccion {
     public void setNumCuenta(String numCuenta) {
         this.numCuenta = numCuenta;
     }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+    
+    public String getEstadoTransaccion() {
+        return estadoTransaccion;
+    }
+
+    public void setEstadoTransaccion(String estadoTransaccion) {
+        this.estadoTransaccion = estadoTransaccion;
+    }
+    
 
     @Override
     public int hashCode() {

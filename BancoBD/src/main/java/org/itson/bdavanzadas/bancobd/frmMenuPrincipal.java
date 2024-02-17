@@ -194,7 +194,7 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnTransferenciaActionPerformed
 
     private void btnHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActionPerformed
-        dlgHistorial historial = new dlgHistorial(this, true, datosConexion);
+        dlgHistorial historial = new dlgHistorial(this, true, datosConexion, cliente);
         historial.setVisible(true);
     }//GEN-LAST:event_btnHistorialActionPerformed
 

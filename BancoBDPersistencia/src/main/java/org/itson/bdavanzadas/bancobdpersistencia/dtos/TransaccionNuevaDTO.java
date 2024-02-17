@@ -17,6 +17,7 @@ public class TransaccionNuevaDTO {
     private Timestamp fecha;
     private float cantidad;
     private String numCuenta;
+    private String estado;
 
     public int getIdTransaccion() {
         return idTransaccion;
@@ -49,7 +50,7 @@ public class TransaccionNuevaDTO {
     public void setNumCuenta(String numCuenta) {
         this.numCuenta = numCuenta;
     }
-    
+  
     public boolean esValido() throws ValidacionDTOException {
         return true;
     }

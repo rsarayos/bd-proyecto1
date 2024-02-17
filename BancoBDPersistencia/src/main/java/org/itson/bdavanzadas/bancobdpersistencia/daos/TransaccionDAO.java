@@ -16,7 +16,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.itson.bdavanzadas.bancobddominio.Transaccion;
+import org.itson.bdavanzadas.bancobddominio.Transferencia;
 import org.itson.bdavanzadas.bancobdpersistencia.conexion.IConexion;
+import static org.itson.bdavanzadas.bancobdpersistencia.daos.TransferenciaDAO.logger;
 import org.itson.bdavanzadas.bancobdpersistencia.dtos.TransaccionNuevaDTO;
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
 
@@ -24,7 +26,7 @@ import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaExcepti
  *
  * @author alex_
  */
-public class TransaccionDAO implements ITransaccionDAO{
+public class TransaccionDAO implements ITransaccionDAO {
 
     final IConexion conexionDB;
     static final Logger logger = Logger.getLogger(TransferenciaDAO.class.getName());
@@ -32,7 +34,7 @@ public class TransaccionDAO implements ITransaccionDAO{
     public TransaccionDAO(IConexion conexionDB) {
         this.conexionDB = conexionDB;
     }
-    
+
     @Override
     public Transaccion nueva(TransaccionNuevaDTO transaccionNueva) throws PersistenciaException {
         String setenciaSQL = """
@@ -57,7 +59,7 @@ public class TransaccionDAO implements ITransaccionDAO{
             return null;
         }
     }
-    
+
     @Override
     public Transaccion obtener(int idTransaccion) throws PersistenciaException {
         String setenciaSQL = """
@@ -67,9 +69,7 @@ public class TransaccionDAO implements ITransaccionDAO{
                              """;
 
         try (
-                Connection conexion = this.conexionDB.obtenerConexion();
-                PreparedStatement comando = conexion.prepareStatement(setenciaSQL);
-        ) {
+                Connection conexion = this.conexionDB.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(setenciaSQL);) {
             comando.setInt(1, idTransaccion);
 
             ResultSet resultados = comando.executeQuery();
@@ -89,7 +89,7 @@ public class TransaccionDAO implements ITransaccionDAO{
             throw new PersistenciaException("No se ha podido obtener la transaccion", ex);
         }
     }
-    
+
     @Override
     public List<Transaccion> consultar() throws PersistenciaException {
         String setenciaSQL = """
@@ -98,17 +98,15 @@ public class TransaccionDAO implements ITransaccionDAO{
                              """;
         List<Transaccion> listaTransacciones = new LinkedList<>();
         try (
-                Connection conexion = this.conexionDB.obtenerConexion(); 
-                PreparedStatement comando = conexion.prepareStatement(setenciaSQL); 
-                ResultSet resultados = comando.executeQuery();) {
-            
-            while (resultados.next()) {                
+                Connection conexion = this.conexionDB.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(setenciaSQL); ResultSet resultados = comando.executeQuery();) {
+
+            while (resultados.next()) {
                 int idTransaccion = resultados.getInt("idTransaccion");
                 Timestamp fecha = resultados.getTimestamp("fecha");
                 float cantidad = resultados.getFloat("cantidad");
                 String numCuenta = resultados.getString("numCuenta");
-                Transaccion transaccion = new Transaccion(idTransaccion, 
-                        fecha, 
+                Transaccion transaccion = new Transaccion(idTransaccion,
+                        fecha,
                         cantidad,
                         numCuenta);
                 listaTransacciones.add(transaccion);
@@ -120,5 +118,58 @@ public class TransaccionDAO implements ITransaccionDAO{
             throw new PersistenciaException("No se pudieron consultar las transacciones", ex);
         }
     }
-  
+
+    @Override
+    public List<Transaccion> consultarTransaccionesCuenta(String numCuenta) throws PersistenciaException {
+        String setenciaSQL = """
+                             SELECT  t.idTransaccion, tr.numCuentaDestino, t.cantidad, t.fecha,
+                                     CASE
+                                         WHEN tr.idTransaccion=t.idTransaccion THEN 'Transferencia'
+                                         WHEN r.idTransaccion=t.idTransaccion THEN 'Retiro'
+                                     END AS Tipo,
+                                     CASE 
+                                         WHEN t.idTransaccion = r.idTransaccion THEN
+                                             CASE r.estado
+                                                 WHEN 1 THEN 'No cobrado'
+                                                 WHEN 2 THEN 'Cobrado'
+                                                 WHEN 3 THEN 'Cancelado'
+                                             END
+                                         ELSE 'Completado'
+                                     END AS Estado
+                             FROM transacciones t
+                             LEFT JOIN transferencias tr ON tr.idTransaccion = t.idTransaccion
+                             LEFT JOIN retiros r ON r.idTransaccion = t.idTransaccion
+                             WHERE t.numCuenta = ?;
+                             """;
+        List<Transaccion> listaTransancciones = new LinkedList<>();
+        try (
+                Connection conexion = this.conexionDB.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(setenciaSQL);) {
+            comando.setString(1, numCuenta);
+            ResultSet resultados = comando.executeQuery();
+            while (resultados.next()) {
+                int idTransaccion = resultados.getInt("idTransaccion");
+                String numCuentaDest = resultados.getString("numCuentaDestino");
+                float cantidad = resultados.getFloat("cantidad");
+                Timestamp fecha = resultados.getTimestamp("fecha");
+                String tipo = resultados.getString("Tipo");
+                String estado = resultados.getString("Estado");
+
+                Transaccion transaccion = new Transaccion();
+                transaccion.setIdTransaccion(idTransaccion);
+                transaccion.setNumCuenta(numCuentaDest);
+                transaccion.setFecha(fecha);
+                transaccion.setCantidad(cantidad);
+                transaccion.setTipo(tipo);
+                transaccion.setEstadoTransaccion(estado);
+                
+                listaTransancciones.add(transaccion);
+            }
+            logger.log(Level.INFO, "Se consultaron {0} transferencias", listaTransancciones.size());
+            return listaTransancciones;
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientesDAO.class.getName()).log(Level.SEVERE, "No se pudieron consultar las transacciones", ex);
+            throw new PersistenciaException("No se pudieron consultar las transacciones", ex);
+        }
+    }
+
 }

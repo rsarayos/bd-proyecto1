@@ -65,7 +65,7 @@
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="cbxCuentaRetiro" max="32767" attributes="0"/>
                                       <Component id="txtMonto" max="32767" attributes="0"/>
-                                      <Component id="cbxCuentaDestino" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="txtCuentaDestino" alignment="0" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="30" pref="30" max="-2" attributes="0"/>
                               </Group>
@@ -93,7 +93,7 @@
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="lblContrasenia" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="cbxCuentaDestino" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtCuentaDestino" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -181,7 +181,7 @@
         <Component class="javax.swing.JTextField" name="txtMonto">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Leelawadee UI" size="14" style="0"/>
+              <Font name="Leelawadee UI" size="14" style="1"/>
             </Property>
           </Properties>
           <Events>
@@ -212,18 +212,15 @@
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
         </Component>
-        <Component class="javax.swing.JComboBox" name="cbxCuentaDestino">
+        <Component class="javax.swing.JTextField" name="txtCuentaDestino">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Leelawadee UI" size="14" style="1"/>
             </Property>
-            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="0"/>
-            </Property>
           </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-          </AuxValues>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCuentaDestinoActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

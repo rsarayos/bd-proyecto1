@@ -1,7 +1,19 @@
-
 package org.itson.bdavanzadas.bancobd;
 
+import java.awt.Font;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import org.itson.bdavanzadas.bancobddominio.Cliente;
+import org.itson.bdavanzadas.bancobddominio.Cuenta;
+import org.itson.bdavanzadas.bancobddominio.Retiro;
+import org.itson.bdavanzadas.bancobddominio.Transaccion;
+import org.itson.bdavanzadas.bancobddominio.Transferencia;
 import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
+import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
 
 /**
  *
@@ -10,14 +22,80 @@ import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
 public class dlgHistorial extends javax.swing.JDialog {
 
     private final DatosConexion datosConexion;
-    
+    private Cliente cliente;
+    private Cuenta cuenta;
+
     /**
      * Creates new form dlgHistorial
      */
-    public dlgHistorial(java.awt.Frame parent, boolean modal, DatosConexion datosConexion) {
+    public dlgHistorial(java.awt.Frame parent, boolean modal, DatosConexion datosConexion, Cliente cliente) {
         super(parent, modal);
         initComponents();
-        this.datosConexion=datosConexion;
+        this.datosConexion = datosConexion;
+        this.cliente = cliente;
+        mostrarCuentas();
+
+    }
+
+    private void mostrarCuentas() {
+
+        List<Cuenta> listaCuentasRetiro = null;
+        try {
+            listaCuentasRetiro = datosConexion.getCuentaDAO().consultarCuentasCliente(cliente.getTelefono());
+            for (Cuenta cuentaL : listaCuentasRetiro) {
+                cbxCuenta.addItem(cuentaL.getNumCuenta());
+            }
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(dlgTransferencia.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    private void mostrarTabla(Cuenta cuenta) {
+        List<Transaccion> listaTransacciones;
+        List<Transferencia> listaTransferencias;
+        List<Retiro> listaRetiros;
+        try {
+            listaTransacciones = datosConexion.getTransaccionDAO().consultarTransaccionesCuenta(cuenta.getNumCuenta());
+            listaTransferencias = datosConexion.getTransferenciaDAO().consultarTransCuenta(cuenta.getNumCuenta());
+            listaRetiros = datosConexion.getRetiroDAO().consultarRetiroCuenta(cuenta.getNumCuenta());
+            DefaultTableModel modelo = new DefaultTableModel();
+            modelo.addColumn("CUENTA DESTINO");
+            modelo.addColumn("CANTIDAD");
+            modelo.addColumn("FECHA");
+            modelo.addColumn("TIPO");
+            modelo.addColumn("ESTADO");
+
+            Object[] fila = new Object[5];
+
+            for (Transaccion transaccion : listaTransacciones) {
+                for (Transferencia transferencia : listaTransferencias) {
+                    fila[0] = transferencia.getCuentaDestino();
+                    if(transaccion.getIdTransaccion() == (transferencia.getIdTransaccion())){
+                        fila[3] = "Transferencia";
+                    }
+                }
+                for (Retiro retiro : listaRetiros) {
+                    if(transaccion.getIdTransaccion() == (retiro.getIdTransaccion())){
+                        fila[3] = "Retiro";
+                    }
+                }
+                fila[1] = transaccion.getCantidad();
+                fila[2] = transaccion.getFecha();
+
+                fila[4] = transaccion.getEstadoTransaccion();
+                
+                modelo.addRow(fila);
+            }
+
+            jTablaHistorial.setModel(modelo);
+
+            JTableHeader header = jTablaHistorial.getTableHeader();
+
+            header.setFont(new Font("Leelawadee UI", Font.BOLD, 12));
+        } catch (PersistenciaException e) {
+            JOptionPane.showMessageDialog(this, "Error al mostrar información de los socios: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -177,7 +255,12 @@ public class dlgHistorial extends javax.swing.JDialog {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnRefrescarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefrescarActionPerformed
-
+        try {
+            cuenta = datosConexion.getCuentaDAO().obtener(String.valueOf(cbxCuenta.getSelectedItem()));
+            mostrarTabla(cuenta);
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(dlgHistorial.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnRefrescarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

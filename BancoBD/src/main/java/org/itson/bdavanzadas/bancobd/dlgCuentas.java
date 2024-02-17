@@ -34,18 +34,26 @@ public class dlgCuentas extends javax.swing.JDialog {
         List<Cuenta> listaCuentas;
         try {
             listaCuentas = datosConexion.getCuentaDAO().consultarCuentasCliente(cliente.getTelefono());
-            DefaultTableModel modelo = new DefaultTableModel();
+            DefaultTableModel modelo = new DefaultTableModel() {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
             modelo.addColumn("CUENTA");
+            modelo.addColumn("SALDO");
             modelo.addColumn("ESTADO");
 
             for (Cuenta cuenta : listaCuentas) {
-                Object[] fila = {cuenta.getNumCuenta(), "Cancelar"};
+                Object[] fila = {cuenta.getNumCuenta(), cuenta.getSaldo(), "Cancelar"};
                 modelo.addRow(fila);
             }
 
             jTablaCuentas.setModel(modelo);
 
             JTableHeader header = jTablaCuentas.getTableHeader();
+            jTablaCuentas.getTableHeader().setReorderingAllowed(false);
+            jTablaCuentas.setDefaultEditor(Object.class, null);
 
             header.setFont(new Font("Leelawadee UI", Font.BOLD, 28));
             header.setPreferredSize(new java.awt.Dimension(80, 30));

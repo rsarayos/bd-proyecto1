@@ -26,7 +26,7 @@ import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaExcepti
  *
  * @author alex_
  */
-public class TransferenciaDAO implements ITransferenciaDAO{
+public class TransferenciaDAO implements ITransferenciaDAO {
 
     final IConexion conexionDB;
     static final Logger logger = Logger.getLogger(TransferenciaDAO.class.getName());
@@ -34,20 +34,19 @@ public class TransferenciaDAO implements ITransferenciaDAO{
     public TransferenciaDAO(IConexion conexionDB) {
         this.conexionDB = conexionDB;
     }
-    
+
     @Override
     public Transferencia nueva(TransferenciaNuevaDTO transferenciaNueva) throws PersistenciaException {
         String setenciaSQL = """
-                             INSERT INTO transacciones (idTransaccion, numCuentaDestino)
-                                         VALUES(?,?);
+                             INSERT INTO transacciones (idTransaccion, cantidad, numCuenta)
+                                         VALUES(?,?,?);
                              """;
 
         try (
-                Connection conexion = this.conexionDB.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(
-                setenciaSQL,
-                Statement.RETURN_GENERATED_KEYS);) {
+                Connection conexion = this.conexionDB.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(setenciaSQL,Statement.RETURN_GENERATED_KEYS);) {
             comando.setInt(1, transferenciaNueva.getIdTransaccion());
-            comando.setString(2, transferenciaNueva.getCuentaDestino());
+            comando.setFloat(2, transferenciaNueva.getCantidad());
+            comando.setString(3, transferenciaNueva.getCuentaDestino());
             int numeroRegistrosInsertados = comando.executeUpdate();
             logger.log(Level.INFO, "Se agrearon {0} transferencia", numeroRegistrosInsertados);
             ResultSet idsGenerados = comando.getGeneratedKeys();
@@ -59,7 +58,7 @@ public class TransferenciaDAO implements ITransferenciaDAO{
             return null;
         }
     }
-    
+
     @Override
     public Transferencia obtener(int idTransferencia) throws PersistenciaException {
         String setenciaSQL = """
@@ -70,9 +69,7 @@ public class TransferenciaDAO implements ITransferenciaDAO{
                              """;
 
         try (
-                Connection conexion = this.conexionDB.obtenerConexion();
-                PreparedStatement comando = conexion.prepareStatement(setenciaSQL);
-        ) {
+                Connection conexion = this.conexionDB.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(setenciaSQL);) {
             comando.setInt(1, idTransferencia);
 
             ResultSet resultados = comando.executeQuery();
@@ -104,22 +101,20 @@ public class TransferenciaDAO implements ITransferenciaDAO{
                              """;
         List<Transferencia> listaTranferencias = new LinkedList<>();
         try (
-                Connection conexion = this.conexionDB.obtenerConexion(); 
-                PreparedStatement comando = conexion.prepareStatement(setenciaSQL); 
-                ResultSet resultados = comando.executeQuery();) {
-            
-            while (resultados.next()) {                
+                Connection conexion = this.conexionDB.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(setenciaSQL); ResultSet resultados = comando.executeQuery();) {
+
+            while (resultados.next()) {
                 int idTransferencia = resultados.getInt("idTransferencia");
                 int idTransaccion = resultados.getInt("idTransaccion");
                 String numCuentaDest = resultados.getString("numCuentaDestino");
                 Timestamp fecha = resultados.getTimestamp("fecha");
                 float cantidad = resultados.getFloat("cantidad");
                 String numCuenta = resultados.getString("numCuenta");
-                Transferencia transferencia = new Transferencia(idTransferencia, 
-                        numCuentaDest, 
+                Transferencia transferencia = new Transferencia(idTransferencia,
+                        numCuentaDest,
                         idTransaccion,
-                        fecha, 
-                        cantidad, 
+                        fecha,
+                        cantidad,
                         numCuenta);
                 listaTranferencias.add(transferencia);
             }
@@ -141,22 +136,20 @@ public class TransferenciaDAO implements ITransferenciaDAO{
                              """;
         List<Transferencia> listaTranferencias = new LinkedList<>();
         try (
-                Connection conexion = this.conexionDB.obtenerConexion(); 
-                PreparedStatement comando = conexion.prepareStatement(setenciaSQL); 
-                ) {
+                Connection conexion = this.conexionDB.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(setenciaSQL);) {
             comando.setString(1, numCuenta);
             ResultSet resultados = comando.executeQuery();
-            while (resultados.next()) {                
+            while (resultados.next()) {
                 int idTransferencia = resultados.getInt("idTransferencia");
                 int idTransaccion = resultados.getInt("idTransaccion");
                 String numCuentaDest = resultados.getString("numCuentaDestino");
                 Timestamp fecha = resultados.getTimestamp("fecha");
                 float cantidad = resultados.getFloat("cantidad");
-                Transferencia transferencia = new Transferencia(idTransferencia, 
-                        numCuentaDest, 
+                Transferencia transferencia = new Transferencia(idTransferencia,
+                        numCuentaDest,
                         idTransaccion,
-                        fecha, 
-                        cantidad, 
+                        fecha,
+                        cantidad,
                         numCuenta);
                 listaTranferencias.add(transferencia);
             }
@@ -172,27 +165,25 @@ public class TransferenciaDAO implements ITransferenciaDAO{
     public Transferencia realizarTransferencia(String cuentaOrigen, String cuentaDestino, float cantidad) throws PersistenciaException {
         String setenciaSQL = "{call realizar_transferencia(?, ?, ?, ?, ?)}";
         try (
-                Connection conexion = this.conexionDB.obtenerConexion(); 
-                CallableStatement callableStatement = conexion.prepareCall(setenciaSQL);) {
+                Connection conexion = this.conexionDB.obtenerConexion(); CallableStatement callableStatement = conexion.prepareCall(setenciaSQL);) {
             callableStatement.setString(1, cuentaOrigen);
             callableStatement.setString(2, cuentaDestino);
             callableStatement.setFloat(3, cantidad);
             callableStatement.registerOutParameter(4, Types.BOOLEAN);
             callableStatement.registerOutParameter(5, Types.INTEGER);
             callableStatement.execute();
-            
+
             boolean resultado = callableStatement.getBoolean(4);
             int idTransferencia = callableStatement.getInt(5);
-            
+
             if (resultado) {
-                    return this.obtener(idTransferencia);
-                } else {
-                    throw new PersistenciaException("No se pudo realizar la transferencia");
-                }
+                return this.obtener(idTransferencia);
+            } else {
+                throw new PersistenciaException("No se pudo realizar la transferencia");
+            }
         } catch (SQLException ex) {
             Logger.getLogger(ClientesDAO.class.getName()).log(Level.SEVERE, "No se pudo procesar la transferencia", ex);
             throw new PersistenciaException("No se pudo procesar la transferencia", ex);
         }
     }
-
 }

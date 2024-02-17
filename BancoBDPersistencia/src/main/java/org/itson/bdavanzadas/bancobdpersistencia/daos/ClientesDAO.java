@@ -1,4 +1,3 @@
-
 package org.itson.bdavanzadas.bancobdpersistencia.daos;
 
 import java.sql.Connection;
@@ -20,7 +19,7 @@ import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaExcepti
  *
  * @author alex_
  */
-public class ClientesDAO implements IClientesDAO{
+public class ClientesDAO implements IClientesDAO {
 
     final IConexion conexionDB;
     static final Logger logger = Logger.getLogger(ClientesDAO.class.getName());
@@ -28,7 +27,7 @@ public class ClientesDAO implements IClientesDAO{
     public ClientesDAO(IConexion conexionDB) {
         this.conexionDB = conexionDB;
     }
-    
+
     @Override
     public Cliente agregar(ClienteNuevoDTO clienteNuevo) throws PersistenciaException {
         String setenciaSQL = """
@@ -76,14 +75,6 @@ public class ClientesDAO implements IClientesDAO{
             comando.setString(8, telefono);
             int numeroRegistrosActualizados = comando.executeUpdate();
             logger.log(Level.INFO, "Se actualizaron {0} registros", numeroRegistrosActualizados);
-//                Cliente cliente = new Cliente(clienteNuevo.getTelefono(),
-//                    clienteNuevo.getNombre(),
-//                    clienteNuevo.getApellidoPaterno(),
-//                    clienteNuevo.getApellidoMaterno(),
-//                    clienteNuevo.getFechaNacimiento(),
-//                    clienteNuevo.getEdad(),
-//                    clienteNuevo.getPassword(),
-//                    clienteNuevo.getIdDireccion());
             return obtener(clienteNuevo.getTelefono());
         } catch (SQLException ex) {
             Logger.getLogger(ClientesDAO.class.getName()).log(Level.SEVERE, "No se pudo actualizar al socio", ex);
@@ -100,9 +91,7 @@ public class ClientesDAO implements IClientesDAO{
                              """;
 
         try (
-                Connection conexion = this.conexionDB.obtenerConexion();
-                PreparedStatement comando = conexion.prepareStatement(setenciaSQL);
-        ) {
+                Connection conexion = this.conexionDB.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(setenciaSQL);) {
             comando.setString(1, telefono);
 
             ResultSet resultados = comando.executeQuery();
@@ -119,7 +108,7 @@ public class ClientesDAO implements IClientesDAO{
                         resultados.getInt("idDireccion")
                 );
             } else {
-                return null; // No se encontró el socio con el telefono dado
+                return null;
             }
         } catch (SQLException ex) {
             logger.log(Level.SEVERE, "No se ha podido obtener el socio por telefono", ex);
@@ -135,11 +124,9 @@ public class ClientesDAO implements IClientesDAO{
                              """;
         List<Cliente> listaClientes = new LinkedList<>();
         try (
-                Connection conexion = this.conexionDB.obtenerConexion(); 
-                PreparedStatement comando = conexion.prepareStatement(setenciaSQL); 
-                ResultSet resultados = comando.executeQuery();) {
-            
-            while (resultados.next()) {                
+                Connection conexion = this.conexionDB.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(setenciaSQL); ResultSet resultados = comando.executeQuery();) {
+
+            while (resultados.next()) {
                 String telefono = resultados.getString("telefono");
                 String nombre = resultados.getString("nombre");
                 String apellidoPa = resultados.getString("apellidoPaterno");
@@ -148,13 +135,13 @@ public class ClientesDAO implements IClientesDAO{
                 int edad = resultados.getInt("edad");
                 String contrasenia = resultados.getString("contrasenia");
                 int idDireccion = resultados.getInt("idDireccion");
-                Cliente cliente = new Cliente(telefono, 
-                        nombre, 
-                        apellidoPa, 
-                        apellidoMa, 
-                        fechaNacimiento, 
-                        edad, 
-                        contrasenia, 
+                Cliente cliente = new Cliente(telefono,
+                        nombre,
+                        apellidoPa,
+                        apellidoMa,
+                        fechaNacimiento,
+                        edad,
+                        contrasenia,
                         idDireccion);
                 listaClientes.add(cliente);
             }
@@ -165,5 +152,5 @@ public class ClientesDAO implements IClientesDAO{
             throw new PersistenciaException("No se pudieron consultar los socios", ex);
         }
     }
-    
+
 }

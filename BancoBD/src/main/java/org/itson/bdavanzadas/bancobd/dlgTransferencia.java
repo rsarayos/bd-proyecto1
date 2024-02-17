@@ -3,9 +3,11 @@ package org.itson.bdavanzadas.bancobd;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import org.itson.bdavanzadas.bancobddominio.Cliente;
 import org.itson.bdavanzadas.bancobddominio.Cuenta;
 import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
+import org.itson.bdavanzadas.bancobdpersistencia.dtos.TransferenciaNuevaDTO;
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
 
 /**
@@ -30,17 +32,42 @@ public class dlgTransferencia extends javax.swing.JDialog {
 
     private void mostrarCuentas() {
 
+        List<Cuenta> listaCuentasRetiro = null;
+        try {
+            listaCuentasRetiro = datosConexion.getCuentaDAO().consultarCuentasCliente(cliente.getTelefono());
+            for (Cuenta cuenta : listaCuentasRetiro) {
+                cbxCuentaRetiro.addItem(cuenta.getNumCuenta());
+            }
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(dlgTransferencia.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    private void transferencia() {
+
         List<Cuenta> listaCuentas = null;
         try {
             listaCuentas = datosConexion.getCuentaDAO().consultar();
         } catch (PersistenciaException ex) {
-            Logger.getLogger(dlgTransferencia.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(dlgAgregarCuenta.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+        String cuentaDestino = "";
         for (Cuenta cuenta : listaCuentas) {
-            cbxCuentaRetiro.addItem(cuenta.getNumCuenta());
+            if (cuenta.getNumCuenta().equals(txtCuentaDestino.getText())) {
+                cuentaDestino = txtCuentaDestino.getText();
+            }
         }
 
+        float monto = Float.parseFloat(txtMonto.getText());
+        String cuentaRetiro = String.valueOf(cbxCuentaRetiro.getSelectedItem());
+
+        try {
+            datosConexion.getTransferenciaDAO().realizarTransferencia(cuentaRetiro, cuentaDestino, monto);
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(dlgTransferencia.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        dispose();
     }
 
     /**
@@ -61,7 +88,7 @@ public class dlgTransferencia extends javax.swing.JDialog {
         txtMonto = new javax.swing.JTextField();
         lblContrasenia1 = new javax.swing.JLabel();
         cbxCuentaRetiro = new javax.swing.JComboBox<>();
-        cbxCuentaDestino = new javax.swing.JComboBox<>();
+        txtCuentaDestino = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -100,7 +127,7 @@ public class dlgTransferencia extends javax.swing.JDialog {
         lblContrasenia.setForeground(new java.awt.Color(255, 255, 255));
         lblContrasenia.setText("Cuenta destino:");
 
-        txtMonto.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
+        txtMonto.setFont(new java.awt.Font("Leelawadee UI", 1, 14)); // NOI18N
         txtMonto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtMontoActionPerformed(evt);
@@ -113,7 +140,12 @@ public class dlgTransferencia extends javax.swing.JDialog {
 
         cbxCuentaRetiro.setFont(new java.awt.Font("Leelawadee UI", 1, 14)); // NOI18N
 
-        cbxCuentaDestino.setFont(new java.awt.Font("Leelawadee UI", 1, 14)); // NOI18N
+        txtCuentaDestino.setFont(new java.awt.Font("Leelawadee UI", 1, 14)); // NOI18N
+        txtCuentaDestino.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCuentaDestinoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout fondoLayout = new javax.swing.GroupLayout(fondo);
         fondo.setLayout(fondoLayout);
@@ -138,7 +170,7 @@ public class dlgTransferencia extends javax.swing.JDialog {
                                 .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(cbxCuentaRetiro, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(txtMonto)
-                                    .addComponent(cbxCuentaDestino, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(txtCuentaDestino))
                                 .addGap(30, 30, 30))))
                     .addGroup(fondoLayout.createSequentialGroup()
                         .addContainerGap(196, Short.MAX_VALUE)
@@ -157,7 +189,7 @@ public class dlgTransferencia extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblContrasenia)
-                    .addComponent(cbxCuentaDestino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtCuentaDestino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblContrasenia1)
@@ -185,7 +217,19 @@ public class dlgTransferencia extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-
+        if (!String.valueOf(cbxCuentaRetiro.getSelectedItem()).equals(txtCuentaDestino.getText())) {
+            if (!txtCuentaDestino.getText().isBlank()) {
+                if (!txtMonto.getText().isBlank()) {
+                    transferencia();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Ingrese un monto");
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Ingrese una cuenta destino");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "No es posible realizar una transferencia a la misma cuenta");
+        }
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -196,16 +240,20 @@ public class dlgTransferencia extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtMontoActionPerformed
 
+    private void txtCuentaDestinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCuentaDestinoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCuentaDestinoActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnConfirmar;
-    private javax.swing.JComboBox<String> cbxCuentaDestino;
     private javax.swing.JComboBox<String> cbxCuentaRetiro;
     private javax.swing.JPanel fondo;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel lblContrasenia;
     private javax.swing.JLabel lblContrasenia1;
     private javax.swing.JLabel lblCuentaRetiro;
+    private javax.swing.JTextField txtCuentaDestino;
     private javax.swing.JTextField txtMonto;
     // End of variables declaration//GEN-END:variables
 }

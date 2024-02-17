@@ -59,7 +59,7 @@ public class dlgAgregarCuenta extends javax.swing.JDialog {
 
     private void agregarCuenta() {
         String numCuenta = txtCuenta.getText();
-        int monto = Integer.parseInt(txtMonto.getText());
+        float monto = Float.parseFloat(txtMonto.getText());
 
         CuentaNuevaDTO cuentaNueva = new CuentaNuevaDTO();
         cuentaNueva.setNumCuenta(numCuenta);
@@ -71,7 +71,7 @@ public class dlgAgregarCuenta extends javax.swing.JDialog {
         try {
             cuentaNueva.esValido();
             datosConexion.getCuentaDAO().agregar(cuentaNueva);
-            JOptionPane.showMessageDialog(this, "Se registró al cliente", "Notificación", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Se agregó la cuenta correctamente", "Notificación", JOptionPane.INFORMATION_MESSAGE);
         } catch (ValidacionDTOException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de validación", JOptionPane.ERROR_MESSAGE);
         } catch (PersistenciaException ex) {
@@ -221,7 +221,10 @@ public class dlgAgregarCuenta extends javax.swing.JDialog {
             agregarCuenta();
             dlgCuentas cuentas = new dlgCuentas(null, true, datosConexion, cliente);
             cuentas.setVisible(true);
+        }else{
+            JOptionPane.showMessageDialog(this, "Ingrese un monto");
         }
+        
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void txtCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCuentaActionPerformed

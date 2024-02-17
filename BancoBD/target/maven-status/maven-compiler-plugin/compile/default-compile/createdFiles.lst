@@ -17,6 +17,7 @@ org\itson\bdavanzadas\bancobd\dlgCuentas.class
 org\itson\bdavanzadas\bancobd\dlgAgregarCuenta.class
 org\itson\bdavanzadas\bancobd\dlgActualizarCliente$2.class
 org\itson\bdavanzadas\bancobd\BancoBD.class
+org\itson\bdavanzadas\bancobd\dlgCuentas$3.class
 org\itson\bdavanzadas\bancobd\frmMenuInicio.class
 org\itson\bdavanzadas\bancobd\frmMenuInicio$2.class
 org\itson\bdavanzadas\bancobd\dlgRetiroSinCuenta.class
@@ -30,6 +31,7 @@ org\itson\bdavanzadas\bancobd\dlgRetirarSinCuentaMenuInicial$3.class
 org\itson\bdavanzadas\bancobd\dlgRetirarSinCuentaMenuInicial.class
 org\itson\bdavanzadas\bancobd\dlgRetiroSinCuenta$2.class
 org\itson\bdavanzadas\bancobd\frmMenuInicio$4.class
+org\itson\bdavanzadas\bancobd\dlgTransferencia$4.class
 org\itson\bdavanzadas\bancobd\dlgAgregarCuenta$2.class
 org\itson\bdavanzadas\bancobd\frmMenuPrincipal$1.class
 org\itson\bdavanzadas\bancobd\dlgRetiroSinCuenta$4.class
