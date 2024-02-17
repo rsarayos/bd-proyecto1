@@ -5,6 +5,7 @@
 package org.itson.bdavanzadas.bancobdpersistencia.dtos;
 
 import java.util.Date;
+import org.itson.bdavanzadas.bancobdpersistencia.auxiliar.Validaciones;
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.ValidacionDTOException;
 
 /**
@@ -12,6 +13,9 @@ import org.itson.bdavanzadas.bancobdpersistencia.excepciones.ValidacionDTOExcept
  * @author alex_
  */
 public class CuentaNuevaDTO {
+    
+    Validaciones valida = new Validaciones();
+    
     private String numCuenta;
     private Date fechaApertura;
     private float saldo;
@@ -59,10 +63,9 @@ public class CuentaNuevaDTO {
     }
     
     public boolean esValido() throws ValidacionDTOException {
-        if (this.numCuenta == null 
-            || this.numCuenta.isBlank() 
-            || this.numCuenta.trim().length() > 6) {
-            throw new ValidacionDTOException("cuenta de cliente invalido");
+        if (this.saldo == 0f 
+            || this.saldo < 0) {
+            throw new ValidacionDTOException("saldo en cuenta invalida");
         }
         return true;
     }

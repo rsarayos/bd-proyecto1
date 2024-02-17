@@ -5,6 +5,7 @@
 package org.itson.bdavanzadas.bancobdpersistencia.dtos;
 
 import java.util.Date;
+import org.itson.bdavanzadas.bancobdpersistencia.auxiliar.Validaciones;
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.ValidacionDTOException;
 
 /**
@@ -12,6 +13,8 @@ import org.itson.bdavanzadas.bancobdpersistencia.excepciones.ValidacionDTOExcept
  * @author alex_
  */
 public class ClienteNuevoDTO {
+    
+    Validaciones valida = new Validaciones();
     
     private String telefono;
     private String nombre;
@@ -89,23 +92,28 @@ public class ClienteNuevoDTO {
     public boolean esValido() throws ValidacionDTOException {
         if (this.telefono == null 
             || this.telefono.isBlank() 
-            || this.telefono.trim().length() > 10) {
+            || !this.valida.validaTelefono(telefono)) {
             throw new ValidacionDTOException("Telefono de cliente invalido");
         }
         if (this.nombre == null 
             || this.nombre.isBlank() 
-            || this.nombre.trim().length() > 100) {
+            || !this.valida.validaNombre(nombre)) {
             throw new ValidacionDTOException("Nombre de cliente invalido");
         }
         if (this.apellidoPaterno == null 
             || this.apellidoPaterno.isBlank() 
-            || this.apellidoPaterno.trim().length() > 50) {
+            || !this.valida.validaApellidos(apellidoPaterno)) {
             throw new ValidacionDTOException("Apellido paterno de cliente invalido");
         }
         if (this.apellidoMaterno == null 
             || this.apellidoMaterno.isBlank() 
-            || this.apellidoMaterno.trim().length() > 50) {
+            || !this.valida.validaApellidos(apellidoMaterno)) {
             throw new ValidacionDTOException("Apellido materno de cliente invalido");
+        }
+        if (this.password == null 
+            || this.apellidoMaterno.isBlank() 
+            || !this.valida.validaContra(password)) {
+            throw new ValidacionDTOException("Contraseña de cliente invalido");
         }
         return true;
     }

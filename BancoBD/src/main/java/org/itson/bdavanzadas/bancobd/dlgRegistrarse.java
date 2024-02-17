@@ -68,9 +68,9 @@ public class dlgRegistrarse extends javax.swing.JDialog {
         limpiarDatos();
         try {
             direccionNueva.esValido();
+            clienteNuevo.esValido();
             Direccion direccion = this.datosConexion.getDireccionDAO().agregar(direccionNueva);
             clienteNuevo.setIdDireccion(direccion.getIdDireccion());
-            clienteNuevo.esValido();
             if (datosConexion.getClientesDAO().obtener(clienteNuevo.getTelefono()) == null) {
                 this.datosConexion.getClientesDAO().agregar(clienteNuevo);
                 JOptionPane.showMessageDialog(this, "Se registró al cliente", "Notificación", JOptionPane.INFORMATION_MESSAGE);

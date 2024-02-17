@@ -6,6 +6,8 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import org.itson.bdavanzadas.bancobddominio.Cliente;
 import org.itson.bdavanzadas.bancobddominio.Cuenta;
+import org.itson.bdavanzadas.bancobddominio.Transferencia;
+import org.itson.bdavanzadas.bancobdpersistencia.auxiliar.Validaciones;
 import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
 import org.itson.bdavanzadas.bancobdpersistencia.dtos.TransferenciaNuevaDTO;
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
@@ -18,6 +20,7 @@ public class dlgTransferencia extends javax.swing.JDialog {
 
     private final DatosConexion datosConexion;
     private Cliente cliente;
+    private Validaciones validar;
 
     /**
      * Creates new form dlgTransferencia
@@ -27,6 +30,7 @@ public class dlgTransferencia extends javax.swing.JDialog {
         initComponents();
         this.datosConexion = datosConexion;
         this.cliente = cliente;
+        this.validar = new Validaciones();
         mostrarCuentas();
     }
 
@@ -53,9 +57,13 @@ public class dlgTransferencia extends javax.swing.JDialog {
             Logger.getLogger(dlgAgregarCuenta.class.getName()).log(Level.SEVERE, null, ex);
         }
         String cuentaDestino = "";
+        boolean cuentaExistente = false;
         for (Cuenta cuenta : listaCuentas) {
-            if (cuenta.getNumCuenta().equals(txtCuentaDestino.getText())) {
-                cuentaDestino = txtCuentaDestino.getText();
+            if (validar.validaCuenta(txtCuentaDestino.getText())) {
+                if (cuenta.getNumCuenta().equals(txtCuentaDestino.getText())) {
+                    cuentaDestino = txtCuentaDestino.getText();
+                    cuentaExistente = true;
+                }
             }
         }
 
@@ -63,7 +71,14 @@ public class dlgTransferencia extends javax.swing.JDialog {
         String cuentaRetiro = String.valueOf(cbxCuentaRetiro.getSelectedItem());
 
         try {
-            datosConexion.getTransferenciaDAO().realizarTransferencia(cuentaRetiro, cuentaDestino, monto);
+            if(monto > 0 && cuentaExistente){
+            Transferencia transExito = datosConexion.getTransferenciaDAO().realizarTransferencia(cuentaRetiro, cuentaDestino, monto);
+            String resultado = "Folio Transferencia: " + transExito.getIdTransferencia();
+            JOptionPane.showMessageDialog(this, resultado, "Transferencia Exitosa", JOptionPane.INFORMATION_MESSAGE);
+            }
+            else {
+            JOptionPane.showMessageDialog(this, "No fue posible realizar la transferencia", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         } catch (PersistenciaException ex) {
             Logger.getLogger(dlgTransferencia.class.getName()).log(Level.SEVERE, null, ex);
         }

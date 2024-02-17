@@ -4,6 +4,7 @@
  */
 package org.itson.bdavanzadas.bancobdpersistencia.dtos;
 
+import org.itson.bdavanzadas.bancobdpersistencia.auxiliar.Validaciones;
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.ValidacionDTOException;
 
 /**
@@ -11,6 +12,9 @@ import org.itson.bdavanzadas.bancobdpersistencia.excepciones.ValidacionDTOExcept
  * @author alex_
  */
 public class DireccionNuevaDTO {
+    
+    Validaciones valida = new Validaciones();
+    
     private int idDireccion;
     private String calle;
     private String colonia;
@@ -67,6 +71,31 @@ public class DireccionNuevaDTO {
     }
     
     public boolean esValido() throws ValidacionDTOException {
+        if (this.calle == null 
+            || this.calle.isBlank() 
+            || !this.valida.validaDomicilio(calle)) {
+            throw new ValidacionDTOException("calle de cliente invalido");
+        }
+        if (this.ciudad == null 
+            || this.ciudad.isBlank() 
+            || !this.valida.validaDomicilio(ciudad)) {
+            throw new ValidacionDTOException("ciudad de cliente invalido");
+        }
+        if (this.colonia == null 
+            || this.colonia.isBlank() 
+            || !this.valida.validaDomicilio(colonia)) {
+            throw new ValidacionDTOException("colonia de cliente invalido");
+        }
+        if (this.cp == null 
+            || this.cp.isBlank() 
+            || !this.valida.validaCp(cp)) {
+            throw new ValidacionDTOException("codigo postal de cliente invalido");
+        }
+        if (this.numero == null 
+            || this.numero.isBlank() 
+            || !this.valida.validaNumero(numero)) {
+            throw new ValidacionDTOException("numero de domicilio de cliente invalido");
+        }
         return true;
     }
 }
