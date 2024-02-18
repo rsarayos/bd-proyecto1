@@ -240,9 +240,10 @@ public class Cliente {
     }
 
     /**
-     * Compara el objeto utilizando el numero de telefono
-     * 
-     * @return true si son el mismo objeto, false en caso contrario
+     * Compara si dos objetos Cliente son iguales basándose en el número de telefono.
+     *
+     * @param obj Objeto a comparar.
+     * @return true si los objetos son iguales, false en caso contrario.
      */
     @Override
     public boolean equals(Object obj) {
@@ -259,6 +260,11 @@ public class Cliente {
         return Objects.equals(this.telefono, other.telefono);
     }
 
+    /**
+     * Representación en forma de cadena de la clase Cliente.
+     *
+     * @return Cadena que representa la cuenta.
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
