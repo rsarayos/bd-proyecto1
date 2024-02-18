@@ -1,9 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
- */
+
 package org.itson.bdavanzadas.bancobdpersistencia.daos;
 
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 import org.itson.bdavanzadas.bancobddominio.Retiro;
 import org.itson.bdavanzadas.bancobdpersistencia.dtos.RetiroNuevoDTO;
@@ -20,4 +19,5 @@ public interface IRetiroDAO {
     Retiro realizarRetiro(int idRetiro) throws PersistenciaException;
     List<Retiro> consultar() throws PersistenciaException;
     List<Retiro> consultarRetiroCuenta(String numCuenta) throws PersistenciaException;
+    List<Retiro> consultarRetiroCuentaPorFechas(String numCuenta, Timestamp fechaInicio, Timestamp fechaFin) throws PersistenciaException;
 }

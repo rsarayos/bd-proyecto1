@@ -71,18 +71,21 @@ public class dlgTransferencia extends javax.swing.JDialog {
         String cuentaRetiro = String.valueOf(cbxCuentaRetiro.getSelectedItem());
 
         try {
-            if(monto > 0 && cuentaExistente){
-            Transferencia transExito = datosConexion.getTransferenciaDAO().realizarTransferencia(cuentaRetiro, cuentaDestino, monto);
-            String resultado = "Folio Transferencia: " + transExito.getIdTransferencia();
-            JOptionPane.showMessageDialog(this, resultado, "Transferencia Exitosa", JOptionPane.INFORMATION_MESSAGE);
-            }
-            else {
-            JOptionPane.showMessageDialog(this, "No fue posible realizar la transferencia", "Error", JOptionPane.ERROR_MESSAGE);
+            if (cuentaExistente) {
+                if (monto > 0) {
+                    Transferencia transExito = datosConexion.getTransferenciaDAO().realizarTransferencia(cuentaRetiro, cuentaDestino, monto);
+                    String resultado = "Folio Transferencia: " + transExito.getIdTransferencia();
+                    JOptionPane.showMessageDialog(this, "Tranferencia realizada con éxito\n"+resultado, "Transferencia Exitosa", JOptionPane.INFORMATION_MESSAGE);
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Ingrese un monto correcto", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "No es una cuenta existente", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } catch (PersistenciaException ex) {
             Logger.getLogger(dlgTransferencia.class.getName()).log(Level.SEVERE, null, ex);
         }
-        dispose();
     }
 
     /**

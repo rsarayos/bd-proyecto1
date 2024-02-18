@@ -40,14 +40,14 @@ public class RetiroDAO implements IRetiroDAO {
 
     @Override
     public Retiro nuevo(RetiroNuevoDTO retiroNuevo) throws PersistenciaException {
-        String setenciaSQL = """
+        String sentenciaSQL = """
                              INSERT INTO retiros (folioRetiro, contraseniaRetiro, estado, idTransaccion)
                                          VALUES(?,?,?,?);
                              """;
 
         try (
                 Connection conexion = this.conexionDB.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(
-                setenciaSQL,
+                sentenciaSQL,
                 Statement.RETURN_GENERATED_KEYS);) {
             
             String contraEncriptada = encriptador.encriptar(retiroNuevo.getContraseniaRetiro());
@@ -79,14 +79,14 @@ public class RetiroDAO implements IRetiroDAO {
 
     @Override
     public Retiro actualizar(RetiroNuevoDTO retiroNuevo) throws PersistenciaException {
-        String setenciaSQL = """
+        String sentenciaSQL = """
                              UPDATE retiros
                              SET estado=?
                              WHERE idRetiro=?;
                              """;
 
         try (
-                Connection conexion = this.conexionDB.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(setenciaSQL);) {
+                Connection conexion = this.conexionDB.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
             comando.setInt(1, retiroNuevo.getEstado());
             comando.setInt(2, retiroNuevo.getIdRetiro());
             int numeroRegistrosActualizados = comando.executeUpdate();
@@ -107,15 +107,16 @@ public class RetiroDAO implements IRetiroDAO {
 
     @Override
     public Retiro obtener(int idRetiro) throws PersistenciaException {
-        String setenciaSQL = """
+        String sentenciaSQL = """
                              SELECT *
+                             SELECT idRetiro, folioRetiro, contraseniaRetiro, estado, idTransaccion
                              FROM retiros
                              INNER JOIN transacciones ON retiros.idTransaccion = transacciones.idTransaccion
                              WHERE idRetiro=?;
                              """;
 
         try (
-                Connection conexion = this.conexionDB.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(setenciaSQL);) {
+                Connection conexion = this.conexionDB.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
             comando.setInt(1, idRetiro);
 
             ResultSet resultados = comando.executeQuery();
@@ -152,14 +153,14 @@ public class RetiroDAO implements IRetiroDAO {
 
     @Override
     public List<Retiro> consultar() throws PersistenciaException {
-        String setenciaSQL = """
+        String sentenciaSQL = """
                              SELECT *
                              FROM retiros
                              INNER JOIN transacciones ON retiros.idTransaccion = transacciones.idTransaccion;
                              """;
         List<Retiro> listaRetiros = new LinkedList<>();
         try (
-                Connection conexion = this.conexionDB.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(setenciaSQL); ResultSet resultados = comando.executeQuery();) {
+                Connection conexion = this.conexionDB.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL); ResultSet resultados = comando.executeQuery();) {
 
             while (resultados.next()) {
                 int idRetiro = resultados.getInt("idRetiro");
@@ -194,15 +195,16 @@ public class RetiroDAO implements IRetiroDAO {
 
     @Override
     public List<Retiro> consultarRetiroCuenta(String numCuenta) throws PersistenciaException {
-        String setenciaSQL = """
+        String sentenciaSQL = """
                              SELECT *
                              FROM retiros
                              INNER JOIN transacciones ON retiros.idTransaccion = transacciones.idTransaccion
-                             WHERE numCuenta=?;
+                             WHERE numCuenta=?
+                             ORDER BY transacciones.fecha DESC;
                              """;
         List<Retiro> listaRetiros = new LinkedList<>();
         try (
-                Connection conexion = this.conexionDB.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(setenciaSQL);) {
+                Connection conexion = this.conexionDB.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
             comando.setString(1, numCuenta);
             ResultSet resultados = comando.executeQuery();
             while (resultados.next()) {
@@ -236,10 +238,53 @@ public class RetiroDAO implements IRetiroDAO {
     }
 
     @Override
-    public Retiro realizarRetiro(int idRetiro) throws PersistenciaException {
-        String setenciaSQL = "{call realizar_retiro(?, ?)}";
+    public List<Retiro> consultarRetiroCuentaPorFechas(String numCuenta, Timestamp fechaInicio, Timestamp fechaFin) throws PersistenciaException {
+        String sentenciaSQL = """
+                             SELECT *
+                             FROM retiros
+                             INNER JOIN transacciones ON retiros.idTransaccion = transacciones.idTransaccion
+                             WHERE numCuenta=?
+                             AND (DATE(transacciones.fecha) BETWEEN DATE(?) AND DATE(?))
+                             ORDER BY transacciones.fecha DESC;
+                             """;
+        List<Retiro> listaRetiros = new LinkedList<>();
         try (
-                Connection conexion = this.conexionDB.obtenerConexion(); CallableStatement callableStatement = conexion.prepareCall(setenciaSQL);) {
+                Connection conexion = this.conexionDB.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
+            comando.setString(1, numCuenta);
+            comando.setTimestamp(2, fechaInicio);
+            comando.setTimestamp(3, fechaFin);
+            ResultSet resultados = comando.executeQuery();
+            while (resultados.next()) {
+                int idRetiro = resultados.getInt("idRetiro");
+                String folioRetiro = resultados.getString("folioRetiro");
+                String contraseniaRetiro = resultados.getString("contraseniaRetiro");
+                int estado = resultados.getInt("estado");
+                int idTransaccion = resultados.getInt("idTransaccion");
+                Timestamp fecha = resultados.getTimestamp("fecha");
+                long cantidad = resultados.getInt("cantidad");
+                Retiro retiro = new Retiro(idRetiro,
+                        folioRetiro,
+                        contraseniaRetiro,
+                        estado,
+                        idTransaccion,
+                        fecha,
+                        cantidad,
+                        numCuenta);
+                listaRetiros.add(retiro);
+            }
+            logger.log(Level.INFO, "Se consultaron {0} retiros", listaRetiros.size());
+            return listaRetiros;
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientesDAO.class.getName()).log(Level.SEVERE, "No se pudieron consultar los retiros", ex);
+            throw new PersistenciaException("No se pudieron consultar los retiros", ex);
+        }
+    }
+
+    @Override
+    public Retiro realizarRetiro(int idRetiro) throws PersistenciaException {
+        String sentenciaSQL = "{call realizar_retiro(?, ?)}";
+        try (
+                Connection conexion = this.conexionDB.obtenerConexion(); CallableStatement callableStatement = conexion.prepareCall(sentenciaSQL);) {
             callableStatement.setInt(1, idRetiro);
             callableStatement.registerOutParameter(2, Types.BOOLEAN);
             callableStatement.execute();

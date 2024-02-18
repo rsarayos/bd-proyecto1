@@ -1,12 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
+
 package org.itson.bdavanzadas.bancobd;
 
-import com.google.protobuf.TextFormat.ParseException;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -65,7 +59,7 @@ public class dlgRegistrarse extends javax.swing.JDialog {
         clienteNuevo.setApellidoMaterno(apellidoMaterno);
         clienteNuevo.setFechaNacimiento(fechaNacimiento);
         clienteNuevo.setPassword(contrasenia);
-        limpiarDatos();
+
         try {
             direccionNueva.esValido();
             clienteNuevo.esValido();
@@ -74,6 +68,7 @@ public class dlgRegistrarse extends javax.swing.JDialog {
             if (datosConexion.getClientesDAO().obtener(clienteNuevo.getTelefono()) == null) {
                 this.datosConexion.getClientesDAO().agregar(clienteNuevo);
                 JOptionPane.showMessageDialog(this, "Se registró al cliente", "Notificación", JOptionPane.INFORMATION_MESSAGE);
+                dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "El número de teléfono ya está registrado", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -82,7 +77,6 @@ public class dlgRegistrarse extends javax.swing.JDialog {
         } catch (PersistenciaException ex) {
             JOptionPane.showMessageDialog(this, "No fue posible agregar al cliente", "Error de almacenamiento", JOptionPane.ERROR_MESSAGE);
         }
-        dispose();
     }
 
     private void limpiarDatos() {

@@ -4,6 +4,8 @@
  */
 package org.itson.bdavanzadas.bancobdpersistencia.daos;
 
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 import org.itson.bdavanzadas.bancobddominio.Transferencia;
 import org.itson.bdavanzadas.bancobdpersistencia.dtos.TransferenciaNuevaDTO;
@@ -18,5 +20,6 @@ public interface ITransferenciaDAO {
     Transferencia obtener(int idTransferencia) throws PersistenciaException;
     List<Transferencia> consultar() throws PersistenciaException;
     List<Transferencia> consultarTransCuenta(String numCuenta) throws PersistenciaException;
+    List<Transferencia> consultarTransCuentaPorFechas(String numCuenta, Timestamp fechaInicio, Timestamp fechaFin) throws PersistenciaException;
     Transferencia realizarTransferencia(String cuentaOrigen, String cuentaDestino, float cantidad) throws PersistenciaException;
 }
