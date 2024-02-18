@@ -51,7 +51,6 @@ public class dlgHistorial extends javax.swing.JDialog {
     }
 
     private void mostrarCuentas() {
-
         List<Cuenta> listaCuentasRetiro = null;
         try {
             listaCuentasRetiro = datosConexion.getCuentaDAO().consultarCuentasCliente(cliente.getTelefono());
@@ -61,7 +60,6 @@ public class dlgHistorial extends javax.swing.JDialog {
         } catch (PersistenciaException ex) {
             Logger.getLogger(dlgTransferencia.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
     private void mostrarTablaTodas(Cuenta cuenta) {
@@ -459,7 +457,7 @@ public class dlgHistorial extends javax.swing.JDialog {
         try {
             cuenta = datosConexion.getCuentaDAO().obtener(String.valueOf(cbxCuenta.getSelectedItem()));
             if (rbtnTodas.isSelected()) {
-                if (rbtnFechas.isSelected() && rbtnTodas.isSelected()) {
+                if (rbtnFechas.isSelected()) {
                     if (jDateFechaInicio.getDate() != null && jDateFechaFin.getDate() != null) {
                         mostrarTablaTodasPorFechas(cuenta);
                     } else {
@@ -469,7 +467,7 @@ public class dlgHistorial extends javax.swing.JDialog {
                     mostrarTablaTodas(cuenta);
                 }
             } else if (rbtnTransferencia.isSelected()) {
-                if (rbtnFechas.isSelected() && rbtnTransferencia.isSelected()) {
+                if (rbtnFechas.isSelected()) {
                     if (jDateFechaInicio.getDate() != null && jDateFechaFin.getDate() != null) {
                         mostrarTablaTransferenciasPorFechas(cuenta);
                     } else {
@@ -479,7 +477,7 @@ public class dlgHistorial extends javax.swing.JDialog {
                     mostrarTablaTransferencias(cuenta);
                 }
             } else if (rbtnRetiro.isSelected()) {
-                if (rbtnFechas.isSelected() && rbtnRetiro.isSelected()) {
+                if (rbtnFechas.isSelected()) {
                     if (jDateFechaInicio.getDate() != null && jDateFechaFin.getDate() != null) {
                         mostrarTablaRetirosPorFechas(cuenta);
                     } else {
@@ -488,7 +486,7 @@ public class dlgHistorial extends javax.swing.JDialog {
                 } else {
                     mostrarTablaRetiros(cuenta);
                 }
-            } else if (rbtnRetiro.isSelected() && rbtnTransferencia.isSelected()) {
+            } else if (rbtnRetiro.isSelected()) {
                 if (rbtnFechas.isSelected()) {
                     if (jDateFechaInicio.getDate() != null && jDateFechaFin.getDate() != null) {
                         mostrarTablaRetirosPorFechas(cuenta);

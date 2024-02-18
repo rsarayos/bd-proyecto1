@@ -194,7 +194,7 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCuentasActionPerformed
 
     private void btnRetiroSinCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetiroSinCuentaActionPerformed
-        dlgRetiroSinCuenta retiroSinCuenta = new dlgRetiroSinCuenta(this, true, datosConexion);
+        dlgRetiroSinCuenta retiroSinCuenta = new dlgRetiroSinCuenta(this, true, datosConexion, cliente);
         retiroSinCuenta.setVisible(true);
     }//GEN-LAST:event_btnRetiroSinCuentaActionPerformed
 

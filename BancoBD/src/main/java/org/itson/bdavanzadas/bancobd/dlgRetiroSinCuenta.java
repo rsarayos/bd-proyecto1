@@ -1,7 +1,16 @@
 
 package org.itson.bdavanzadas.bancobd;
 
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.itson.bdavanzadas.bancobddominio.Cliente;
+import org.itson.bdavanzadas.bancobddominio.Cuenta;
+import org.itson.bdavanzadas.bancobddominio.Retiro;
+import org.itson.bdavanzadas.bancobdpersistencia.auxiliar.GenerarFolioContraRetiros;
 import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
+import org.itson.bdavanzadas.bancobdpersistencia.dtos.RetiroNuevoDTO;
+import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
 
 /**
  *
@@ -10,16 +19,55 @@ import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
 public class dlgRetiroSinCuenta extends javax.swing.JDialog {
 
     private final DatosConexion datosConexion;
+    private Cliente cliente;
     
     /**
      * Creates new form dlgRetiroSinCuenta
      */
-    public dlgRetiroSinCuenta(java.awt.Frame parent, boolean modal, DatosConexion datosConexion) {
+    public dlgRetiroSinCuenta(java.awt.Frame parent, boolean modal, DatosConexion datosConexion, Cliente cliente) {
         super(parent, modal);
         initComponents();
         this.datosConexion=datosConexion;
+        this.cliente=cliente;
+        mostrarCuentas();
     }
 
+    private void mostrarCuentas() {
+        List<Cuenta> listaCuentasRetiro = null;
+        try {
+            listaCuentasRetiro = datosConexion.getCuentaDAO().consultarCuentasCliente(cliente.getTelefono());
+            for (Cuenta cuenta : listaCuentasRetiro) {
+                cbxCuentaRetiro.addItem(cuenta.getNumCuenta());
+            }
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(dlgTransferencia.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void retirar(){
+        String cuenta = String.valueOf(cbxCuentaRetiro.getSelectedItem());
+        float monto = Float.parseFloat(txtMonto.getText());
+        
+        GenerarFolioContraRetiros generarFolioContra = new GenerarFolioContraRetiros();
+        String folio = generarFolioContra.generarFolio();
+        String contrasenia = generarFolioContra.generarContraseña();
+        
+        RetiroNuevoDTO retiroNuevo = new RetiroNuevoDTO();
+        retiroNuevo.setNumCuenta(cuenta);
+        retiroNuevo.setCantidad(monto);
+        retiroNuevo.setFolioRetiro(folio);
+        retiroNuevo.setContraseniaRetiro(contrasenia);
+        retiroNuevo.setEstado(1);
+        
+        try {
+            Retiro retiro = datosConexion.getRetiroDAO().realizarRetiro(retiroNuevo.getIdRetiro());
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(dlgRetiroSinCuenta.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+    
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -34,11 +82,10 @@ public class dlgRetiroSinCuenta extends javax.swing.JDialog {
         btnConfirmar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         lblCuentaRetiro = new javax.swing.JLabel();
-        lblContrasenia = new javax.swing.JLabel();
         txtMonto = new javax.swing.JTextField();
         lblContrasenia1 = new javax.swing.JLabel();
         cbxCuentaRetiro = new javax.swing.JComboBox<>();
-        txtMonto1 = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Retiro sin cuenta");
@@ -74,10 +121,6 @@ public class dlgRetiroSinCuenta extends javax.swing.JDialog {
         lblCuentaRetiro.setForeground(new java.awt.Color(255, 255, 255));
         lblCuentaRetiro.setText("Cuenta de retiro:");
 
-        lblContrasenia.setFont(new java.awt.Font("Leelawadee UI", 1, 24)); // NOI18N
-        lblContrasenia.setForeground(new java.awt.Color(255, 255, 255));
-        lblContrasenia.setText("Fecha de vencimiento:");
-
         txtMonto.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
         txtMonto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -91,13 +134,9 @@ public class dlgRetiroSinCuenta extends javax.swing.JDialog {
 
         cbxCuentaRetiro.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
 
-        txtMonto1.setEditable(false);
-        txtMonto1.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
-        txtMonto1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtMonto1ActionPerformed(evt);
-            }
-        });
+        jLabel1.setFont(new java.awt.Font("Leelawadee UI", 1, 16)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Tienes 10 minutos para realizar el retiro antes de que sea cancelado!");
 
         javax.swing.GroupLayout fondoLayout = new javax.swing.GroupLayout(fondo);
         fondo.setLayout(fondoLayout);
@@ -109,25 +148,26 @@ public class dlgRetiroSinCuenta extends javax.swing.JDialog {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, fondoLayout.createSequentialGroup()
                         .addGap(0, 56, Short.MAX_VALUE)
                         .addComponent(btnConfirmar)
-                        .addGap(134, 134, 134)
+                        .addGap(126, 126, 126)
                         .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(21, 21, 21))
+                        .addGap(29, 29, 29))
                     .addGroup(fondoLayout.createSequentialGroup()
                         .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(lblContrasenia1)
                             .addComponent(lblCuentaRetiro))
                         .addGap(28, 28, 28)
                         .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtMonto1, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(cbxCuentaRetiro, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtMonto))))
                 .addGap(196, 196, 196))
             .addGroup(fondoLayout.createSequentialGroup()
                 .addGap(133, 133, 133)
-                .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblContrasenia)
-                    .addComponent(jLabel2))
+                .addComponent(jLabel2)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, fondoLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(186, 186, 186))
         );
         fondoLayout.setVerticalGroup(
             fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -138,15 +178,13 @@ public class dlgRetiroSinCuenta extends javax.swing.JDialog {
                 .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblCuentaRetiro)
                     .addComponent(cbxCuentaRetiro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(43, 43, 43)
                 .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblContrasenia1)
                     .addComponent(txtMonto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblContrasenia)
-                    .addComponent(txtMonto1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(41, 41, 41)
                 .addGroup(fondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -180,20 +218,15 @@ public class dlgRetiroSinCuenta extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtMontoActionPerformed
 
-    private void txtMonto1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMonto1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtMonto1ActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnConfirmar;
     private javax.swing.JComboBox<String> cbxCuentaRetiro;
     private javax.swing.JPanel fondo;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel lblContrasenia;
     private javax.swing.JLabel lblContrasenia1;
     private javax.swing.JLabel lblCuentaRetiro;
     private javax.swing.JTextField txtMonto;
-    private javax.swing.JTextField txtMonto1;
     // End of variables declaration//GEN-END:variables
 }
