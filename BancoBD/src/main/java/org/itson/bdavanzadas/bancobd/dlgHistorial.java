@@ -478,6 +478,16 @@ public class dlgHistorial extends javax.swing.JDialog {
                 } else {
                     mostrarTablaTransferencias(cuenta);
                 }
+            } else if (rbtnRetiro.isSelected()) {
+                if (rbtnFechas.isSelected() && rbtnRetiro.isSelected()) {
+                    if (jDateFechaInicio.getDate() != null && jDateFechaFin.getDate() != null) {
+                        mostrarTablaRetirosPorFechas(cuenta);
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Ingresa las fechas");
+                    }
+                } else {
+                    mostrarTablaRetiros(cuenta);
+                }
             } else if (rbtnRetiro.isSelected() && rbtnTransferencia.isSelected()) {
                 if (rbtnFechas.isSelected()) {
                     if (jDateFechaInicio.getDate() != null && jDateFechaFin.getDate() != null) {
