@@ -6,7 +6,8 @@ package org.itson.bdavanzadas.bancobdpersistencia.daos;
 
 import java.util.List;
 import org.itson.bdavanzadas.bancobddominio.Transaccion;
-import org.itson.bdavanzadas.bancobddominio.Transferencia;
+import java.sql.Date;
+import java.sql.Timestamp;
 import org.itson.bdavanzadas.bancobdpersistencia.dtos.TransaccionNuevaDTO;
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
 
@@ -19,4 +20,5 @@ public interface ITransaccionDAO {
     Transaccion obtener(int idTransaccion) throws PersistenciaException;
     List<Transaccion> consultar() throws PersistenciaException;
     List<Transaccion> consultarTransaccionesCuenta(String numCuenta) throws PersistenciaException;
+    List<Transaccion> consultarTransaccionesCuentaPorFechas(String numCuenta, Timestamp fechaInicio, Timestamp fechaFin) throws PersistenciaException;
 }

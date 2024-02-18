@@ -42,7 +42,7 @@ public class dlgCuentas extends javax.swing.JDialog {
             };
             modelo.addColumn("CUENTA");
             modelo.addColumn("SALDO");
-            modelo.addColumn("ESTADO");
+            modelo.addColumn("CANCELAR");
 
             for (Cuenta cuenta : listaCuentas) {
                 Object[] fila = {cuenta.getNumCuenta(), cuenta.getSaldo(), "Cancelar"};

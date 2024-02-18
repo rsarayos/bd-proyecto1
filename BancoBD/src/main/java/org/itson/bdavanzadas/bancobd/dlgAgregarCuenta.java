@@ -1,7 +1,5 @@
 package org.itson.bdavanzadas.bancobd;
 
-import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -106,7 +104,7 @@ public class dlgAgregarCuenta extends javax.swing.JDialog {
 
         lblTelefono.setFont(new java.awt.Font("Leelawadee UI", 1, 24)); // NOI18N
         lblTelefono.setForeground(new java.awt.Color(255, 255, 255));
-        lblTelefono.setText("Cuenta:");
+        lblTelefono.setText("No. Cuenta:");
 
         txtCuenta.setEditable(false);
         txtCuenta.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
@@ -142,7 +140,7 @@ public class dlgAgregarCuenta extends javax.swing.JDialog {
 
         lblMonto.setFont(new java.awt.Font("Leelawadee UI", 1, 24)); // NOI18N
         lblMonto.setForeground(new java.awt.Color(255, 255, 255));
-        lblMonto.setText("Monto:");
+        lblMonto.setText("Monto inicial:");
 
         txtMonto.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
         txtMonto.addActionListener(new java.awt.event.ActionListener() {
