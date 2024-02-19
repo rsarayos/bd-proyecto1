@@ -39,7 +39,7 @@ public class Retiro extends Transaccion{
     }
 
     /**
-     * Constructor que permite crear un objeto Transferencia con el id.
+     * Constructor que permite crear un objeto Retiro con el id.
      *
      * @param idRetiro id del retiro.
      */
@@ -47,11 +47,26 @@ public class Retiro extends Transaccion{
         this.idRetiro = idRetiro;
     }
 
+    /**
+     * Constructor que permite crear un objeto Retiro con el folio y contraseña del retiro.
+     *
+     * @param folioRetiro folio del retiro.
+     * @param contraseniaRetiro contraseña del retiro.
+     */
     public Retiro(String folioRetiro, String contraseniaRetiro) {
         this.folioRetiro = folioRetiro;
         this.contraseniaRetiro = contraseniaRetiro;
     }
 
+    /**
+     * Constructor que permite crear un objeto Retiro con el idTransaccion, el folio y contraseña del retiro.
+     *
+     * @param idRetiro id del retiro.
+     * @param folioRetiro folio del retiro.
+     * @param contraseniaRetiro contraseña del retiro.
+     * @param estado estado del retiro.
+     * @param idTransaccion id de la transaccion del retiro.
+     */
     public Retiro(int idRetiro, String folioRetiro, String contraseniaRetiro, int estado, int idTransaccion) {
         super(idTransaccion);
         this.idRetiro = idRetiro;
@@ -60,6 +75,18 @@ public class Retiro extends Transaccion{
         this.estado = estado;
     }
 
+    /**
+     * Constructor que permite crear un objeto Retiro con sus parametros de transaccion, y los del retiro.
+     *
+     * @param idRetiro id del retiro.
+     * @param folioRetiro folio del retiro.
+     * @param contraseniaRetiro contraseña del retiro.
+     * @param estado estado del retiro.
+     * @param idTransaccion id de la transaccion del retiro.
+     * @param fecha fecha de la transaccion.
+     * @param cantidad cantidad de la transaccion.
+     * @param numCuenta numero de cuenta origen de la transaccion.
+     */
     public Retiro(int idRetiro, String folioRetiro, String contraseniaRetiro, int estado, int idTransaccion, Timestamp fecha, float cantidad, String numCuenta) {
         super(idTransaccion, fecha, cantidad, numCuenta);
         this.idRetiro = idRetiro;
@@ -68,38 +95,85 @@ public class Retiro extends Transaccion{
         this.estado = estado;
     }
 
+    // Métodos de acceso y modificación
+    
+    /**
+     * Obtiene el número id del retiro.
+     *
+     * @return Número id del retiro.
+     */
     public int getIdRetiro() {
         return idRetiro;
     }
 
+    /**
+     * Establece el id del retiro.
+     *
+     * @param idRetiro Nuevo id del retiro.
+     */
     public void setIdRetiro(int idRetiro) {
         this.idRetiro = idRetiro;
     }
 
+    /**
+     * Obtiene el folio del retiro.
+     *
+     * @return folio del retiro.
+     */
     public String getFolioRetiro() {
         return folioRetiro;
     }
 
+    /**
+     * Establece el folio del retiro.
+     *
+     * @param folioRetiro Nuevo id de la transferencia.
+     */
     public void setFolioRetiro(String folioRetiro) {
         this.folioRetiro = folioRetiro;
     }
 
+    /**
+     * Obtiene la contraseña del retiro.
+     *
+     * @return contraseña del retiro.
+     */
     public String getContraseniaRetiro() {
         return contraseniaRetiro;
     }
 
+    /**
+     * Establece la contraseña del retiro.
+     *
+     * @param contraseniaRetiro Nueva contraseña del retiro.
+     */
     public void setContraseniaRetiro(String contraseniaRetiro) {
         this.contraseniaRetiro = contraseniaRetiro;
     }
 
+    /**
+     * Obtiene el estado del retiro.
+     *
+     * @return estado del retiro.
+     */
     public int getEstado() {
         return estado;
     }
 
+    /**
+     * Establece el estado del retiro.
+     *
+     * @param estado Nuevo estado del retiro.
+     */
     public void setEstado(int estado) {
         this.estado = estado;
     }
     
+    /**
+     * Calcula el código hash para el objeto Transferencia basado en su id.
+     *
+     * @return Código hash del objeto Retiro.
+     */
     @Override
     public int hashCode() {
         int hash = 7;
@@ -107,6 +181,12 @@ public class Retiro extends Transaccion{
         return hash;
     }
 
+    /**
+     * Compara si dos objetos Retiro son iguales basándose en el id.
+     *
+     * @param obj Objeto a comparar.
+     * @return true si los objetos son iguales, false en caso contrario.
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -122,6 +202,11 @@ public class Retiro extends Transaccion{
         return this.idRetiro == other.idRetiro;
     }
 
+    /**
+     * Representación en forma de cadena de la clase Retiro.
+     *
+     * @return Cadena que representa el Retiro.
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
