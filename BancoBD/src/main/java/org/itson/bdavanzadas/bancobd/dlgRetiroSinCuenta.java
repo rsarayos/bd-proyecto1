@@ -1,9 +1,13 @@
-
 package org.itson.bdavanzadas.bancobd;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import org.itson.bdavanzadas.bancobddominio.Cliente;
 import org.itson.bdavanzadas.bancobddominio.Cuenta;
 import org.itson.bdavanzadas.bancobddominio.Retiro;
@@ -20,15 +24,15 @@ public class dlgRetiroSinCuenta extends javax.swing.JDialog {
 
     private final DatosConexion datosConexion;
     private Cliente cliente;
-    
+
     /**
      * Creates new form dlgRetiroSinCuenta
      */
     public dlgRetiroSinCuenta(java.awt.Frame parent, boolean modal, DatosConexion datosConexion, Cliente cliente) {
         super(parent, modal);
         initComponents();
-        this.datosConexion=datosConexion;
-        this.cliente=cliente;
+        this.datosConexion = datosConexion;
+        this.cliente = cliente;
         mostrarCuentas();
     }
 
@@ -43,31 +47,48 @@ public class dlgRetiroSinCuenta extends javax.swing.JDialog {
             Logger.getLogger(dlgTransferencia.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    private void retirar(){
+
+    private void retirar() {
         String cuenta = String.valueOf(cbxCuentaRetiro.getSelectedItem());
         float monto = Float.parseFloat(txtMonto.getText());
-        
+
         GenerarFolioContraRetiros generarFolioContra = new GenerarFolioContraRetiros();
         String folio = generarFolioContra.generarFolio();
         String contrasenia = generarFolioContra.generarContraseña();
-        
-        RetiroNuevoDTO retiroNuevo = new RetiroNuevoDTO();
-        retiroNuevo.setNumCuenta(cuenta);
-        retiroNuevo.setCantidad(monto);
-        retiroNuevo.setFolioRetiro(folio);
-        retiroNuevo.setContraseniaRetiro(contrasenia);
-        retiroNuevo.setEstado(1);
-        
-        try {
-            Retiro retiro = datosConexion.getRetiroDAO().realizarRetiro(retiroNuevo.getIdRetiro());
-        } catch (PersistenciaException ex) {
-            Logger.getLogger(dlgRetiroSinCuenta.class.getName()).log(Level.SEVERE, null, ex);
+
+        Date fechaActual = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(fechaActual);
+        calendar.add(Calendar.MINUTE, 10);
+        Date fechaCon10Minutos = calendar.getTime();
+        Timestamp fechaCancelacion = new Timestamp(fechaCon10Minutos.getTime());
+
+        RetiroNuevoDTO retiroNuevo = null;
+        if (monto > 0) {
+            retiroNuevo = new RetiroNuevoDTO();
+            retiroNuevo.setNumCuenta(cuenta);
+            retiroNuevo.setCantidad(monto);
+            retiroNuevo.setFolioRetiro(folio);
+            retiroNuevo.setContraseniaRetiro(contrasenia);
+            retiroNuevo.setEstado(1);
+            retiroNuevo.setFecha(fechaCancelacion);
+
+            try {
+                Retiro retiro = datosConexion.getRetiroDAO().realizarRetiro(retiroNuevo.getIdRetiro());
+                if (retiro != null) {
+                    String mensaje = "Retiro sin cuenta creado, guarda el folio y la contraseña\n No. Folio de la transacción: " + folio + "\nContraseña: " + contrasenia+"\nFecha de vencimiento: "+fechaCancelacion.toString();
+                    JOptionPane.showMessageDialog(this, mensaje, "Retiro sin cuenta", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(this, "No fue posible realizar el retiro", "Retiro sin cuenta", JOptionPane.INFORMATION_MESSAGE);
+                }
+            } catch (PersistenciaException ex) {
+                Logger.getLogger(dlgRetiroSinCuenta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Ingrese un monto correcto", "Error", JOptionPane.ERROR_MESSAGE);
         }
-    
-    
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -207,7 +228,11 @@ public class dlgRetiroSinCuenta extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-
+        if(!txtMonto.getText().isBlank()){
+            retirar();
+        }else{
+            JOptionPane.showMessageDialog(this, "Ingrese un monto", "Error", JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed

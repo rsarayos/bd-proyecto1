@@ -18,11 +18,7 @@ public class Validaciones {
         Pattern patron = Pattern.compile("^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\\s]{1,100}$");
         Matcher matcher = patron.matcher(nombre);
         
-        if (matcher.matches()) {
-            return true;
-        } else {
-            return false;
-        }
+        return matcher.matches();
     }
     
     public boolean validaApellidos(String apellido) {
@@ -30,11 +26,7 @@ public class Validaciones {
         Pattern patron = Pattern.compile("^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ]{1,50}$");
         Matcher matcher = patron.matcher(apellido);
         
-        if (matcher.matches()) {
-            return true;
-        } else {
-            return false;
-        }
+        return matcher.matches();
     }
     
     public boolean validaTelefono(String telefono) {
@@ -42,11 +34,7 @@ public class Validaciones {
         Pattern patron = Pattern.compile("^\\d{10}$");
         Matcher matcher = patron.matcher(telefono);
         
-        if (matcher.matches()) {
-            return true;
-        } else {
-            return false;
-        }
+        return matcher.matches();
     }
     
     public boolean validaFecha(String fecha) {
@@ -54,11 +42,7 @@ public class Validaciones {
         Pattern patron = Pattern.compile("^\\d{4}-\\d{2}-\\d{2}$");
         Matcher matcher = patron.matcher(fecha);
         
-        if (matcher.matches()) {
-            return true;
-        } else {
-            return false;
-        }
+        return matcher.matches();
     }
     
     public boolean validaDomicilio(String domicilio) {
@@ -66,11 +50,7 @@ public class Validaciones {
         Pattern patron = Pattern.compile("^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\\d\\s]{1,50}$");
         Matcher matcher = patron.matcher(domicilio);
         
-        if (matcher.matches()) {
-            return true;
-        } else {
-            return false;
-        }
+        return matcher.matches();
     }
     
     public boolean validaNumero(String numero) {
@@ -78,11 +58,7 @@ public class Validaciones {
         Pattern patron = Pattern.compile("^\\d{1,10}$");
         Matcher matcher = patron.matcher(numero);
         
-        if (matcher.matches()) {
-            return true;
-        } else {
-            return false;
-        }
+        return matcher.matches();
     }
     
     public boolean validaCp(String cp) {
@@ -90,11 +66,7 @@ public class Validaciones {
         Pattern patron = Pattern.compile("^\\d{1,5}$");
         Matcher matcher = patron.matcher(cp);
         
-        if (matcher.matches()) {
-            return true;
-        } else {
-            return false;
-        }
+        return matcher.matches();
     }
     
     public boolean validaCuenta(String cuenta) {
@@ -102,11 +74,7 @@ public class Validaciones {
         Pattern patron = Pattern.compile("^\\d{6}$");
         Matcher matcher = patron.matcher(cuenta);
         
-        if (matcher.matches()) {
-            return true;
-        } else {
-            return false;
-        }
+        return matcher.matches();
     }
     
     public boolean validaContra(String contrasenia) {
@@ -114,11 +82,7 @@ public class Validaciones {
         Pattern patron = Pattern.compile("^[a-zA-Z0-9.,\\-_\\*]{1,20}$");
         Matcher matcher = patron.matcher(contrasenia);
         
-        if (matcher.matches()) {
-            return true;
-        } else {
-            return false;
-        }
+        return matcher.matches();
     }
     
     public boolean validaCantidad(String cantidad) {

@@ -54,6 +54,7 @@ public class dlgCuentas extends javax.swing.JDialog {
             JTableHeader header = jTablaCuentas.getTableHeader();
             jTablaCuentas.getTableHeader().setReorderingAllowed(false);
             jTablaCuentas.setDefaultEditor(Object.class, null);
+            jTablaCuentas.getTableHeader().setResizingAllowed(false);
 
             header.setFont(new Font("Leelawadee UI", Font.BOLD, 28));
             header.setPreferredSize(new java.awt.Dimension(80, 30));

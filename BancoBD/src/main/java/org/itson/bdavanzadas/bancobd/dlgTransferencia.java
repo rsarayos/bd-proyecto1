@@ -9,7 +9,6 @@ import org.itson.bdavanzadas.bancobddominio.Cuenta;
 import org.itson.bdavanzadas.bancobddominio.Transferencia;
 import org.itson.bdavanzadas.bancobdpersistencia.auxiliar.Validaciones;
 import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
-import org.itson.bdavanzadas.bancobdpersistencia.dtos.TransferenciaNuevaDTO;
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.ValidacionDTOException;
 
@@ -67,11 +66,10 @@ public class dlgTransferencia extends javax.swing.JDialog {
                 }
             }
         }
-        
+
         String cuentaRetiro = String.valueOf(cbxCuentaRetiro.getSelectedItem());
 
-        
-            if (cuentaExistente) {
+        if (cuentaExistente) {
             if (validar.validaCantidad(txtMonto.getText())) {
                 float monto = Float.parseFloat(txtMonto.getText());
                 if (monto > 0) {
@@ -91,7 +89,7 @@ public class dlgTransferencia extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(this, "Monto Invalido", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(this, "No es una cuenta existente", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "La cuenta destino no es existente", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

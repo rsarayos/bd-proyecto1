@@ -11,6 +11,7 @@ public class dlgRetirarSinCuentaMenuInicial extends javax.swing.JDialog {
 
     private final DatosConexion datosConexion;
     
+    
     /**
      * Creates new form dlgRetirarSinCuentaMenuInicial
      */
@@ -20,6 +21,15 @@ public class dlgRetirarSinCuentaMenuInicial extends javax.swing.JDialog {
         this.datosConexion=datosConexion;
     }
 
+    private void realizarRetiro(){
+    
+        String folio = txtFolio.getText();
+        
+        char[] contraseniaArray = pswContrasenia.getPassword();
+        String contrasenia = new String(contraseniaArray);
+    }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

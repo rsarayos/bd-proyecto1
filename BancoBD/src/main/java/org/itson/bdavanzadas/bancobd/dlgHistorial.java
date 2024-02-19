@@ -126,6 +126,9 @@ public class dlgHistorial extends javax.swing.JDialog {
         }
 
         jTablaHistorial.setModel(modelo);
+        jTablaHistorial.getTableHeader().setReorderingAllowed(false);
+        jTablaHistorial.setDefaultEditor(Object.class, null);
+        jTablaHistorial.getTableHeader().setResizingAllowed(false);
         JTableHeader header = jTablaHistorial.getTableHeader();
         header.setFont(new Font("Leelawadee UI", Font.BOLD, 12));
     }
@@ -175,6 +178,9 @@ public class dlgHistorial extends javax.swing.JDialog {
         }
 
         jTablaHistorial.setModel(modelo);
+        jTablaHistorial.getTableHeader().setReorderingAllowed(false);
+        jTablaHistorial.setDefaultEditor(Object.class, null);
+        jTablaHistorial.getTableHeader().setResizingAllowed(false);
         JTableHeader header = jTablaHistorial.getTableHeader();
         header.setFont(new Font("Leelawadee UI", Font.BOLD, 12));
 
@@ -238,6 +244,9 @@ public class dlgHistorial extends javax.swing.JDialog {
         }
 
         jTablaHistorial.setModel(modelo);
+        jTablaHistorial.getTableHeader().setReorderingAllowed(false);
+        jTablaHistorial.setDefaultEditor(Object.class, null);
+        jTablaHistorial.getTableHeader().setResizingAllowed(false);
         JTableHeader header = jTablaHistorial.getTableHeader();
         header.setFont(new Font("Leelawadee UI", Font.BOLD, 12));
     }
