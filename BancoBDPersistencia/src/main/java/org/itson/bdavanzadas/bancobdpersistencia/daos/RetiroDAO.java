@@ -150,6 +150,52 @@ public class RetiroDAO implements IRetiroDAO {
             throw new PersistenciaException("No se ha podido obtener el retiro", ex);
         }
     }
+    
+    @Override
+    public Retiro obtenerPorFolio(String folioRetiro) throws PersistenciaException {
+        String sentenciaSQL = """
+                             SELECT *
+                             SELECT idRetiro, folioRetiro, contraseniaRetiro, estado, idTransaccion
+                             FROM retiros
+                             INNER JOIN transacciones ON retiros.idTransaccion = transacciones.idTransaccion
+                             WHERE folioRetiro=?;
+                             """;
+
+        try (
+                Connection conexion = this.conexionDB.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
+            comando.setString(1, folioRetiro);
+
+            ResultSet resultados = comando.executeQuery();
+
+            if (resultados.next()) {
+                int idRetiro = resultados.getInt("idRetiro");
+                String contraseniaCifrada = resultados.getString("contraseniaRetiro");
+                String contraDesencriptada = encriptador.desencriptar(contraseniaCifrada);
+                int estado = resultados.getInt("estado");
+                int idTransaccion = resultados.getInt("idTransaccion");
+                Timestamp fecha = resultados.getTimestamp("fecha");
+                long cantidad = resultados.getInt("cantidad");
+                String numCuenta = resultados.getString("numCuenta");
+                Retiro retiro = new Retiro(idRetiro,
+                        folioRetiro,
+                        contraDesencriptada,
+                        estado,
+                        idTransaccion,
+                        fecha,
+                        cantidad,
+                        numCuenta);
+                return retiro;
+            } else {
+                return null; // No se encontró el socio con el telefono dado
+            }
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "No se ha podido obtener el retiro", ex);
+            throw new PersistenciaException("No se ha podido obtener el retiro", ex);
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, "No se ha podido obtener el retiro", ex);
+            throw new PersistenciaException("No se ha podido obtener el retiro", ex);
+        }
+    }
 
     @Override
     public List<Retiro> consultar() throws PersistenciaException {
