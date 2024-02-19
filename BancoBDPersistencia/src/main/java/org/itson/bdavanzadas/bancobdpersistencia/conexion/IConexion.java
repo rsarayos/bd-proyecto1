@@ -8,8 +8,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
- *
- * @author alex_
+ * La interfaz IConexion proporciona un método para obtener una conexión a una base de datos.
+ * 
+ * @author Victor Humberto Encinas Guzman & Raul Alejandro Sauceda Rayos
  */
 public interface IConexion {
     Connection obtenerConexion() throws SQLException;
