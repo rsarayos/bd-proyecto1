@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 import org.itson.bdavanzadas.bancobddominio.Cliente;
 import org.itson.bdavanzadas.bancobddominio.Cuenta;
 import org.itson.bdavanzadas.bancobdpersistencia.auxiliar.GenerarNumeroCuenta;
+import org.itson.bdavanzadas.bancobdpersistencia.auxiliar.Validaciones;
 import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
 import org.itson.bdavanzadas.bancobdpersistencia.dtos.CuentaNuevaDTO;
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
@@ -20,6 +21,7 @@ public class dlgAgregarCuenta extends javax.swing.JDialog {
 
     private final DatosConexion datosConexion;
     private Cliente cliente;
+    private Validaciones validar;
 
     /**
      * Creates new form dlgAgregarCuenta
@@ -29,6 +31,7 @@ public class dlgAgregarCuenta extends javax.swing.JDialog {
         initComponents();
         this.datosConexion = datosConexion;
         this.cliente = cliente;
+        this.validar = new Validaciones();
         generarNumCuenta();
     }
 
@@ -57,8 +60,10 @@ public class dlgAgregarCuenta extends javax.swing.JDialog {
 
     private void agregarCuenta() {
         String numCuenta = txtCuenta.getText();
-        float monto = Float.parseFloat(txtMonto.getText());
+        
 
+        if(validar.validaCantidad(txtMonto.getText())){
+        float monto = Float.parseFloat(txtMonto.getText());
         CuentaNuevaDTO cuentaNueva = new CuentaNuevaDTO();
         cuentaNueva.setNumCuenta(numCuenta);
         cuentaNueva.setSaldo(monto);
@@ -75,7 +80,9 @@ public class dlgAgregarCuenta extends javax.swing.JDialog {
         } catch (PersistenciaException ex) {
             JOptionPane.showMessageDialog(this, "No fue posible agregar la cuenta", "Error de almacenamiento", JOptionPane.ERROR_MESSAGE);
         }
-        dispose();
+        dispose();} else {
+            JOptionPane.showMessageDialog(this, "Ingresar un monto valido", "Error de registro", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**

@@ -11,6 +11,7 @@ import org.itson.bdavanzadas.bancobdpersistencia.auxiliar.Validaciones;
 import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
 import org.itson.bdavanzadas.bancobdpersistencia.dtos.TransferenciaNuevaDTO;
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
+import org.itson.bdavanzadas.bancobdpersistencia.excepciones.ValidacionDTOException;
 
 /**
  *
@@ -66,25 +67,31 @@ public class dlgTransferencia extends javax.swing.JDialog {
                 }
             }
         }
-
-        float monto = Float.parseFloat(txtMonto.getText());
+        
         String cuentaRetiro = String.valueOf(cbxCuentaRetiro.getSelectedItem());
 
-        try {
+        
             if (cuentaExistente) {
+            if (validar.validaCantidad(txtMonto.getText())) {
+                float monto = Float.parseFloat(txtMonto.getText());
                 if (monto > 0) {
-                    Transferencia transExito = datosConexion.getTransferenciaDAO().realizarTransferencia(cuentaRetiro, cuentaDestino, monto);
+                    Transferencia transExito = null;
+                    try {
+                        transExito = datosConexion.getTransferenciaDAO().realizarTransferencia(cuentaRetiro, cuentaDestino, monto);
+                    } catch (PersistenciaException ex) {
+                        Logger.getLogger(dlgTransferencia.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     String resultado = "Folio Transferencia: " + transExito.getIdTransferencia();
-                    JOptionPane.showMessageDialog(this, "Tranferencia realizada con éxito\n"+resultado, "Transferencia Exitosa", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Tranferencia realizada con éxito\n" + resultado, "Transferencia Exitosa", JOptionPane.INFORMATION_MESSAGE);
                     dispose();
                 } else {
                     JOptionPane.showMessageDialog(this, "Ingrese un monto correcto", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } else {
-                JOptionPane.showMessageDialog(this, "No es una cuenta existente", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Monto Invalido", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (PersistenciaException ex) {
-            Logger.getLogger(dlgTransferencia.class.getName()).log(Level.SEVERE, null, ex);
+        } else {
+            JOptionPane.showMessageDialog(this, "No es una cuenta existente", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

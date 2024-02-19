@@ -121,4 +121,16 @@ public class Validaciones {
         }
     }
     
+    public boolean validaCantidad(String cantidad) {
+
+        Pattern patron = Pattern.compile("^(?!0\\d)(\\d+(\\.\\d{1,2})?)?$");
+        Matcher matcher = patron.matcher(cantidad);
+        
+        if (matcher.matches()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
 }
