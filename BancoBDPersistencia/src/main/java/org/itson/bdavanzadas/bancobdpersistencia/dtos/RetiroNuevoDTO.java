@@ -4,53 +4,91 @@
  */
 package org.itson.bdavanzadas.bancobdpersistencia.dtos;
 
-import org.itson.bdavanzadas.bancobdpersistencia.excepciones.ValidacionDTOException;
-
 /**
- *
- * @author alex_
+ * La clase RetiroNuevoDTO representa un objeto de transferencia de datos (DTO) para la creación de nuevos Retiros.
+ * 
+ * @author Victor Humberto Encinas Guzman & Raul Alejandro Sauceda Rayos
  */
 public class RetiroNuevoDTO extends TransaccionNuevaDTO{
+    
+    // Atributos de la clase Direccion
     private int idRetiro;
     private String folioRetiro;
     private String contraseniaRetiro;
     private int estado;
 
+    // Métodos de acceso y modificación
+    
+    /**
+     * Obtiene el número id del retiro.
+     *
+     * @return Número id del retiro.
+     */
     public int getIdRetiro() {
         return idRetiro;
     }
 
+    /**
+     * Establece el id del retiro.
+     *
+     * @param idRetiro Nuevo id del retiro.
+     */
     public void setIdRetiro(int idRetiro) {
         this.idRetiro = idRetiro;
     }
 
+    /**
+     * Obtiene el folio del retiro.
+     *
+     * @return folio del retiro.
+     */
     public String getFolioRetiro() {
         return folioRetiro;
     }
 
+    /**
+     * Establece el folio del retiro.
+     *
+     * @param folioRetiro Nuevo id de la transferencia.
+     */
     public void setFolioRetiro(String folioRetiro) {
         this.folioRetiro = folioRetiro;
     }
 
+    /**
+     * Obtiene la contraseña del retiro.
+     *
+     * @return contraseña del retiro.
+     */
     public String getContraseniaRetiro() {
         return contraseniaRetiro;
     }
 
+    /**
+     * Establece la contraseña del retiro.
+     *
+     * @param contraseniaRetiro Nueva contraseña del retiro.
+     */
     public void setContraseniaRetiro(String contraseniaRetiro) {
         this.contraseniaRetiro = contraseniaRetiro;
     }
 
+    /**
+     * Obtiene el estado del retiro.
+     *
+     * @return estado del retiro.
+     */
     public int getEstado() {
         return estado;
     }
 
+    /**
+     * Establece el estado del retiro.
+     *
+     * @param estado Nuevo estado del retiro.
+     */
     public void setEstado(int estado) {
         this.estado = estado;
-    }
-    
-    @Override
-    public boolean esValido() throws ValidacionDTOException {
-        return true;
     }
     
 }
