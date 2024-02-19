@@ -17,15 +17,25 @@ import org.itson.bdavanzadas.bancobdpersistencia.dtos.ClienteNuevoDTO;
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
 
 /**
- *
- * @author alex_
+ * La clase ClientesDAO implementa la interfaz IClientesDAO y proporciona métodos para realizar operaciones CRUD
+ * (Crear, Leer, Actualizar, Eliminar) relacionadas con la entidad Cliente en la base de datos.
+ * 
+ * @author Victor Humberto Encinas Guzman & Raul Alejandro Sauceda Rayos
  */
 public class ClientesDAO implements IClientesDAO {
 
+    // Objeto IConexion utilizado para obtener conexiones a la base de datos.
     final IConexion conexionDB;
+    // Objeto Logger utilizado para registrar mensajes de registro.
     static final Logger logger = Logger.getLogger(ClientesDAO.class.getName());
+    // Objeto EncriptarContra utilizado para cifrar y descifrar contraseñas.
     private EncriptarContra encriptador;
 
+    /**
+     * Constructor de la clase ClientesDAO que recibe un objeto IConexion.
+     *
+     * @param conexionDB Objeto IConexion utilizado para obtener conexiones a la base de datos.
+     */
     public ClientesDAO(IConexion conexionDB) {
         this.conexionDB = conexionDB;
         this.encriptador = new EncriptarContra();
