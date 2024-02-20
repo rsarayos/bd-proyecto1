@@ -20,8 +20,14 @@ import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaExcepti
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.ValidacionDTOException;
 
 /**
- *
- * @author victo
+ * Representa el dialog Retiros sin cuenta que permite generar un folio, una 
+ * contraseña y una fecha de vencimiento a partir de una cuenta para que 
+ * cualquier persona que sea o no cliente retire el dinero.
+ * 
+ * La clase proporciona un constructor para instanciar el dialog, además 
+ * contiene métodos oyentes para cada botón presente en el menú.
+ * 
+ * @author Victor Humberto Encinas Guzman & Raul Alejandro Sauceda Rayos
  */
 public class dlgRetiroSinCuenta extends javax.swing.JDialog {
 
@@ -30,7 +36,14 @@ public class dlgRetiroSinCuenta extends javax.swing.JDialog {
     private Validaciones validar;
 
     /**
-     * Creates new form dlgRetiroSinCuenta
+     * Método constructor que permite inicializar el diálogo para realizar un
+     * retiro sin cuenta.
+     *
+     * @param parent El Frame padre del diálogo.
+     * @param modal Indica si el diálogo es modal o no.
+     * @param datosConexion Objeto DatosConexion que contiene la información de 
+     * conexión a la base de datos.
+     * @param cliente El cliente para el cual se realizará el retiro sin cuenta.
      */
     public dlgRetiroSinCuenta(java.awt.Frame parent, boolean modal, DatosConexion datosConexion, Cliente cliente) {
         super(parent, modal);
@@ -41,6 +54,10 @@ public class dlgRetiroSinCuenta extends javax.swing.JDialog {
         mostrarCuentas();
     }
 
+    /**
+     * Método que permite mostrar las cuentas disponibles para realizar el 
+     * retiro sin cunetra dentro de un comboBox.
+     */
     private void mostrarCuentas() {
         List<Cuenta> listaCuentasRetiro = null;
         try {
@@ -55,6 +72,11 @@ public class dlgRetiroSinCuenta extends javax.swing.JDialog {
         }
     }
 
+    /**
+     * Método que permite generar un folio de operación a un retiro sin cuenta.
+     * 
+     * @return Una cadena de texto con el folio de operación.
+     */
     private String generarFolio() {
         GenerarFolioContraRetiros generarFolioContra = new GenerarFolioContraRetiros();
 
@@ -65,16 +87,40 @@ public class dlgRetiroSinCuenta extends javax.swing.JDialog {
             Logger.getLogger(dlgAgregarCuenta.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        String folio = "";
-        for (Retiro retiro : listaRetiros) {
+        String folio;
+        do{
             folio = generarFolioContra.generarFolio();
-            if (!retiro.getFolioRetiro().equals(folio)) {
-                return folio;
-            }
-        }
+        }while(folioExiste(folio, listaRetiros));
+        
         return null;
     }
 
+    /**
+     * Método que permite verificar si un folio de retiro ya existe en una lista
+     * de retiros.
+     * 
+     * @param folio El folio a verificar.
+     * @param listaRetiros La lista de retiros en la que se busca el folio.
+     * @return true si el folio existe en la lista, false de lo contrario.
+     */
+    private boolean folioExiste(String folio, List<Retiro> listaRetiros){
+    
+        if (listaRetiros == null) {
+            return false;
+        }
+        
+        for (Retiro retiro : listaRetiros) {
+            if(retiro.getFolioRetiro().equals(folio)){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Método que permite generar un retiro, aquí se muestra el folio, se genera
+     * la contraseña y la fecha de vencimiento para realizar el retiro.
+     */
     private void generarRetiro() {
         String cuenta = String.valueOf(cbxCuentaRetiro.getSelectedItem());
 
@@ -268,6 +314,12 @@ public class dlgRetiroSinCuenta extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Método oyente que permite confirmar la generación del retiro, además se 
+     * valida que el monto no este en blanco.
+     * 
+     * @param evt Evento de dar clic en el botón.
+     */
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
         if (!txtMonto.getText().isBlank()) {
             generarRetiro();
@@ -276,6 +328,12 @@ public class dlgRetiroSinCuenta extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
+    /**
+     * Método oyente que permite salir de la opción retiro sin cuenta y 
+     * redirige al menú principal.
+     * 
+     * @param evt Evento de dar clic en el botón.
+     */
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed

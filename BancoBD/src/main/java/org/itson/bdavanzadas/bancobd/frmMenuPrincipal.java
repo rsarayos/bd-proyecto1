@@ -5,8 +5,14 @@ import org.itson.bdavanzadas.bancobddominio.Cliente;
 import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
 
 /**
- *
- * @author victo
+ * Representa el frame MenuPrincipal que muestra el menú para actualizar un 
+ * cliente, crear una cuenta, hacer una transferencia, consultar el historial de
+ * operaciones y empezar la transacción de un retiro sin cuenta.
+ * 
+ * La clase proporciona un constructor para instanciar el frame, además contiene
+ * métodos oyentes para cada botón presente en el menú.
+ * 
+ * @author Victor Humberto Encinas Guzman & Raul Alejandro Sauceda Rayos
  */
 public class frmMenuPrincipal extends javax.swing.JFrame {
 
@@ -14,7 +20,12 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
     private Cliente cliente;
     
     /**
-     * Creates new form frmMenuPrincipal
+     * Método constructor que permite inicializar el objeto frmMenuInicio.
+     * 
+     * @param datosConexion Objeto que permite obtener la conexión con las 
+     * interfaces DAO.
+     * @param cliente Objeto Cliente que contiene los datos del cliente que 
+     * ingresó al sistema.
      */
     public frmMenuPrincipal(DatosConexion datosConexion, Cliente cliente) {
         initComponents();
@@ -24,7 +35,6 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
         lblBienvenida.setText("Bienvenido/a "+cliente.getNombre());
     }
 
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -188,32 +198,68 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Método oyente que permite ver las cuentas de un cliente, dentro se pueden
+     * agregar o cancelar cuentas.
+     * 
+     * @param evt Evento de dar clic en el botón.
+     */
     private void btnCuentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCuentasActionPerformed
         dlgCuentas cuentas = new dlgCuentas(this, true, datosConexion, cliente);
         cuentas.setVisible(true);
     }//GEN-LAST:event_btnCuentasActionPerformed
 
+    /**
+     * Método oyente que permite crear un retiro sin cuenta, dentro se elige la
+     * cuenta y el monto deseado.
+     * 
+     * @param evt Evento de dar clic en el botón.
+     */
     private void btnRetiroSinCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetiroSinCuentaActionPerformed
         dlgRetiroSinCuenta retiroSinCuenta = new dlgRetiroSinCuenta(this, true, datosConexion, cliente);
         retiroSinCuenta.setVisible(true);
     }//GEN-LAST:event_btnRetiroSinCuentaActionPerformed
 
+    /**
+     * Método oyente que permite crear una transferencia, dentro se elige la
+     * cuenta, se agrega la cuenta destino y  el monto deseado.
+     * 
+     * @param evt Evento de dar clic en el botón.
+     */
     private void btnTransferenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransferenciaActionPerformed
         dlgTransferencia transferencia = new dlgTransferencia(this, true, datosConexion, cliente);
         transferencia.setVisible(true);
     }//GEN-LAST:event_btnTransferenciaActionPerformed
 
+    /**
+     * Método oyente que permite ver el historial de operaciones, dentro se 
+     * eligen las cuentas, los tipos de operaciones realizadas y el un filtro 
+     * para buscarlas por fechas.
+     * 
+     * @param evt Evento de dar clic en el botón.
+     */
     private void btnHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActionPerformed
         dlgHistorial historial = new dlgHistorial(this, true, datosConexion, cliente);
         historial.setVisible(true);
     }//GEN-LAST:event_btnHistorialActionPerformed
 
+    /**
+     * Método oyente que permite cerrar la sesión y redirige al menú de inicio
+     * 
+     * @param evt Evento de dar clic en el botón.
+     */
     private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
         dispose();
         frmMenuInicio menuInicio = new frmMenuInicio(datosConexion);
         menuInicio.setVisible(true);
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
+    /**
+     * Método oyente que permite actualizar los datos del cliente, excepto el 
+     * teléfono.
+     * 
+     * @param evt Evento de dar clic en el texto.
+     */
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
         dlgActualizarCliente actualizarCliente = new dlgActualizarCliente(this, true, datosConexion, cliente);
         actualizarCliente.setVisible(true);

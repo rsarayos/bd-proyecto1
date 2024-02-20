@@ -14,8 +14,13 @@ import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaExcepti
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.ValidacionDTOException;
 
 /**
- *
- * @author victo
+ * Representa el dialog Agregar cuenta, permite crear una nueva cuenta a partir
+ * de un número de cuenta generado automáticamente y de un monto inicial.
+ * 
+ * La clase proporciona un constructor para instanciar el dialog, además 
+ * contiene métodos oyentes para cada botón presente en el menú.
+ * 
+ * @author Victor Humberto Encinas Guzman & Raul Alejandro Sauceda Rayos
  */
 public class dlgAgregarCuenta extends javax.swing.JDialog {
 
@@ -24,7 +29,14 @@ public class dlgAgregarCuenta extends javax.swing.JDialog {
     private Validaciones validar;
 
     /**
-     * Creates new form dlgAgregarCuenta
+     * Método constructor que permite inicializar el diálogo para agregar una 
+     * cuenta a un cliente.
+     * 
+     * @param parent El Frame padre del diálogo.
+     * @param modal Indica si el diálogo es modal o no.
+     * @param datosConexion Objeto DatosConexion que contiene la información de 
+     * conexión a la base de datos.
+     * @param cliente El cliente a actualizar.
      */
     public dlgAgregarCuenta(java.awt.Frame parent, boolean modal, DatosConexion datosConexion, Cliente cliente) {
         super(parent, modal);
@@ -35,10 +47,29 @@ public class dlgAgregarCuenta extends javax.swing.JDialog {
         generarNumCuenta();
     }
 
+    /**
+     * Método que permite generar un número de cuenta y asignarlo al campo de 
+     * texto.
+     */
     private void generarNumCuenta() {
         GenerarNumeroCuenta gnc = new GenerarNumeroCuenta();
-        String numero = gnc.generarNumeroCuenta();
+        String numero;
 
+        do{
+            numero = gnc.generarNumeroCuenta(); 
+        }while(cuentaExistente(numero));
+        
+        txtCuenta.setText(numero);
+    }
+
+    /**
+     * Método que permite verificar si una cuenta con el número especificado ya 
+     * existe en la base de datos.
+     * 
+     * @param numero El número de cuenta a verificar.
+     * @return true si la cuenta existe, false de lo contrario.
+     */
+    private boolean cuentaExistente (String numero){
         List<Cuenta> listaCuentas = null;
 
         try {
@@ -48,16 +79,16 @@ public class dlgAgregarCuenta extends javax.swing.JDialog {
         }
 
         for (Cuenta cuenta : listaCuentas) {
-            if (!cuenta.getNumCuenta().equals(numero)) {
-                txtCuenta.setText(numero);
-                break;
-            } else {
-                generarNumCuenta();
-                break;
-            }
+            if (cuenta.getNumCuenta().equals(numero)) {
+                return true;
+            } 
         }
+        return false;
     }
-
+    
+    /**
+     * Método que permite agregar una nueva cuenta a un cliente.
+     */
     private void agregarCuenta() {
         String numCuenta = txtCuenta.getText();
 
@@ -217,10 +248,22 @@ public class dlgAgregarCuenta extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Método oyente que permite salir de la opción agregar cuenta y 
+     * redirige al diálogo de Cuentas.
+     * 
+     * @param evt Evento de dar clic en el botón.
+     */
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
+    /**
+     * Método oyente que permite confirmar el agregar una cuenta, además se 
+     * valida que el monto no esté en blanco.
+     * 
+     * @param evt Evento de dar clic en el botón.
+     */
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
         if (!txtMonto.getText().isBlank()) {
             agregarCuenta();

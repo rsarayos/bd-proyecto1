@@ -17,11 +17,15 @@ import org.itson.bdavanzadas.bancobddominio.Cuenta;
 import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
 import org.itson.bdavanzadas.bancobdpersistencia.dtos.CuentaNuevaDTO;
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
-import org.itson.bdavanzadas.bancobdpersistencia.excepciones.ValidacionDTOException;
 
 /**
- *
- * @author victo
+ * Representa el dialog Cuentas, permite mostrar los datos de las cuentas como 
+ * el número, el saldo y el estado.
+ * 
+ * La clase proporciona un constructor para instanciar el dialog, además 
+ * contiene métodos oyentes para cada botón presente en el menú.
+ * 
+ * @author Victor Humberto Encinas Guzman & Raul Alejandro Sauceda Rayos
  */
 public class dlgCuentas extends javax.swing.JDialog {
 
@@ -29,7 +33,14 @@ public class dlgCuentas extends javax.swing.JDialog {
     private Cliente cliente;
 
     /**
-     * Creates new form dlgCuentas
+     * Método constructor que permite inicializar el diálogo para mostrar las 
+     * cuentas de un usuario.
+     * 
+     * @param parent El Frame padre del diálogo.
+     * @param modal Indica si el diálogo es modal o no.
+     * @param datosConexion Objeto DatosConexion que contiene la información de 
+     * conexión a la base de datos.
+     * @param cliente El cliente a actualizar.
      */
     public dlgCuentas(java.awt.Frame parent, boolean modal, DatosConexion datosConexion, Cliente cliente) {
         super(parent, modal);
@@ -39,6 +50,10 @@ public class dlgCuentas extends javax.swing.JDialog {
         mostrarTabla();
     }
 
+    /**
+     * Método que permite mostrar la tabla que muestra las cuentas de un 
+     * cliente.
+     */
     private void mostrarTabla() {
         List<Cuenta> listaCuentas;
         try {
@@ -108,6 +123,15 @@ public class dlgCuentas extends javax.swing.JDialog {
         }
     }
 
+    /**
+     * Método que permite obtener la cuenta correspondiente a una fila de la 
+     * tabla.
+     * 
+     * @param fila El índice de la fila de la tabla.
+     * @return La cuenta asociada a la fila especificada.
+     * @throws PersistenciaException Si ocurre un error al consultar la base de 
+     * datos.
+     */
     private Cuenta obtenerFilaDeCuenta(int fila) throws PersistenciaException {
         List<Cuenta> listaCuentas = datosConexion.getCuentaDAO().consultarCuentasCliente(cliente.getTelefono());
         if (fila >= 0 && fila < listaCuentas.size()) {
@@ -223,12 +247,23 @@ public class dlgCuentas extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Método oyente que permite confirmar abrir el menú de agregar cuentas.
+     * 
+     * @param evt Evento de dar clic en el botón.
+     */
     private void btnAgregarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarCuentaActionPerformed
         dlgAgregarCuenta agregarCuenta = new dlgAgregarCuenta(null, true, datosConexion, cliente);
         dispose();
         agregarCuenta.setVisible(true);
     }//GEN-LAST:event_btnAgregarCuentaActionPerformed
 
+    /**
+     * Método oyente que permite salir de la opción agregar cuenta y 
+     * redirige al diálogo de Cuentas.
+     * 
+     * @param evt Evento de dar clic en el botón.
+     */
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         dispose();
     }//GEN-LAST:event_btnSalirActionPerformed

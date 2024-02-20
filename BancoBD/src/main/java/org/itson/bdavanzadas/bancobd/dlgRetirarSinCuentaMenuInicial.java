@@ -4,20 +4,31 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import org.itson.bdavanzadas.bancobddominio.Retiro;
-import org.itson.bdavanzadas.bancobdpersistencia.auxiliar.EncriptarContra;
 import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
 
 /**
- *
- * @author victo
+ * Representa el dialog Retirar sin cuenta desde menu de inicio, permite 
+ * retirar sin cuenta mediante un folio y una contraseña generadas por el 
+ * sistema.
+ * 
+ * La clase proporciona un constructor para instanciar el dialog, además 
+ * contiene métodos oyentes para cada botón presente en el menú.
+ * 
+ * @author Victor Humberto Encinas Guzman & Raul Alejandro Sauceda Rayos
  */
 public class dlgRetirarSinCuentaMenuInicial extends javax.swing.JDialog {
 
     private final DatosConexion datosConexion;
 
     /**
-     * Creates new form dlgRetirarSinCuentaMenuInicial
+     * Método constructor que permite inicializar el diálogo para mostrar las 
+     * cuentas de un usuario.
+     * 
+     * @param parent El Frame padre del diálogo.
+     * @param modal Indica si el diálogo es modal o no.
+     * @param datosConexion Objeto DatosConexion que contiene la información de 
+     * conexión a la base de datos.
      */
     public dlgRetirarSinCuentaMenuInicial(java.awt.Frame parent, boolean modal, DatosConexion datosConexion) {
         super(parent, modal);
@@ -25,6 +36,10 @@ public class dlgRetirarSinCuentaMenuInicial extends javax.swing.JDialog {
         this.datosConexion = datosConexion;
     }
 
+    /**
+     * Método que permite validar si el folio y la contraseña son correctos para
+     * que se lleva a cabo el retiro sin cuenta.
+     */
     private void realizarRetiro() {
         String folio = txtFolio.getText();
 
@@ -181,6 +196,12 @@ public class dlgRetirarSinCuentaMenuInicial extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Método oyente que permite confirmar el retiro sin cuenta, valida que 
+     * ningún campo esté en blanco.
+     * 
+     * @param evt Evento de dar clic en el botón.
+     */
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
         if (!txtFolio.getText().isBlank()) {
             if (!pswContrasenia.getText().isBlank()) {
@@ -189,6 +210,12 @@ public class dlgRetirarSinCuentaMenuInicial extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
+    /**
+     * Método oyente que permite salir de la opción retiro sin cuenta menu 
+     * inicial y redirige al menú de inicio.
+     * 
+     * @param evt Evento de dar clic en el botón.
+     */
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed

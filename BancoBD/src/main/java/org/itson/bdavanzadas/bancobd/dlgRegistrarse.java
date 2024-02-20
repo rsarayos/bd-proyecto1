@@ -12,15 +12,27 @@ import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaExcepti
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.ValidacionDTOException;
 
 /**
- *
- * @author victo
+ * Representa el dialog Registrarse, permite que un cliente ingrese sus datos
+ * personales como nombre completo, fecha de nacimiento, teléfono y su dirección
+ * , además se crea una contraseña.
+ * 
+ * La clase proporciona un constructor para instanciar el dialog, además 
+ * contiene métodos oyentes para cada botón presente en el menú.
+ * 
+ * @author Victor Humberto Encinas Guzman & Raul Alejandro Sauceda Rayos
  */
 public class dlgRegistrarse extends javax.swing.JDialog {
 
     private final DatosConexion datosConexion;
 
     /**
-     * Creates new form dlgRegistrarse
+     * Método constructor que permite inicializar el diálogo para registrar un
+     * cliente nuevo.
+     *
+     * @param parent El Frame padre del diálogo.
+     * @param modal Indica si el diálogo es modal o no.
+     * @param datosConexion Objeto DatosConexion que contiene la información de 
+     * conexión a la base de datos.
      */
     public dlgRegistrarse(java.awt.Frame parent, boolean modal, DatosConexion datosConexion) {
         super(parent, modal);
@@ -29,6 +41,11 @@ public class dlgRegistrarse extends javax.swing.JDialog {
 
     }
 
+    /**
+     * Método que permite registrar un cliente nuevo a la base de datos.
+     * @throws java.text.ParseException Si ocurre un error al convertir la fecha
+     * de nacimiento.
+     */
     private void registrar() throws java.text.ParseException {
         String telefono = txtTelefono.getText();
         String nombres = txtNombres.getText();
@@ -253,6 +270,12 @@ public class dlgRegistrarse extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Método oyente que permite confirmar el registro de un nuevo cliente, 
+     * además válida que no estén en blanco cada uno de los campos.
+     * 
+     * @param evt Evento de dar clic en el botón.
+     */
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         if (!txtNombres.getText().isBlank()) {
             if (!txtApellidoPaterno.getText().isBlank()) {
@@ -305,6 +328,12 @@ public class dlgRegistrarse extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_btnAceptarActionPerformed
 
+    /**
+     * Método oyente que permite salir de la opción registrar cliente y 
+     * redirige al menú principal.
+     * 
+     * @param evt Evento de dar clic en el botón.
+     */
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed

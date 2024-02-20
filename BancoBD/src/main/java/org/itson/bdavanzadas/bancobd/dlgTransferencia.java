@@ -10,11 +10,16 @@ import org.itson.bdavanzadas.bancobddominio.Transferencia;
 import org.itson.bdavanzadas.bancobdpersistencia.auxiliar.Validaciones;
 import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
-import org.itson.bdavanzadas.bancobdpersistencia.excepciones.ValidacionDTOException;
 
 /**
+ * Representa el dialog Transferencia que permite realizar una transferencia
+ * entre las cuentas que pertenezcan a un cliente a una cuenta que exista dentro
+ * del banco y el monto a transferir.
  *
- * @author victo
+ * La clase proporciona un constructor para instanciar el dialog, además
+ * contiene métodos oyentes para cada botón presente en el menú.
+ *
+ * @author Victor Humberto Encinas Guzman & Raul Alejandro Sauceda Rayos
  */
 public class dlgTransferencia extends javax.swing.JDialog {
 
@@ -23,7 +28,13 @@ public class dlgTransferencia extends javax.swing.JDialog {
     private Validaciones validar;
 
     /**
-     * Creates new form dlgTransferencia
+     * Método constructor que permite inicializar el diálogo para realizar una
+     * transferencia entre cuentas.
+     *
+     * @param parent El frame padre del diálogo.
+     * @param modal Indica si el diálogo es modal o no.
+     * @param datosConexion El objeto de conexión a la base de datos.
+     * @param cliente El cliente que realiza la transferencia.
      */
     public dlgTransferencia(java.awt.Frame parent, boolean modal, DatosConexion datosConexion, Cliente cliente) {
         super(parent, modal);
@@ -34,22 +45,27 @@ public class dlgTransferencia extends javax.swing.JDialog {
         mostrarCuentas();
     }
 
+    /**
+     * Método que permite mostrar las cuentas disponibles para realizar la
+     * transferencia dentro de un comboBox.
+     */
     private void mostrarCuentas() {
-
         List<Cuenta> listaCuentasRetiro = null;
         try {
             listaCuentasRetiro = datosConexion.getCuentaDAO().consultarCuentasCliente(cliente.getTelefono());
             for (Cuenta cuenta : listaCuentasRetiro) {
-                if (cuenta.isEstado()==true) {
+                if (cuenta.isEstado() == true) {
                     cbxCuentaRetiro.addItem(cuenta.getNumCuenta());
                 }
             }
         } catch (PersistenciaException ex) {
             Logger.getLogger(dlgTransferencia.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
+    /**
+     * Método que permite realizar la transferencia entre dos cuentas.
+     */
     private void transferencia() {
 
         List<Cuenta> listaCuentas = null;
@@ -70,7 +86,6 @@ public class dlgTransferencia extends javax.swing.JDialog {
         }
 
         String cuentaRetiro = String.valueOf(cbxCuentaRetiro.getSelectedItem());
-
         if (cuentaExistente) {
             if (validar.validaCantidad(txtMonto.getText())) {
                 float monto = Float.parseFloat(txtMonto.getText());
@@ -81,9 +96,12 @@ public class dlgTransferencia extends javax.swing.JDialog {
                     } catch (PersistenciaException ex) {
                         Logger.getLogger(dlgTransferencia.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    String resultado = "Folio Transferencia: " + transExito.getIdTransferencia();
-                    JOptionPane.showMessageDialog(this, "Tranferencia realizada con éxito\n" + resultado, "Transferencia Exitosa", JOptionPane.INFORMATION_MESSAGE);
-                    dispose();
+                    if (transExito != null) {
+                        String resultado = "Folio Transferencia: " + transExito.getIdTransferencia();
+                        JOptionPane.showMessageDialog(this, "Tranferencia realizada con éxito\n" + resultado, "Transferencia Exitosa", JOptionPane.INFORMATION_MESSAGE);
+                        dispose();
+                    } else {
+                    }
                 } else {
                     JOptionPane.showMessageDialog(this, "Ingrese un monto correcto", "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -241,6 +259,12 @@ public class dlgTransferencia extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Método oyente que permite confirmar la transferencia, valida que los
+     * campos de texto no estén vacíos.
+     *
+     * @param evt Evento de dar clic en el botón.
+     */
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
         if (!String.valueOf(cbxCuentaRetiro.getSelectedItem()).equals(txtCuentaDestino.getText())) {
             if (!txtCuentaDestino.getText().isBlank()) {
@@ -257,6 +281,12 @@ public class dlgTransferencia extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
+    /**
+     * Método oyente que permite salir de la opción transferencia y redirige al
+     * menú principal.
+     *
+     * @param evt Evento de dar clic en el botón.
+     */
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed

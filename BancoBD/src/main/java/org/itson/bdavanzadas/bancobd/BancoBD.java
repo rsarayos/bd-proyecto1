@@ -17,8 +17,14 @@ import org.itson.bdavanzadas.bancobdpersistencia.daos.TransaccionDAO;
 import org.itson.bdavanzadas.bancobdpersistencia.daos.TransferenciaDAO;
 
 /**
- *
- * @author alex_
+ * Representa la clase main, desde aquí se implementa la conexión con la base de
+ * datos utilizada, se crean las conexiones con cada una de las entidades y son
+ * guardadas en un objeto de tipo datosConexion, además se llama al objeto del
+ * frame de Menu inicio y lo hace visible para comenzar con la navegación del
+ * cliente.
+ * 
+ * 
+ * @author Victor Humberto Encinas Guzman & Raul Alejandro Sauceda Rayos
  */
 public class BancoBD {
 

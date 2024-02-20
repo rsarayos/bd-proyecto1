@@ -8,15 +8,23 @@ import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
 
 /**
- *
- * @author victo
+ * Representa el frame MenuInicio que muestra el menú para iniciar sesión, 
+ * registrar un usuario o realizar el retiro sin cuenta.
+ * 
+ * La clase proporciona un constructor para instanciar el frame, además contiene
+ * métodos oyentes para cada botón presente en el menú.
+ * 
+ * @author Victor Humberto Encinas Guzman & Raul Alejandro Sauceda Rayos
  */
 public class frmMenuInicio extends javax.swing.JFrame {
 
     private final DatosConexion datosConexion;
 
     /**
-     * Creates new form MenuPrincipal
+     * Método constructor que permite inicializar el objeto frmMenuInicio.
+     * 
+     * @param datosConexion Objeto que permite obtener la conexión con las 
+     * interfaces DAO.
      */
     public frmMenuInicio(DatosConexion datosConexion) {
         initComponents();
@@ -193,6 +201,13 @@ public class frmMenuInicio extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Método oyente que permite iniciar sesión a un cliente con ayuda del 
+     * teléfono y la contraseña. En caso de ser válido se abre el 
+     * frmMenuPrincipal.
+     * 
+     * @param evt Evento de dar clic en el botón.
+     */
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
         if (!txtTelefono.getText().isBlank()) {
             if (!String.valueOf(pswContrasenia.getPassword()).isBlank()) {
@@ -208,7 +223,6 @@ public class frmMenuInicio extends javax.swing.JFrame {
                 if (cliente != null) {
                     if (cliente.getTelefono().equals(telefono)) {
                         if (cliente.getPassword().equals(contrasenia)) {
-                            System.out.println(cliente);
                             frmMenuPrincipal menuPrincipal = new frmMenuPrincipal(datosConexion, cliente);
                             menuPrincipal.setVisible(true);
                             dispose();
@@ -230,16 +244,31 @@ public class frmMenuInicio extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
+    /**
+     * Método oyente que permite abrir el diálogo de retiro sin cuenta.
+     * 
+     * @param evt Evento de dar clic en el botón.
+     */
     private void btnRetiroSinCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetiroSinCuentaActionPerformed
         dlgRetirarSinCuentaMenuInicial retiroSinCuenta = new dlgRetirarSinCuentaMenuInicial(this, true, datosConexion);
         retiroSinCuenta.setVisible(true);
     }//GEN-LAST:event_btnRetiroSinCuentaActionPerformed
 
+    /**
+     * Método oyente que permite abrir el diálogo de registrar un cliente.
+     * 
+     * @param evt Evento de dar clic en el botón.
+     */
     private void btnRegistrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarseActionPerformed
         dlgRegistrarse registrarse = new dlgRegistrarse(this, true, datosConexion);
         registrarse.setVisible(true);
     }//GEN-LAST:event_btnRegistrarseActionPerformed
 
+    /**
+     * Método oyente que permite salir de la aplicación.
+     * 
+     * @param evt Evento de dar clic en el botón.
+     */
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         dispose();
     }//GEN-LAST:event_btnSalirActionPerformed

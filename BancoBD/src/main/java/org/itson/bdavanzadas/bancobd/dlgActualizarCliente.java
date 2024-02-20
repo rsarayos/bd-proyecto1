@@ -12,8 +12,13 @@ import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaExcepti
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.ValidacionDTOException;
 
 /**
- *
- * @author victo
+ * Representa el dialog Actualizar cliente, permite actualizar los datos del 
+ * cliente excepto el número de teléfono.
+ * 
+ * La clase proporciona un constructor para instanciar el dialog, además 
+ * contiene métodos oyentes para cada botón presente en el menú.
+ * 
+ * @author Victor Humberto Encinas Guzman & Raul Alejandro Sauceda Rayos
  */
 public class dlgActualizarCliente extends javax.swing.JDialog {
 
@@ -21,7 +26,14 @@ public class dlgActualizarCliente extends javax.swing.JDialog {
     private Cliente cliente;
 
     /**
-     * Creates new form dlgActualizarCliente
+     * Método constructor que permite inicializar el diálogo para actualizar los
+     * datos de un cliente.
+     * 
+     * @param parent El Frame padre del diálogo.
+     * @param modal Indica si el diálogo es modal o no.
+     * @param datosConexion Objeto DatosConexion que contiene la información de 
+     * conexión a la base de datos.
+     * @param cliente El cliente a actualizar.
      */
     public dlgActualizarCliente(java.awt.Frame parent, boolean modal, DatosConexion datosConexion, Cliente cliente) {
         super(parent, modal);
@@ -57,6 +69,10 @@ public class dlgActualizarCliente extends javax.swing.JDialog {
 
     }
 
+    /**
+     * Método que permite actualizar los datos de un cliente en la base de 
+     * datos, excepto el número de teléfono.
+     */
     private void actualizar() {
         String telefono = txtTelefono.getText();
         String nombres = txtNombres.getText();
@@ -286,6 +302,12 @@ public class dlgActualizarCliente extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Método oyente que permite confirmar la actualización de los datos de un
+     * cliente, además válida que no estén en blanco cada uno de los campos.
+     * 
+     * @param evt Evento de dar clic en el botón.
+     */
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         if (!txtNombres.getText().isBlank()) {
             if (!txtApellidoPaterno.getText().isBlank()) {
@@ -334,6 +356,12 @@ public class dlgActualizarCliente extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_btnAceptarActionPerformed
 
+    /**
+     * Método oyente que permite salir de la opción actualizar cliente y 
+     * redirige al menú principal.
+     * 
+     * @param evt Evento de dar clic en el botón.
+     */
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed

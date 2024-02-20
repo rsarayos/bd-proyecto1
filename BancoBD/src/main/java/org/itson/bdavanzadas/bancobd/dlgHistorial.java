@@ -11,7 +11,6 @@ import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
-import org.itson.bdavanzadas.bancobd.dlgTransferencia;
 import org.itson.bdavanzadas.bancobddominio.Cliente;
 import org.itson.bdavanzadas.bancobddominio.Cuenta;
 import org.itson.bdavanzadas.bancobddominio.Retiro;
@@ -21,8 +20,15 @@ import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
 
 /**
- *
- * @author victo
+ * Representa el dialog Historial que permite mostrar las transacciones 
+ * realizadas por cada cuenta de un cliente, permite ver las transacciones, los
+ * retiros o las dos juntas, además se pueden filtrar las transacciones por un 
+ * periodo de fechas.
+ * 
+ * La clase proporciona un constructor para instanciar el dialog, además 
+ * contiene métodos oyentes para cada botón presente en el menú.
+ * 
+ * @author Victor Humberto Encinas Guzman & Raul Alejandro Sauceda Rayos
  */
 public class dlgHistorial extends javax.swing.JDialog {
 
@@ -33,7 +39,15 @@ public class dlgHistorial extends javax.swing.JDialog {
     private ButtonGroup seleccionTipo;
 
     /**
-     * Creates new form dlgHistorial
+     * Método constructor que permite inicializar el diálogo para ver el 
+     * historial de transacciones.
+     * 
+     * @param parent El Frame padre del diálogo.
+     * @param modal Indica si el diálogo es modal o no.
+     * @param datosConexion Objeto DatosConexion que contiene la información de 
+     * conexión a la base de datos.
+     * @param cliente El cliente del cual se mostrará el historial de 
+     * transacciones.
      */
     public dlgHistorial(java.awt.Frame parent, boolean modal, DatosConexion datosConexion, Cliente cliente) {
         super(parent, modal);
@@ -52,6 +66,10 @@ public class dlgHistorial extends javax.swing.JDialog {
 
     }
 
+    /**
+     * Método que permite mostrar las cuentas disponibles para realizar la 
+     * transferencia dentro de un comboBox.
+     */
     private void mostrarCuentas() {
         List<Cuenta> listaCuentasRetiro = null;
         try {
@@ -66,6 +84,12 @@ public class dlgHistorial extends javax.swing.JDialog {
         }
     }
 
+    /**
+     * Método que permite mostrar la tabla de todas las transacciones realizadas
+     * en una cuenta. 
+     * 
+     * @param cuenta Cuenta de la cual será mostrado el historial. 
+     */
     private void mostrarTablaTodas(Cuenta cuenta) {
         List<Transaccion> listaTransacciones;
         List<Transferencia> listaTransferencias;
@@ -82,6 +106,12 @@ public class dlgHistorial extends javax.swing.JDialog {
         }
     }
 
+    /**
+     * Método que permite mostrar la tabla de todas las transacciones realizadas
+     * en una cuenta en un periodo de fechas. 
+     * 
+     * @param cuenta Cuenta de la cual será mostrado el historial. 
+     */
     private void mostrarTablaTodasPorFechas(Cuenta cuenta) {
         List<Transaccion> listaTransacciones;
         List<Transferencia> listaTransferencias;
@@ -101,6 +131,13 @@ public class dlgHistorial extends javax.swing.JDialog {
         }
     }
 
+    /**
+     * Método que permite crear la tabla que muestra todas las transacciones. 
+     * 
+     * @param listaTransacciones Lista con todas las transacciones realizadas.
+     * @param listaTransferencias Lista con todas la transferencias realizadas.
+     * @param listaRetiros Lista con todos los retiros realizados.
+     */
     private void crearTablaTodas(List<Transaccion> listaTransacciones, List<Transferencia> listaTransferencias, List<Retiro> listaRetiros) {
         DefaultTableModel modelo = new DefaultTableModel();
         modelo.addColumn("CUENTA DESTINO");
@@ -145,6 +182,12 @@ public class dlgHistorial extends javax.swing.JDialog {
         header.setFont(new Font("Leelawadee UI", Font.BOLD, 12));
     }
 
+    /**
+     * Método que permite mostrar la tabla de todas las transferencias
+     * realizadas en una cuenta. 
+     * 
+     * @param cuenta Cuenta de la cual será mostrado el historial. 
+     */
     private void mostrarTablaTransferencias(Cuenta cuenta) {
         List<Transferencia> listaTransferencias;
         try {
@@ -155,6 +198,12 @@ public class dlgHistorial extends javax.swing.JDialog {
         }
     }
 
+    /**
+     * Método que permite mostrar la tabla de todas las transferencias 
+     * realizadas en una cuenta en un periodo de fechas. 
+     * 
+     * @param cuenta Cuenta de la cual será mostrado el historial. 
+     */
     private void mostrarTablaTransferenciasPorFechas(Cuenta cuenta) {
         List<Transferencia> listaTransferencias;
 
@@ -169,6 +218,11 @@ public class dlgHistorial extends javax.swing.JDialog {
         }
     }
 
+    /**
+     * Método que permite crear la tabla que muestra todas las transferencias. 
+     * 
+     * @param listaTransferencias Lista con todas la transferencias realizadas.
+     */
     private void crearTablaTransferencias(List<Transferencia> listaTransferencias) {
 
         DefaultTableModel modelo = new DefaultTableModel();
@@ -205,6 +259,12 @@ public class dlgHistorial extends javax.swing.JDialog {
 
     }
 
+    /**
+     * Método que permite mostrar la tabla de todos los retiros realizadas en 
+     * una cuenta.  
+     * 
+     * @param cuenta Cuenta de la cual será mostrado el historial. 
+     */
     private void mostrarTablaRetiros(Cuenta cuenta) {
         List<Retiro> listaRetiros;
         List<Transaccion> listaTransacciones;
@@ -217,6 +277,12 @@ public class dlgHistorial extends javax.swing.JDialog {
         }
     }
 
+    /**
+     * Método que permite mostrar la tabla de todos los retiros realizadas en 
+     * una cuenta en un periodo de fechas. 
+     * 
+     * @param cuenta Cuenta de la cual será mostrado el historial. 
+     */
     private void mostrarTablaRetirosPorFechas(Cuenta cuenta) {
         List<Retiro> listaRetiros;
         List<Transaccion> listaTransacciones;
@@ -233,6 +299,12 @@ public class dlgHistorial extends javax.swing.JDialog {
         }
     }
 
+    /**
+     * Método que permite crear la tabla que muestra todos los retiros. 
+     * 
+     * @param listaTransacciones Lista con todas las transacciones realizadas.
+     * @param listaRetiros Lista con todos los retiros realizados.
+     */
     private void crearTablaRetiros(List<Transaccion> listaTransacciones, List<Retiro> listaRetiros) {
         DefaultTableModel modelo = new DefaultTableModel();
         modelo.addColumn("CANTIDAD");
@@ -484,10 +556,22 @@ public class dlgHistorial extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Método oyente que permite salir de la opción historial y redirige al
+     * menú principal.
+     * 
+     * @param evt Evento de dar clic en el botón.
+     */
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         dispose();
     }//GEN-LAST:event_btnSalirActionPerformed
 
+    /**
+     * Método oyente que permite refrescar el historial, valida que radio button
+     * esta seleccionado para saber que opción mostrar.
+     * 
+     * @param evt Evento de dar clic en el botón.
+     */
     private void btnRefrescarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefrescarActionPerformed
         try {
             cuenta = datosConexion.getCuentaDAO().obtener(String.valueOf(cbxCuenta.getSelectedItem()));
