@@ -41,6 +41,9 @@ public class ClientesDAO implements IClientesDAO {
         this.encriptador = new EncriptarContra();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Cliente agregar(ClienteNuevoDTO clienteNuevo) throws PersistenciaException {
         String setenciaSQL = """
@@ -75,6 +78,9 @@ public class ClientesDAO implements IClientesDAO {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Cliente actualizar(ClienteNuevoDTO clienteNuevo, String telefono) throws PersistenciaException {
         String setenciaSQL = """
@@ -109,6 +115,9 @@ public class ClientesDAO implements IClientesDAO {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Cliente obtener(String telefono) throws PersistenciaException {
         String setenciaSQL = """
@@ -156,6 +165,9 @@ public class ClientesDAO implements IClientesDAO {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Cliente> consultar() throws PersistenciaException {
         String setenciaSQL = """
