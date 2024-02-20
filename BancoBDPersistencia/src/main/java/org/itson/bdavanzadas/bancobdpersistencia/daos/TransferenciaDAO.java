@@ -246,7 +246,7 @@ public class TransferenciaDAO implements ITransferenciaDAO {
             if (resultado) {
                 return this.obtener(idTransferencia);
             } else {
-                throw new PersistenciaException("No se pudo realizar la transferencia");
+                return null;
             }
         } catch (SQLException ex) {
             Logger.getLogger(ClientesDAO.class.getName()).log(Level.SEVERE, "No se pudo procesar la transferencia", ex);

@@ -4,6 +4,8 @@
  */
 package org.itson.bdavanzadas.bancobdpersistencia.dtos;
 
+import org.itson.bdavanzadas.bancobdpersistencia.excepciones.ValidacionDTOException;
+
 /**
  * La clase RetiroNuevoDTO representa un objeto de transferencia de datos (DTO) para la creación de nuevos Retiros.
  * 
@@ -89,6 +91,25 @@ public class RetiroNuevoDTO extends TransaccionNuevaDTO{
      */
     public void setEstado(int estado) {
         this.estado = estado;
+    }
+    
+    /**
+     * Realiza validaciones en los datos del retiro y devuelve true si los datos son válidos.
+     *
+     * @return true si los datos del retiro son válidos, false de lo contrario.
+     * @throws ValidacionDTOException Si alguno de los campos del cliente no es válido.
+     */
+    @Override
+    public boolean esValido() throws ValidacionDTOException {
+        if (this.folioRetiro == null 
+            || this.folioRetiro.isBlank()) {
+            throw new ValidacionDTOException("folio retiro invalido");
+        }
+        if (this.contraseniaRetiro == null 
+            || this.contraseniaRetiro.isBlank()) {
+            throw new ValidacionDTOException("contraseña de retiro invalida");
+        }
+        return true;
     }
     
 }
