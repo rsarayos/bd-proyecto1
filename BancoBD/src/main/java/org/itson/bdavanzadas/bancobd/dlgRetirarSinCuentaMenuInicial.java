@@ -1,7 +1,12 @@
-
 package org.itson.bdavanzadas.bancobd;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import org.itson.bdavanzadas.bancobddominio.Retiro;
+import org.itson.bdavanzadas.bancobdpersistencia.auxiliar.EncriptarContra;
 import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
+import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
 
 /**
  *
@@ -10,26 +15,45 @@ import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
 public class dlgRetirarSinCuentaMenuInicial extends javax.swing.JDialog {
 
     private final DatosConexion datosConexion;
-    
-    
+
     /**
      * Creates new form dlgRetirarSinCuentaMenuInicial
      */
     public dlgRetirarSinCuentaMenuInicial(java.awt.Frame parent, boolean modal, DatosConexion datosConexion) {
         super(parent, modal);
         initComponents();
-        this.datosConexion=datosConexion;
+        this.datosConexion = datosConexion;
     }
 
-    private void realizarRetiro(){
-    
+    private void realizarRetiro() {
         String folio = txtFolio.getText();
-        
+
         char[] contraseniaArray = pswContrasenia.getPassword();
         String contrasenia = new String(contraseniaArray);
+
+        try {
+            Retiro retiro = datosConexion.getRetiroDAO().obtenerPorFolio(folio);
+            if (retiro.getFolioRetiro().equals(folio)) {
+                if (retiro.getContraseniaRetiro().equals(contrasenia)) {
+                    Retiro retiroCompleto = datosConexion.getRetiroDAO().realizarRetiro(retiro.getIdRetiro());
+                    if (retiroCompleto != null) {
+                        JOptionPane.showMessageDialog(this, "Retiro exitoso", "Retiro sin cuenta", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(this, "No fue posible hacer el retiro", "Retiro sin cuenta", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "La contraseña no es correcta", "Retiro sin cuenta", JOptionPane.INFORMATION_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "El folio es incorrecto", "Retiro sin cuenta", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(dlgRetirarSinCuentaMenuInicial.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "No fue posible hacer el retiro", "Retiro sin cuenta", JOptionPane.INFORMATION_MESSAGE);
+        }
+        dispose();
     }
-    
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -158,7 +182,11 @@ public class dlgRetirarSinCuentaMenuInicial extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-
+        if (!txtFolio.getText().isBlank()) {
+            if (!pswContrasenia.getText().isBlank()) {
+                realizarRetiro();
+            }
+        }
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed

@@ -2,7 +2,9 @@ package org.itson.bdavanzadas.bancobd;
 
 import java.awt.Font;
 import java.sql.Timestamp;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ButtonGroup;
@@ -44,8 +46,8 @@ public class dlgHistorial extends javax.swing.JDialog {
         seleccionTipo.add(rbtnTransferencia);
         seleccionTipo.add(rbtnRetiro);
         seleccionTipo.add(rbtnTodas);
-        
-        ButtonGroup seleccionFecha= new ButtonGroup();
+
+        ButtonGroup seleccionFecha = new ButtonGroup();
         seleccionFecha.add(rbtnFechas);
 
     }
@@ -55,7 +57,9 @@ public class dlgHistorial extends javax.swing.JDialog {
         try {
             listaCuentasRetiro = datosConexion.getCuentaDAO().consultarCuentasCliente(cliente.getTelefono());
             for (Cuenta cuentaL : listaCuentasRetiro) {
-                cbxCuenta.addItem(cuentaL.getNumCuenta());
+                if (cuentaL.isEstado()==true) {
+                    cbxCuenta.addItem(cuentaL.getNumCuenta());
+                }
             }
         } catch (PersistenciaException ex) {
             Logger.getLogger(dlgTransferencia.class.getName()).log(Level.SEVERE, null, ex);
@@ -105,20 +109,28 @@ public class dlgHistorial extends javax.swing.JDialog {
         modelo.addColumn("TIPO");
         modelo.addColumn("ESTADO");
 
+        Locale mexico = new Locale("es", "MX");
+        NumberFormat formatoPesos = NumberFormat.getCurrencyInstance(mexico);
+
         Object[] fila = new Object[5];
         for (Transaccion transaccion : listaTransacciones) {
             for (Transferencia transferencia : listaTransferencias) {
-                fila[0] = transferencia.getCuentaDestino();
                 if (transaccion.getIdTransaccion() == (transferencia.getIdTransaccion())) {
                     fila[3] = "Transferencia";
+                    fila[0] = transferencia.getCuentaDestino();
                 }
             }
             for (Retiro retiro : listaRetiros) {
                 if (transaccion.getIdTransaccion() == (retiro.getIdTransaccion())) {
                     fila[3] = "Retiro";
+                    fila[0] = "";
                 }
             }
-            fila[1] = transaccion.getCantidad();
+
+            float cantidad = transaccion.getCantidad();
+            String cantidadFormateada = formatoPesos.format(cantidad);
+            fila[1] = cantidadFormateada;
+
             fila[2] = transaccion.getFecha();
             fila[4] = transaccion.getEstadoTransaccion();
 
@@ -166,10 +178,17 @@ public class dlgHistorial extends javax.swing.JDialog {
         modelo.addColumn("TIPO");
         modelo.addColumn("ESTADO");
 
+        Locale mexico = new Locale("es", "MX");
+        NumberFormat formatoPesos = NumberFormat.getCurrencyInstance(mexico);
+
         Object[] fila = new Object[5];
         for (Transferencia transferencia : listaTransferencias) {
             fila[0] = transferencia.getCuentaDestino();
-            fila[1] = transferencia.getCantidad();
+
+            float cantidad = transferencia.getCantidad();
+            String cantidadFormateada = formatoPesos.format(cantidad);
+            fila[1] = cantidadFormateada;
+
             fila[2] = transferencia.getFecha();
             fila[3] = "Transferencia";
             fila[4] = "Completado";
@@ -216,30 +235,37 @@ public class dlgHistorial extends javax.swing.JDialog {
 
     private void crearTablaRetiros(List<Transaccion> listaTransacciones, List<Retiro> listaRetiros) {
         DefaultTableModel modelo = new DefaultTableModel();
-        modelo.addColumn("CUENTA");
         modelo.addColumn("CANTIDAD");
         modelo.addColumn("FECHA");
         modelo.addColumn("TIPO");
         modelo.addColumn("ESTADO");
 
-        Object[] fila = new Object[5];
+        Locale mexico = new Locale("es", "MX");
+        NumberFormat formatoPesos = NumberFormat.getCurrencyInstance(mexico);
+
         for (Transaccion transaccion : listaTransacciones) {
             for (Retiro retiro : listaRetiros) {
-                if (transaccion.getIdTransaccion() == (retiro.getIdTransaccion())) {
-                    fila[0] = transaccion.getNumCuenta();
-                }
-                fila[1] = retiro.getCantidad();
-                fila[2] = retiro.getFecha();
-                fila[3] = "Retiro";
-                if (retiro.getEstado() == 1) {
-                    fila[4] = "No cobrado";
-                } else if (retiro.getEstado() == 2) {
-                    fila[4] = "Cobrado";
-                } else if (retiro.getEstado() == 3) {
-                    fila[4] = "Cancelado";
-                }
+                if (transaccion.getIdTransaccion() == retiro.getIdTransaccion()) {
+                    Object[] fila = new Object[4];
 
-                modelo.addRow(fila);
+                    float cantidad = retiro.getCantidad();
+                    String cantidadFormateada = formatoPesos.format(cantidad);
+                    fila[0] = cantidadFormateada;
+
+                    fila[1] = retiro.getFecha();
+                    fila[2] = "Retiro";
+
+                    if (retiro.getEstado() == 1) {
+                        fila[3] = "No cobrado";
+                    } else if (retiro.getEstado() == 2) {
+                        fila[3] = "Cobrado";
+                    } else if (retiro.getEstado() == 3) {
+                        fila[3] = "Cancelado";
+                    }
+
+                    modelo.addRow(fila);
+                    break;
+                }
             }
         }
 

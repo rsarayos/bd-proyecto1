@@ -19,7 +19,6 @@ public class dlgActualizarCliente extends javax.swing.JDialog {
 
     private final DatosConexion datosConexion;
     private Cliente cliente;
- 
 
     /**
      * Creates new form dlgActualizarCliente
@@ -31,7 +30,7 @@ public class dlgActualizarCliente extends javax.swing.JDialog {
         this.cliente = cliente;
 
         System.out.println(cliente);
-        
+
         try {
             Cliente clienteActu = datosConexion.getClientesDAO().obtener(cliente.getTelefono());
             System.out.println(clienteActu);
@@ -65,7 +64,7 @@ public class dlgActualizarCliente extends javax.swing.JDialog {
         String apellidoMaterno = txtApellidoMaterno.getText();
         java.util.Date fechaSeleccionada = jDateFechaNacimiento.getDate();
         java.sql.Date fechaNacimiento = new java.sql.Date(fechaSeleccionada.getTime());
-        
+
         String calle = txtCalle.getText();
         String numero = txtNumero.getText();
         String colonia = txtColonia.getText();
@@ -91,23 +90,25 @@ public class dlgActualizarCliente extends javax.swing.JDialog {
         clienteActualizado.setFechaNacimiento(fechaNacimiento);
         clienteActualizado.setPassword(contrasenia);
 
+        Cliente clienteActualizadoNuevo = null;
         try {
             direccionActualizada.esValido();
             Direccion direccionActu = this.datosConexion.getDireccionDAO().actualizar(direccionActualizada);
             clienteActualizado.setIdDireccion(direccionActu.getIdDireccion());
             clienteActualizado.esValido();
-            Cliente clienteActualizadoNuevo = this.datosConexion.getClientesDAO().actualizar(clienteActualizado, telefono);
-            
-            if(clienteActualizadoNuevo != null){
-            JOptionPane.showMessageDialog(this, "Se modificó al cliente exitosamente", "Cliente modificado", JOptionPane.INFORMATION_MESSAGE);
-            dispose();
+            clienteActualizadoNuevo = this.datosConexion.getClientesDAO().actualizar(clienteActualizado, telefono);
+
+            if (clienteActualizadoNuevo != null) {
+                JOptionPane.showMessageDialog(this, "Se modificó al cliente exitosamente", "Cliente modificado", JOptionPane.INFORMATION_MESSAGE);
+                dispose();
             }
         } catch (ValidacionDTOException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de validación", JOptionPane.ERROR_MESSAGE);
         } catch (PersistenciaException ex) {
             JOptionPane.showMessageDialog(this, "No fue posible actualizar al cliente", "Error de almacenamiento", JOptionPane.ERROR_MESSAGE);
         }
-
+        frmMenuPrincipal menuPrincipal = new frmMenuPrincipal(datosConexion, clienteActualizadoNuevo);
+        menuPrincipal.setVisible(true);
     }
 
     /**

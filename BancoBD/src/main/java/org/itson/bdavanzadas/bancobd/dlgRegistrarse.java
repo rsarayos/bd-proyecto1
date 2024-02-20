@@ -79,20 +79,6 @@ public class dlgRegistrarse extends javax.swing.JDialog {
         }
     }
 
-    private void limpiarDatos() {
-        txtApellidoMaterno.setText("");
-        txtApellidoPaterno.setText("");
-        txtCalle.setText("");
-        txtCiudad.setText("");
-        txtCodigoPostal.setText("");
-        txtColonia.setText("");
-        txtNombres.setText("");
-        txtNumero.setText("");
-        txtTelefono.setText("");
-        pswContrasenia.setText("");
-        jDateFechaNacimiento.setDate(null);
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

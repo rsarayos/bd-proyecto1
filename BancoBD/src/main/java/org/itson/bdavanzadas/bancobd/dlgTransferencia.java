@@ -40,7 +40,9 @@ public class dlgTransferencia extends javax.swing.JDialog {
         try {
             listaCuentasRetiro = datosConexion.getCuentaDAO().consultarCuentasCliente(cliente.getTelefono());
             for (Cuenta cuenta : listaCuentasRetiro) {
-                cbxCuentaRetiro.addItem(cuenta.getNumCuenta());
+                if (cuenta.isEstado()==true) {
+                    cbxCuentaRetiro.addItem(cuenta.getNumCuenta());
+                }
             }
         } catch (PersistenciaException ex) {
             Logger.getLogger(dlgTransferencia.class.getName()).log(Level.SEVERE, null, ex);
@@ -60,7 +62,7 @@ public class dlgTransferencia extends javax.swing.JDialog {
         boolean cuentaExistente = false;
         for (Cuenta cuenta : listaCuentas) {
             if (validar.validaCuenta(txtCuentaDestino.getText())) {
-                if (cuenta.getNumCuenta().equals(txtCuentaDestino.getText())) {
+                if (cuenta.getNumCuenta().equals(txtCuentaDestino.getText()) && cuenta.isEstado()) {
                     cuentaDestino = txtCuentaDestino.getText();
                     cuentaExistente = true;
                 }

@@ -109,7 +109,6 @@ public class RetiroDAO implements IRetiroDAO {
     public Retiro obtener(int idRetiro) throws PersistenciaException {
         String sentenciaSQL = """
                              SELECT *
-                             SELECT idRetiro, folioRetiro, contraseniaRetiro, estado, idTransaccion
                              FROM retiros
                              INNER JOIN transacciones ON retiros.idTransaccion = transacciones.idTransaccion
                              WHERE idRetiro=?;
@@ -155,7 +154,6 @@ public class RetiroDAO implements IRetiroDAO {
     public Retiro obtenerPorFolio(String folioRetiro) throws PersistenciaException {
         String sentenciaSQL = """
                              SELECT *
-                             SELECT idRetiro, folioRetiro, contraseniaRetiro, estado, idTransaccion
                              FROM retiros
                              INNER JOIN transacciones ON retiros.idTransaccion = transacciones.idTransaccion
                              WHERE folioRetiro=?;

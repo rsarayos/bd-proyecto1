@@ -60,27 +60,27 @@ public class dlgAgregarCuenta extends javax.swing.JDialog {
 
     private void agregarCuenta() {
         String numCuenta = txtCuenta.getText();
-        
 
-        if(validar.validaCantidad(txtMonto.getText())){
-        float monto = Float.parseFloat(txtMonto.getText());
-        CuentaNuevaDTO cuentaNueva = new CuentaNuevaDTO();
-        cuentaNueva.setNumCuenta(numCuenta);
-        cuentaNueva.setSaldo(monto);
-        cuentaNueva.setEstado(true);
-        cuentaNueva.setTelefonoTitular(cliente.getTelefono());
-        cuentaNueva.setFechaApertura(null);
+        if (validar.validaCantidad(txtMonto.getText())) {
+            float monto = Float.parseFloat(txtMonto.getText());
+            CuentaNuevaDTO cuentaNueva = new CuentaNuevaDTO();
+            cuentaNueva.setNumCuenta(numCuenta);
+            cuentaNueva.setSaldo(monto);
+            cuentaNueva.setEstado(true);
+            cuentaNueva.setTelefonoTitular(cliente.getTelefono());
+            cuentaNueva.setFechaApertura(null);
 
-        try {
-            cuentaNueva.esValido();
-            datosConexion.getCuentaDAO().agregar(cuentaNueva);
-            JOptionPane.showMessageDialog(this, "Se agregó la cuenta correctamente", "Notificación", JOptionPane.INFORMATION_MESSAGE);
-        } catch (ValidacionDTOException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de validación", JOptionPane.ERROR_MESSAGE);
-        } catch (PersistenciaException ex) {
-            JOptionPane.showMessageDialog(this, "No fue posible agregar la cuenta", "Error de almacenamiento", JOptionPane.ERROR_MESSAGE);
-        }
-        dispose();} else {
+            try {
+                cuentaNueva.esValido();
+                datosConexion.getCuentaDAO().agregar(cuentaNueva);
+                JOptionPane.showMessageDialog(this, "Se agregó la cuenta correctamente", "Notificación", JOptionPane.INFORMATION_MESSAGE);
+            } catch (ValidacionDTOException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de validación", JOptionPane.ERROR_MESSAGE);
+            } catch (PersistenciaException ex) {
+                JOptionPane.showMessageDialog(this, "No fue posible agregar la cuenta", "Error de almacenamiento", JOptionPane.ERROR_MESSAGE);
+            }
+            dispose();
+        } else {
             JOptionPane.showMessageDialog(this, "Ingresar un monto valido", "Error de registro", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -226,10 +226,10 @@ public class dlgAgregarCuenta extends javax.swing.JDialog {
             agregarCuenta();
             dlgCuentas cuentas = new dlgCuentas(null, true, datosConexion, cliente);
             cuentas.setVisible(true);
-        }else{
+        } else {
             JOptionPane.showMessageDialog(this, "Ingrese un monto");
         }
-        
+
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void txtCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCuentaActionPerformed

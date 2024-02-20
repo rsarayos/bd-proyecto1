@@ -1,14 +1,23 @@
 package org.itson.bdavanzadas.bancobd;
 
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumnModel;
+import org.itson.bdavanzadas.bancobd.buttonColumn.ButtonColumn;
 import org.itson.bdavanzadas.bancobddominio.Cliente;
 import org.itson.bdavanzadas.bancobddominio.Cuenta;
 import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
+import org.itson.bdavanzadas.bancobdpersistencia.dtos.CuentaNuevaDTO;
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
+import org.itson.bdavanzadas.bancobdpersistencia.excepciones.ValidacionDTOException;
 
 /**
  *
@@ -34,32 +43,77 @@ public class dlgCuentas extends javax.swing.JDialog {
         List<Cuenta> listaCuentas;
         try {
             listaCuentas = datosConexion.getCuentaDAO().consultarCuentasCliente(cliente.getTelefono());
-            DefaultTableModel modelo = new DefaultTableModel() {
-                @Override
-                public boolean isCellEditable(int row, int column) {
-                    return false;
-                }
-            };
+            DefaultTableModel modelo = new DefaultTableModel();
+
             modelo.addColumn("CUENTA");
             modelo.addColumn("SALDO");
+            modelo.addColumn("ESTADO");
             modelo.addColumn("CANCELAR");
 
+            Locale mexico = new Locale("es", "MX");
+            NumberFormat formatoPesos = NumberFormat.getCurrencyInstance(mexico);
+
             for (Cuenta cuenta : listaCuentas) {
-                Object[] fila = {cuenta.getNumCuenta(), cuenta.getSaldo(), "Cancelar"};
+                float cantidad = cuenta.getSaldo();
+                String cantidadFormateada = formatoPesos.format(cantidad);
+
+                Object[] fila = {cuenta.getNumCuenta(), cantidadFormateada, cuenta.isEstado() == true ? "Activa" : "Cancelada", "Cancelar"};
                 modelo.addRow(fila);
             }
-
             jTablaCuentas.setModel(modelo);
+            TableColumnModel columnModel = jTablaCuentas.getColumnModel();
+
+            ButtonColumn botonCancelarCuenta = new ButtonColumn("Cancelar", (ActionEvent e) -> {
+                int respuesta = JOptionPane.showConfirmDialog(null, "¿Seguro que deseas cancelar la cuenta? No podrás volverla a usar", "Confirmación", JOptionPane.YES_NO_OPTION);
+
+                if (respuesta == JOptionPane.YES_OPTION) {
+                    int row = jTablaCuentas.convertRowIndexToModel(jTablaCuentas.getEditingRow());
+                    try {
+                        Cuenta cuentaFila = obtenerFilaDeCuenta(row);
+                        
+                        CuentaNuevaDTO cuentaActualizada = new CuentaNuevaDTO();
+                        cuentaActualizada.setNumCuenta(cuentaFila.getNumCuenta());
+                        cuentaActualizada.setSaldo(cuentaFila.getSaldo());
+                        cuentaActualizada.setFechaApertura(cuentaFila.getFechaApertura());
+                        cuentaActualizada.setTelefonoTitular(cuentaFila.getTelefonoTitular());
+                        cuentaActualizada.setEstado(false);
+                        
+                        Cuenta cuentaActu = datosConexion.getCuentaDAO().actualizar(cuentaActualizada);
+                        if (cuentaActu != null) {
+                            JOptionPane.showMessageDialog(this, "Se canceló la cuenta correctamente", "Cuenta cancelada", JOptionPane.INFORMATION_MESSAGE);
+                            dispose();
+                            mostrarTabla();
+                        }
+                    } catch (PersistenciaException ex) {
+                        Logger.getLogger(dlgCuentas.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else if (respuesta == JOptionPane.NO_OPTION) {
+                    JOptionPane.getRootFrame().dispose();
+                }
+
+            });
+
+            columnModel.getColumn(3).setCellRenderer(botonCancelarCuenta);
+            columnModel.getColumn(3).setCellEditor(botonCancelarCuenta);
 
             JTableHeader header = jTablaCuentas.getTableHeader();
             jTablaCuentas.getTableHeader().setReorderingAllowed(false);
             jTablaCuentas.setDefaultEditor(Object.class, null);
             jTablaCuentas.getTableHeader().setResizingAllowed(false);
 
-            header.setFont(new Font("Leelawadee UI", Font.BOLD, 28));
+            header.setFont(new Font("Leelawadee UI", Font.BOLD, 24));
             header.setPreferredSize(new java.awt.Dimension(80, 30));
         } catch (PersistenciaException e) {
             JOptionPane.showMessageDialog(this, "Error al mostrar información de los socios: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private Cuenta obtenerFilaDeCuenta(int fila) throws PersistenciaException {
+        List<Cuenta> listaCuentas = datosConexion.getCuentaDAO().consultarCuentasCliente(cliente.getTelefono());
+        if (fila >= 0 && fila < listaCuentas.size()) {
+            return listaCuentas.get(fila);
+        } else {
+            return null;
         }
     }
 

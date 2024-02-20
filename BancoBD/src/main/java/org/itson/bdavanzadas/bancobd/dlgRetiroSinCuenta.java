@@ -1,7 +1,6 @@
 package org.itson.bdavanzadas.bancobd;
 
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -11,10 +10,14 @@ import javax.swing.JOptionPane;
 import org.itson.bdavanzadas.bancobddominio.Cliente;
 import org.itson.bdavanzadas.bancobddominio.Cuenta;
 import org.itson.bdavanzadas.bancobddominio.Retiro;
+import org.itson.bdavanzadas.bancobddominio.Transaccion;
 import org.itson.bdavanzadas.bancobdpersistencia.auxiliar.GenerarFolioContraRetiros;
+import org.itson.bdavanzadas.bancobdpersistencia.auxiliar.Validaciones;
 import org.itson.bdavanzadas.bancobdpersistencia.daos.DatosConexion;
 import org.itson.bdavanzadas.bancobdpersistencia.dtos.RetiroNuevoDTO;
+import org.itson.bdavanzadas.bancobdpersistencia.dtos.TransaccionNuevaDTO;
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
+import org.itson.bdavanzadas.bancobdpersistencia.excepciones.ValidacionDTOException;
 
 /**
  *
@@ -24,6 +27,7 @@ public class dlgRetiroSinCuenta extends javax.swing.JDialog {
 
     private final DatosConexion datosConexion;
     private Cliente cliente;
+    private Validaciones validar;
 
     /**
      * Creates new form dlgRetiroSinCuenta
@@ -33,6 +37,7 @@ public class dlgRetiroSinCuenta extends javax.swing.JDialog {
         initComponents();
         this.datosConexion = datosConexion;
         this.cliente = cliente;
+        this.validar = new Validaciones();
         mostrarCuentas();
     }
 
@@ -41,52 +46,88 @@ public class dlgRetiroSinCuenta extends javax.swing.JDialog {
         try {
             listaCuentasRetiro = datosConexion.getCuentaDAO().consultarCuentasCliente(cliente.getTelefono());
             for (Cuenta cuenta : listaCuentasRetiro) {
-                cbxCuentaRetiro.addItem(cuenta.getNumCuenta());
+                if (cuenta.isEstado()==true) {
+                    cbxCuentaRetiro.addItem(cuenta.getNumCuenta());
+                }
             }
         } catch (PersistenciaException ex) {
             Logger.getLogger(dlgTransferencia.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private void retirar() {
-        String cuenta = String.valueOf(cbxCuentaRetiro.getSelectedItem());
-        float monto = Float.parseFloat(txtMonto.getText());
-
+    private String generarFolio() {
         GenerarFolioContraRetiros generarFolioContra = new GenerarFolioContraRetiros();
-        String folio = generarFolioContra.generarFolio();
-        String contrasenia = generarFolioContra.generarContraseña();
 
-        Date fechaActual = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(fechaActual);
-        calendar.add(Calendar.MINUTE, 10);
-        Date fechaCon10Minutos = calendar.getTime();
-        Timestamp fechaCancelacion = new Timestamp(fechaCon10Minutos.getTime());
+        List<Retiro> listaRetiros = null;
+        try {
+            listaRetiros = datosConexion.getRetiroDAO().consultar();
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(dlgAgregarCuenta.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
-        RetiroNuevoDTO retiroNuevo = null;
-        if (monto > 0) {
-            retiroNuevo = new RetiroNuevoDTO();
-            retiroNuevo.setNumCuenta(cuenta);
-            retiroNuevo.setCantidad(monto);
-            retiroNuevo.setFolioRetiro(folio);
-            retiroNuevo.setContraseniaRetiro(contrasenia);
-            retiroNuevo.setEstado(1);
-            retiroNuevo.setFecha(fechaCancelacion);
+        String folio = "";
+        for (Retiro retiro : listaRetiros) {
+            folio = generarFolioContra.generarFolio();
+            if (!retiro.getFolioRetiro().equals(folio)) {
+                return folio;
+            }
+        }
+        return null;
+    }
 
-            try {
-                Retiro retiro = datosConexion.getRetiroDAO().realizarRetiro(retiroNuevo.getIdRetiro());
-                if (retiro != null) {
-                    String mensaje = "Retiro sin cuenta creado, guarda el folio y la contraseña\n No. Folio de la transacción: " + folio + "\nContraseña: " + contrasenia+"\nFecha de vencimiento: "+fechaCancelacion.toString();
-                    JOptionPane.showMessageDialog(this, mensaje, "Retiro sin cuenta", JOptionPane.INFORMATION_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(this, "No fue posible realizar el retiro", "Retiro sin cuenta", JOptionPane.INFORMATION_MESSAGE);
+    private void generarRetiro() {
+        String cuenta = String.valueOf(cbxCuentaRetiro.getSelectedItem());
+
+        if (validar.validaCantidad(txtMonto.getText())) {
+            float monto = Float.parseFloat(txtMonto.getText());
+
+            GenerarFolioContraRetiros generarFolioContra = new GenerarFolioContraRetiros();
+            String folio = generarFolio();
+            String contrasenia = generarFolioContra.generarContraseña();
+
+            Date fechaActual = new Date();
+            Timestamp fecha = new Timestamp(fechaActual.getTime());
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(fechaActual);
+            calendar.add(Calendar.MINUTE, 10);
+            Date fechaCon10Minutos = calendar.getTime();
+            Timestamp fechaCancelacion = new Timestamp(fechaCon10Minutos.getTime());
+
+            if (monto > 0) {
+                TransaccionNuevaDTO transaccionNueva = new TransaccionNuevaDTO();
+                transaccionNueva.setNumCuenta(cuenta);
+                transaccionNueva.setCantidad(monto);
+                transaccionNueva.setFecha(fecha);
+
+                RetiroNuevoDTO retiroNuevo = new RetiroNuevoDTO();
+                retiroNuevo.setFolioRetiro(folio);
+                retiroNuevo.setContraseniaRetiro(contrasenia);
+                retiroNuevo.setEstado(1);
+
+                try {
+                    transaccionNueva.esValido();
+                    retiroNuevo.esValido();
+                    Transaccion transaccion = datosConexion.getTransaccionDAO().nueva(transaccionNueva);
+                    retiroNuevo.setIdTransaccion(transaccion.getIdTransaccion());
+                    Retiro retiro = datosConexion.getRetiroDAO().nuevo(retiroNuevo);
+                    if (retiro != null) {
+                        String mensaje = "Retiro sin cuenta creado, guarda el folio y la contraseña\nNo. Folio de la transacción: " + folio + "\nContraseña: " + contrasenia + "\nFecha de vencimiento: " + fechaCancelacion.toString();
+                        JOptionPane.showMessageDialog(this, mensaje, "Retiro sin cuenta", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(this, "No fue posible crear el retiro", "Retiro sin cuenta", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } catch (PersistenciaException ex) {
+                    Logger.getLogger(dlgRetiroSinCuenta.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ValidacionDTOException ex) {
+                    Logger.getLogger(dlgRetiroSinCuenta.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } catch (PersistenciaException ex) {
-                Logger.getLogger(dlgRetiroSinCuenta.class.getName()).log(Level.SEVERE, null, ex);
+            } else {
+                JOptionPane.showMessageDialog(this, "Ingrese un monto correcto", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Ingrese un monto correcto", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Monto Invalido", "Error", JOptionPane.ERROR_MESSAGE);
         }
+        dispose();
     }
 
     /**
@@ -228,9 +269,9 @@ public class dlgRetiroSinCuenta extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-        if(!txtMonto.getText().isBlank()){
-            retirar();
-        }else{
+        if (!txtMonto.getText().isBlank()) {
+            generarRetiro();
+        } else {
             JOptionPane.showMessageDialog(this, "Ingrese un monto", "Error", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnConfirmarActionPerformed

@@ -217,6 +217,7 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
         dlgActualizarCliente actualizarCliente = new dlgActualizarCliente(this, true, datosConexion, cliente);
         actualizarCliente.setVisible(true);
+        dispose();
     }//GEN-LAST:event_jLabel1MouseClicked
 
     private void jLabel1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseEntered

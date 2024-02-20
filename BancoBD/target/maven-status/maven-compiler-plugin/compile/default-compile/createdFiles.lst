@@ -7,7 +7,6 @@ org\itson\bdavanzadas\bancobd\dlgHistorial$4.class
 org\itson\bdavanzadas\bancobd\dlgTransferencia.class
 org\itson\bdavanzadas\bancobd\dlgCuentas.class
 org\itson\bdavanzadas\bancobd\BancoBD.class
-org\itson\bdavanzadas\bancobd\dlgCuentas$3.class
 org\itson\bdavanzadas\bancobd\dlgRetiroSinCuenta.class
 org\itson\bdavanzadas\bancobd\dlgTransferencia$1.class
 org\itson\bdavanzadas\bancobd\frmMenuPrincipal$4.class
@@ -46,5 +45,6 @@ org\itson\bdavanzadas\bancobd\frmMenuPrincipal$6.class
 org\itson\bdavanzadas\bancobd\frmMenuPrincipal$3.class
 org\itson\bdavanzadas\bancobd\dlgRegistrarse$2.class
 org\itson\bdavanzadas\bancobd\frmMenuPrincipal.class
+org\itson\bdavanzadas\bancobd\buttonColumn\ButtonColumn.class
 org\itson\bdavanzadas\bancobd\dlgHistorial$5.class
 org\itson\bdavanzadas\bancobd\dlgRegistrarse.class

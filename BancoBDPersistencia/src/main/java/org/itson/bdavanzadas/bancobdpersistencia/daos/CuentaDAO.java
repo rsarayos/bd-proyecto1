@@ -14,10 +14,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.itson.bdavanzadas.bancobddominio.Cliente;
 import org.itson.bdavanzadas.bancobddominio.Cuenta;
 import org.itson.bdavanzadas.bancobdpersistencia.conexion.IConexion;
-import static org.itson.bdavanzadas.bancobdpersistencia.daos.ClientesDAO.logger;
 import org.itson.bdavanzadas.bancobdpersistencia.dtos.CuentaNuevaDTO;
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
 
