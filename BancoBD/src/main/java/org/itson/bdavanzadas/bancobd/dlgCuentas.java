@@ -44,7 +44,7 @@ public class dlgCuentas extends javax.swing.JDialog {
         try {
             listaCuentas = datosConexion.getCuentaDAO().consultarCuentasCliente(cliente.getTelefono());
             DefaultTableModel modelo = new DefaultTableModel();
-
+            
             modelo.addColumn("CUENTA");
             modelo.addColumn("SALDO");
             modelo.addColumn("ESTADO");

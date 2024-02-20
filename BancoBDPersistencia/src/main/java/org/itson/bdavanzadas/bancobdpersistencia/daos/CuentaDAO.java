@@ -165,7 +165,7 @@ public class CuentaDAO implements ICuentaDAO{
             while (resultados.next()) {                
                 String numCuenta = resultados.getString("numCuenta");
                 Date fechaApertura = resultados.getDate("fechaApertura");
-                float saldo = resultados.getLong("saldo");
+                float saldo = resultados.getFloat("saldo");
                 boolean estado = resultados.getBoolean("estado");
                 Cuenta cuenta = new Cuenta(numCuenta, 
                         fechaApertura, 

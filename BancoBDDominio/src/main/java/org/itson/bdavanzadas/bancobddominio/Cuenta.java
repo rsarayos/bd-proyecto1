@@ -54,7 +54,7 @@ public class Cuenta {
         this.numCuenta = numCuenta;
         this.fechaApertura = fechaApertura;
         this.saldo = saldo;
-        this.estado = true;
+        this.estado = estado;
         this.telefonoTitular = telefonoTitular;
     }
     
