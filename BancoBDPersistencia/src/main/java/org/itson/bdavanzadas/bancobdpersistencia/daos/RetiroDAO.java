@@ -24,20 +24,33 @@ import org.itson.bdavanzadas.bancobdpersistencia.dtos.RetiroNuevoDTO;
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
 
 /**
+ * Clase que implementa la interfaz IRetiroDAO y proporciona métodos para interactuar con la tabla de retiros en la base de datos.
+ * Esta clase realiza operaciones CRUD (Crear, Leer, Actualizar, Eliminar) en la tabla de direcciones.
  *
- * @author alex_
+ * @author Victor Humberto Encinas Guzman & Raul Alejandro Sauceda Rayos
  */
 public class RetiroDAO implements IRetiroDAO {
 
+    // Objeto IConexion utilizado para obtener conexiones a la base de datos.
     final IConexion conexionDB;
+    // Objeto Logger utilizado para registrar mensajes de registro.
     static final Logger logger = Logger.getLogger(TransferenciaDAO.class.getName());
+    // Objeto EncriptarContra utilizado para cifrar y descifrar contraseñas.
     private EncriptarContra encriptador;
 
+    /**
+     * Constructor de la clase RetiroDAO que recibe un objeto IConexion.
+     *
+     * @param conexionDB Objeto IConexion utilizado para obtener conexiones a la base de datos.
+     */
     public RetiroDAO(IConexion conexionDB) {
         this.conexionDB = conexionDB;
         this.encriptador = new EncriptarContra();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Retiro nuevo(RetiroNuevoDTO retiroNuevo) throws PersistenciaException {
         String sentenciaSQL = """
@@ -77,6 +90,9 @@ public class RetiroDAO implements IRetiroDAO {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Retiro actualizar(RetiroNuevoDTO retiroNuevo) throws PersistenciaException {
         String sentenciaSQL = """
@@ -105,6 +121,9 @@ public class RetiroDAO implements IRetiroDAO {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Retiro obtener(int idRetiro) throws PersistenciaException {
         String sentenciaSQL = """
@@ -150,6 +169,9 @@ public class RetiroDAO implements IRetiroDAO {
         }
     }
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Retiro obtenerPorFolio(String folioRetiro) throws PersistenciaException {
         String sentenciaSQL = """
@@ -195,6 +217,9 @@ public class RetiroDAO implements IRetiroDAO {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Retiro> consultar() throws PersistenciaException {
         String sentenciaSQL = """
@@ -237,6 +262,9 @@ public class RetiroDAO implements IRetiroDAO {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Retiro> consultarRetiroCuenta(String numCuenta) throws PersistenciaException {
         String sentenciaSQL = """
@@ -281,6 +309,9 @@ public class RetiroDAO implements IRetiroDAO {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Retiro> consultarRetiroCuentaPorFechas(String numCuenta, Timestamp fechaInicio, Timestamp fechaFin) throws PersistenciaException {
         String sentenciaSQL = """
@@ -324,6 +355,9 @@ public class RetiroDAO implements IRetiroDAO {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Retiro realizarRetiro(int idRetiro) throws PersistenciaException {
         String sentenciaSQL = "{call realizar_retiro(?, ?)}";

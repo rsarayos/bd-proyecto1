@@ -23,18 +23,30 @@ import org.itson.bdavanzadas.bancobdpersistencia.dtos.TransferenciaNuevaDTO;
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
 
 /**
+ * Clase que implementa la interfaz ITransferenciaDAO y proporciona métodos para interactuar con la tabla de transferencias en la base de datos.
+ * Esta clase realiza operaciones CRUD (Crear, Leer, Actualizar, Eliminar) en la tabla de transferencias.
  *
- * @author alex_
+ * @author Victor Humberto Encinas Guzman & Raul Alejandro Sauceda Rayos
  */
 public class TransferenciaDAO implements ITransferenciaDAO {
 
+    // Objeto IConexion utilizado para obtener conexiones a la base de datos.
     final IConexion conexionDB;
+    // Objeto Logger utilizado para registrar mensajes de registro.
     static final Logger logger = Logger.getLogger(TransferenciaDAO.class.getName());
 
+    /**
+     * Constructor que recibe una conexión a la base de datos.
+     *
+     * @param conexionDB Conexión a la base de datos.
+     */
     public TransferenciaDAO(IConexion conexionDB) {
         this.conexionDB = conexionDB;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Transferencia nueva(TransferenciaNuevaDTO transferenciaNueva) throws PersistenciaException {
         String sentenciaSQL = """
@@ -59,6 +71,9 @@ public class TransferenciaDAO implements ITransferenciaDAO {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Transferencia obtener(int idTransferencia) throws PersistenciaException {
         String sentenciaSQL = """
@@ -92,6 +107,9 @@ public class TransferenciaDAO implements ITransferenciaDAO {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Transferencia> consultar() throws PersistenciaException {
         String sentenciaSQL = """
@@ -126,6 +144,9 @@ public class TransferenciaDAO implements ITransferenciaDAO {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Transferencia> consultarTransCuenta(String numCuenta) throws PersistenciaException {
         String sentenciaSQL = """
@@ -162,6 +183,9 @@ public class TransferenciaDAO implements ITransferenciaDAO {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Transferencia> consultarTransCuentaPorFechas(String numCuenta, Timestamp fechaInicio, Timestamp fechaFin) throws PersistenciaException {
         String sentenciaSQL = """
@@ -201,6 +225,9 @@ public class TransferenciaDAO implements ITransferenciaDAO {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Transferencia realizarTransferencia(String cuentaOrigen, String cuentaDestino, float cantidad) throws PersistenciaException {
         String sentenciaSQL = "{call realizar_transferencia(?, ?, ?, ?, ?)}";

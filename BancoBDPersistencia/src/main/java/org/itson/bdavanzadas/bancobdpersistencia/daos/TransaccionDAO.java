@@ -21,18 +21,30 @@ import org.itson.bdavanzadas.bancobdpersistencia.dtos.TransaccionNuevaDTO;
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
 
 /**
+ * Clase que implementa la interfaz ITransaccionDAO y proporciona métodos para interactuar con la tabla de transacciones en la base de datos.
+ * Esta clase realiza operaciones CRUD (Crear, Leer, Actualizar, Eliminar) en la tabla de transacciones.
  *
- * @author alex_
+ * @author Victor Humberto Encinas Guzman & Raul Alejandro Sauceda Rayos
  */
 public class TransaccionDAO implements ITransaccionDAO {
 
+    // Objeto IConexion utilizado para obtener conexiones a la base de datos.
     final IConexion conexionDB;
+    // Objeto Logger utilizado para registrar mensajes de registro.
     static final Logger logger = Logger.getLogger(TransferenciaDAO.class.getName());
 
+    /**
+     * Constructor que recibe una conexión a la base de datos.
+     *
+     * @param conexionDB Conexión a la base de datos.
+     */
     public TransaccionDAO(IConexion conexionDB) {
         this.conexionDB = conexionDB;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Transaccion nueva(TransaccionNuevaDTO transaccionNueva) throws PersistenciaException {
         String sentenciaSQL = """
@@ -58,6 +70,9 @@ public class TransaccionDAO implements ITransaccionDAO {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Transaccion obtener(int idTransaccion) throws PersistenciaException {
         String sentenciaSQL = """
@@ -88,6 +103,9 @@ public class TransaccionDAO implements ITransaccionDAO {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Transaccion> consultar() throws PersistenciaException {
         String sentenciaSQL = """
@@ -117,6 +135,9 @@ public class TransaccionDAO implements ITransaccionDAO {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Transaccion> consultarTransaccionesCuenta(String numCuenta) throws PersistenciaException {
         String sentenciaSQL = """
@@ -171,6 +192,9 @@ public class TransaccionDAO implements ITransaccionDAO {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Transaccion> consultarTransaccionesCuentaPorFechas(String numCuenta, Timestamp fechaInicio, Timestamp fechaFin) throws PersistenciaException {
         String sentenciaSQL = """

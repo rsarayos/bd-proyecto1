@@ -20,18 +20,30 @@ import org.itson.bdavanzadas.bancobdpersistencia.dtos.CuentaNuevaDTO;
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
 
 /**
+ * Clase que implementa la interfaz ICuentaDAO y proporciona métodos para interactuar con la tabla de cuentas en la base de datos.
+ * Esta clase realiza operaciones CRUD (Crear, Leer, Actualizar, Eliminar) en la tabla de cuentas.
  *
- * @author alex_
+ * @author Victor Humberto Encinas Guzman & Raul Alejandro Sauceda Rayos
  */
 public class CuentaDAO implements ICuentaDAO{
     
+    // Objeto IConexion utilizado para obtener conexiones a la base de datos.
     final IConexion conexionDB;
+    // Objeto Logger utilizado para registrar mensajes de registro.
     static final Logger logger = Logger.getLogger(ClientesDAO.class.getName());
 
+    /**
+     * Constructor de la clase ClientesDAO que recibe un objeto IConexion.
+     *
+     * @param conexionDB Objeto IConexion utilizado para obtener conexiones a la base de datos.
+     */
     public CuentaDAO(IConexion conexionDB) {
         this.conexionDB = conexionDB;
     }
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Cuenta agregar(CuentaNuevaDTO cuentaNueva) throws PersistenciaException {
         String setenciaSQL = """
@@ -56,6 +68,9 @@ public class CuentaDAO implements ICuentaDAO{
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Cuenta actualizar(CuentaNuevaDTO cuentaNueva) throws PersistenciaException {
         String setenciaSQL = """
@@ -82,6 +97,9 @@ public class CuentaDAO implements ICuentaDAO{
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Cuenta obtener(String numCuenta) throws PersistenciaException {
         String setenciaSQL = """
@@ -115,6 +133,9 @@ public class CuentaDAO implements ICuentaDAO{
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Cuenta> consultar() throws PersistenciaException {
         String setenciaSQL = """
@@ -148,6 +169,9 @@ public class CuentaDAO implements ICuentaDAO{
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Cuenta> consultarCuentasCliente(String telefonoTitular) throws PersistenciaException {
         String setenciaSQL = """

@@ -14,18 +14,30 @@ import org.itson.bdavanzadas.bancobdpersistencia.dtos.DireccionNuevaDTO;
 import org.itson.bdavanzadas.bancobdpersistencia.excepciones.PersistenciaException;
 
 /**
+ * Clase que implementa la interfaz IDireccionDAO y proporciona métodos para interactuar con la tabla de direcciones en la base de datos.
+ * Esta clase realiza operaciones CRUD (Crear, Leer, Actualizar, Eliminar) en la tabla de direcciones.
  *
- * @author alex_
+ * @author Victor Humberto Encinas Guzman & Raul Alejandro Sauceda Rayos
  */
 public class DireccionDAO implements IDireccionDAO{
 
+    // Objeto IConexion utilizado para obtener conexiones a la base de datos.
     final IConexion conexionDB;
+    // Objeto Logger utilizado para registrar mensajes de registro.
     static final Logger logger = Logger.getLogger(DireccionDAO.class.getName());
 
+    /**
+     * Constructor que recibe una conexión a la base de datos.
+     *
+     * @param conexionDB Conexión a la base de datos.
+     */
     public DireccionDAO(IConexion conexionDB) {
         this.conexionDB = conexionDB;
     }
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Direccion agregar(DireccionNuevaDTO direccionNueva) throws PersistenciaException {
         String setenciaSQL = """
@@ -58,6 +70,9 @@ public class DireccionDAO implements IDireccionDAO{
         }
     }
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Direccion obtener(int idDireccion) throws PersistenciaException {
         String setenciaSQL = """
@@ -92,6 +107,9 @@ public class DireccionDAO implements IDireccionDAO{
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Direccion actualizar(DireccionNuevaDTO direccionNueva) throws PersistenciaException {
         String setenciaSQL = """
