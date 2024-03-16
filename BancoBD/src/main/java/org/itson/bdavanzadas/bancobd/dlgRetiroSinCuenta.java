@@ -92,7 +92,7 @@ public class dlgRetiroSinCuenta extends javax.swing.JDialog {
             folio = generarFolioContra.generarFolio();
         }while(folioExiste(folio, listaRetiros));
         
-        return null;
+        return folio;
     }
 
     /**
